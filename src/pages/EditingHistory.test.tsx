@@ -241,7 +241,7 @@ describe('Sales Navigator account (Contacts tab)', () => {
   it('records the account, the match confidence and the leadership coverage', async () => {
     await open('/companies/c_004/contacts', 'c_004')
     const card = region('Sales Navigator account')
-    expect(card).toHaveTextContent('The list of executives is not confirmed complete.')
+    expect(card).toHaveTextContent('Coverage unconfirmed')
     expect(
       within(card).getByRole('link', { name: /Open the Sales Navigator search/ }),
     ).toHaveAttribute('href', company('c_004')?.salesNav.searchUrl)
@@ -261,7 +261,7 @@ describe('Sales Navigator account (Contacts tab)', () => {
     await user.click(screen.getByRole('button', { name: 'Save' }))
     await waitFor(() => expect(valueOf(card, 'Leadership coverage')).toHaveTextContent('Reviewed'))
     // once a person says they checked, the warning goes
-    expect(card).not.toHaveTextContent('not confirmed complete')
+    expect(card).not.toHaveTextContent('Coverage unconfirmed')
 
     await waitFor(() => {
       const c = company('c_004')
@@ -276,9 +276,7 @@ describe('Sales Navigator account (Contacts tab)', () => {
       const c = company('c_004')
       if (c) c.leadershipCoverage = coverage
       const { unmount } = await open('/companies/c_004/contacts', 'c_004')
-      expect(region('Sales Navigator account')).toHaveTextContent(
-        'The list of executives is not confirmed complete.',
-      )
+      expect(region('Sales Navigator account')).toHaveTextContent('Coverage unconfirmed')
       unmount()
     }
   })

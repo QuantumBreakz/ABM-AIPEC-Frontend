@@ -206,7 +206,7 @@ describe('Tabs', () => {
       }),
     )
     await waitFor(() => expect(router.state.location.pathname).toBe('/companies/c_001/contacts'))
-    expect(await screen.findByText('The contact list is being built')).toBeInTheDocument()
+    expect(await screen.findByText('Contact directory coming soon')).toBeInTheDocument()
     expect(screen.getByRole('region', { name: 'Sales Navigator account' })).toBeInTheDocument()
     // the header and steps stay put
     expect(screen.getByRole('region', { name: 'Steps' })).toBeInTheDocument()
@@ -214,7 +214,7 @@ describe('Tabs', () => {
 
   it('opens a tab from a deep link', async () => {
     await open('/companies/c_001/ai', company('c_001')?.name)
-    expect(await screen.findByText(/AI tab is being built/)).toBeInTheDocument()
+    expect(await screen.findByText('AI drafts coming soon')).toBeInTheDocument()
     expect(
       within(screen.getByRole('navigation', { name: 'Company sections' })).getByRole('link', {
         name: 'AI',

@@ -143,7 +143,6 @@ describe('The item drawer', () => {
       `/companies/${first?.companyId}/contacts`,
     )
     expect(dialog).toHaveTextContent(first?.reason as string)
-    expect(dialog).toHaveTextContent('FE-3.3')
   })
 
   it('points AI items at the AI tab', async () => {

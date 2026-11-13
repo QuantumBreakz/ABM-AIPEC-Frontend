@@ -22,7 +22,7 @@ describe('Overview numbers', () => {
   it('shows the headline tiles for the newest edition', async () => {
     await open()
     const o = stats()
-    expect(screen.getByText('Where the research stands for ADIPEC 2026.')).toBeInTheDocument()
+    expect(screen.getByText('ADIPEC 2026 pipeline')).toBeInTheDocument()
     const discovered = screen.getByRole('link', { name: /Companies discovered/ })
     expect(discovered).toHaveTextContent(String(o.discovered))
     expect(screen.getByRole('link', { name: /Unique companies/ })).toHaveTextContent(
@@ -68,7 +68,7 @@ describe('Overview numbers', () => {
       ),
     )
     expect(screen.getByText('Not available')).toBeInTheDocument()
-    expect(screen.getByText('Where the research stands for ADIPEC 2025.')).toBeInTheDocument()
+    expect(screen.getByText('ADIPEC 2025 pipeline')).toBeInTheDocument()
   })
 
   it('shows a friendly empty state for an edition with no companies', async () => {
@@ -192,7 +192,7 @@ describe('Emails by status', () => {
     await open()
     const o = stats()
     const total = Object.values(o.emailsByStatus).reduce((a, b) => a + b, 0)
-    expect(screen.getByText(`${total} email addresses in total.`)).toBeInTheDocument()
+    expect(screen.getByText(`${total} total`)).toBeInTheDocument()
     const group = screen.getByRole('group', { name: 'Emails by status' })
     const present = Object.values(o.emailsByStatus).filter((n) => n > 0).length
     expect(within(group).getAllByRole('link')).toHaveLength(present)
