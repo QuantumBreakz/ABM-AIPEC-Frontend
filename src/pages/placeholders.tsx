@@ -5,9 +5,6 @@ import { ComingSoon } from './ComingSoon'
 
 // Each of these is replaced by a real screen in the ticket named below.
 
-export const OverviewPage = () => (
-  <ComingSoon title="Overview" description="Totals and progress per step." ticket="FE-1.1" />
-)
 export const RunsPage = () => (
   <ComingSoon title="Runs" description="Start, pause and follow research runs." ticket="FE-1.2" />
 )

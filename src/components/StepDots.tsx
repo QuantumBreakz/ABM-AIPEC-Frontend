@@ -49,7 +49,7 @@ export function StepDots({
               className={cn(
                 'size-3 rounded-full ring-offset-1',
                 TONE_DOT[meta.tone],
-                state.status === 'not_started' && 'bg-transparent ring-1 ring-border',
+                state.status === 'not_started' && 'bg-transparent ring-1 ring-border-strong',
                 state.status === 'in_progress' && 'animate-pulse',
               )}
             />

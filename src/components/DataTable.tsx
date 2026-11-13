@@ -19,6 +19,14 @@ import { Button } from './ui/button'
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type Columns<T> = ColumnDef<T, any>[]
 
+declare module '@tanstack/react-table' {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  interface ColumnMeta<TData, TValue> {
+    /** Keep this column pinned to the left while the table scrolls sideways. */
+    sticky?: boolean
+  }
+}
+
 const INTERACTIVE = 'a,button,input,select,textarea,label,[role=button],[role=menuitem]'
 
 type Props<T> = {
@@ -176,7 +184,7 @@ export function DataTable<T>({
                     <span
                       aria-hidden
                       className={cn(
-                        'flex size-4 items-center justify-center rounded border border-border text-[10px]',
+                        'flex size-4 items-center justify-center rounded border border-border-strong text-[10px]',
                         column.getIsVisible() &&
                           'border-primary bg-primary text-primary-foreground',
                       )}
@@ -207,7 +215,11 @@ export function DataTable<T>({
                       aria-sort={
                         dir === 'asc' ? 'ascending' : dir === 'desc' ? 'descending' : undefined
                       }
-                      className="h-10 whitespace-nowrap px-4 text-xs font-medium uppercase tracking-wide text-muted-foreground"
+                      className={cn(
+                        'h-10 whitespace-nowrap px-3 text-xs font-medium uppercase tracking-wide text-muted-foreground',
+                        header.column.columnDef.meta?.sticky &&
+                          'sticky left-0 z-10 bg-muted shadow-[1px_0_0_var(--border)]',
+                      )}
                     >
                       {header.isPlaceholder ? null : sortable ? (
                         <button
@@ -239,7 +251,7 @@ export function DataTable<T>({
               Array.from({ length: 8 }, (_, i) => (
                 <tr key={i} className="border-t border-border">
                   {Array.from({ length: visibleColumns }, (_, j) => (
-                    <td key={j} className="h-11 px-4">
+                    <td key={j} className="h-11 px-3">
                       <Skeleton className="h-4 w-full max-w-40" />
                     </td>
                   ))}
@@ -256,12 +268,19 @@ export function DataTable<T>({
                   onClick={(e) => handleRowClick(e, row.original)}
                   onKeyDown={(e) => handleRowKey(e, row.original)}
                   className={cn(
-                    'border-t border-border transition-colors',
+                    'group border-t border-border transition-colors',
                     onRowClick && 'cursor-pointer hover:bg-muted/50 focus-visible:bg-muted/50',
                   )}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <td key={cell.id} className="h-11 px-4 align-middle">
+                    <td
+                      key={cell.id}
+                      className={cn(
+                        'h-11 px-3 align-middle',
+                        cell.column.columnDef.meta?.sticky &&
+                          'sticky left-0 z-10 bg-surface shadow-[1px_0_0_var(--border)] group-hover:bg-muted group-focus-visible:bg-muted',
+                      )}
+                    >
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </td>
                   ))}
