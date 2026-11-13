@@ -1,6 +1,5 @@
-import { Link, useParams } from 'react-router'
+import { Link } from 'react-router'
 import { Button } from '@/components/ui/button'
-import { REVIEW_TYPES, type ReviewType } from '@/api/types'
 import { ComingSoon } from './ComingSoon'
 
 // Each of these is replaced by a real screen in the ticket named below.
@@ -19,18 +18,6 @@ export const GapReportPage = () => (
 export const AdminUsersPage = () => <ComingSoon title="Users" ticket="FE-6.1" />
 export const AdminProvidersPage = () => <ComingSoon title="Providers" ticket="FE-6.1" />
 export const AdminSuppressionsPage = () => <ComingSoon title="Suppressions" ticket="FE-6.1" />
-
-export function ReviewPage() {
-  const { type } = useParams()
-  if (!REVIEW_TYPES.includes(type as ReviewType)) return <NotFoundPage />
-  return (
-    <ComingSoon
-      title="Review queue"
-      description="Items that need a person to look at them."
-      ticket="FE-2.3"
-    />
-  )
-}
 
 export function NotFoundPage() {
   return (

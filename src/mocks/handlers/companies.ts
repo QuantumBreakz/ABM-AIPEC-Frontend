@@ -248,7 +248,10 @@ export const companyHandlers = [
     target.editions.sort((a, b) => b.edition - a.edition)
     target.originalNames = [...new Set([...target.originalNames, ...source.originalNames])]
     // Anything that pointed at the merged company now points at the one we kept.
-    for (const c of db.companies) if (c.duplicateOf === source.id) c.duplicateOf = target.id
+    // The kept record is no longer a duplicate of anything (it would otherwise point at itself).
+    for (const c of db.companies) {
+      if (c.duplicateOf === source.id) c.duplicateOf = c.id === target.id ? undefined : target.id
+    }
     db.companies.splice(db.companies.indexOf(source), 1)
     addHistory(target.id, 'merge', source.name, target.name, user.email)
     refresh(target, true)

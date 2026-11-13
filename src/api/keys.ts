@@ -2,6 +2,9 @@
 export const keys = {
   me: ['me'] as const,
   reviewCounts: ['review-counts'] as const,
+  /** Prefix of every review list, handy for invalidating them all after something is resolved. */
+  reviewAll: ['review'] as const,
+  review: (type: string, page: number) => ['review', type, page] as const,
   events: ['events'] as const,
   companies: (params?: object) => ['companies', params ?? {}] as const,
   company: (id: string | undefined) => ['company', id] as const,
