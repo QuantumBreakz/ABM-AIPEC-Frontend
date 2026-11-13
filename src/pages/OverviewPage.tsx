@@ -1,4 +1,5 @@
 import {
+  BarChart3,
   Building2,
   CircleAlert,
   Copy,
@@ -6,6 +7,7 @@ import {
   Layers,
   ListChecks,
   type LucideIcon,
+  Table2,
   UserRound,
   Users,
 } from 'lucide-react'
@@ -33,16 +35,19 @@ import { cn } from '@/lib/utils'
 type View = 'chart' | 'table'
 
 function ViewToggle({ view, onChange }: { view: View; onChange: (view: View) => void }) {
-  const option = (value: View, label: string) => (
+  const option = (value: View, label: string, Icon: LucideIcon) => (
     <button
       type="button"
       aria-pressed={view === value}
       onClick={() => onChange(value)}
       className={cn(
-        'h-8 rounded-[6px] px-3 text-[13px] font-medium transition-colors',
-        view === value ? 'bg-surface text-foreground shadow-sm' : 'text-muted-foreground',
+        'inline-flex min-h-8 cursor-pointer items-center gap-1.5 rounded-md px-3 py-1 text-[0.8125rem] font-medium transition-all',
+        view === value
+          ? 'bg-surface text-foreground shadow-xs'
+          : 'text-muted-foreground hover:text-foreground',
       )}
     >
+      <Icon className="size-3.5" aria-hidden />
       {label}
     </button>
   )
@@ -50,10 +55,10 @@ function ViewToggle({ view, onChange }: { view: View; onChange: (view: View) => 
     <div
       role="group"
       aria-label="Show data as"
-      className="inline-flex gap-0.5 rounded-md bg-muted p-0.5"
+      className="inline-flex gap-0.5 rounded-lg border border-border/80 bg-muted p-0.5"
     >
-      {option('chart', 'Chart')}
-      {option('table', 'Table')}
+      {option('chart', 'Chart', BarChart3)}
+      {option('table', 'Table', Table2)}
     </div>
   )
 }
@@ -78,6 +83,11 @@ function Tiles({ data }: { data: Overview }) {
     />
   )
 
+  const uniquePct = data.discovered ? Math.round((data.unique / data.discovered) * 100) : 0
+  const contactPct = data.discovered
+    ? Math.round((data.companiesWithContacts / data.discovered) * 100)
+    : 0
+
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
       <StatTile
@@ -85,7 +95,7 @@ function Tiles({ data }: { data: Overview }) {
         className="sm:col-span-2"
         label="Companies discovered"
         value={formatNumber(data.discovered)}
-        hint="Found in the directory for this edition"
+        hint="Directory"
         to={base}
         icon={Building2}
         iconTone="info"
@@ -96,27 +106,27 @@ function Tiles({ data }: { data: Overview }) {
         className="sm:col-span-2"
         label="ADIPEC advertised"
         value={data.advertised === undefined ? <NotAvailable /> : formatNumber(data.advertised)}
-        hint="Reference only. The real count is what the directory lists."
+        hint="Reference only"
       />
       {tile(
         'Unique companies',
         data.unique,
-        'After removing possible duplicates',
+        `${uniquePct}% deduplicated`,
         `${base}&duplicate=false`,
         Layers,
       )}
       {tile(
         'Possible duplicates',
         data.duplicates,
-        'Records to check and merge',
+        data.duplicates === 0 ? 'None' : 'Merge queue',
         `${base}&duplicate=true`,
         Copy,
       )}
-      {tile('Contacts', data.contacts, 'Decision-makers saved', `${base}&hasContacts=true`, Users)}
+      {tile('Contacts', data.contacts, 'Saved people', `${base}&hasContacts=true`, Users)}
       {tile(
         'Companies with contacts',
         data.companiesWithContacts,
-        'At least one decision-maker',
+        `${contactPct}% coverage`,
         `${base}&hasContacts=true`,
         UserRound,
       )}
@@ -124,7 +134,7 @@ function Tiles({ data }: { data: Overview }) {
         className="lg:col-span-2"
         label="AI drafts to review"
         value={formatNumber(data.ai.draft)}
-        hint={`${formatNumber(data.ai.approved)} approved so far`}
+        hint={`${formatNumber(data.ai.approved)} approved`}
         to={`${base}&aiStatus=draft`}
         icon={FileText}
         iconTone="info"
@@ -133,7 +143,7 @@ function Tiles({ data }: { data: Overview }) {
         className="lg:col-span-2"
         label="Companies with a failure"
         value={formatNumber(data.failures)}
-        hint={data.failures === 0 ? 'Nothing failed' : 'At least one step failed'}
+        hint={data.failures === 0 ? 'All clear' : 'Needs attention'}
         to={`${base}&stepStatus=failed`}
         icon={data.failures === 0 ? ListChecks : CircleAlert}
         iconTone={data.failures === 0 ? 'success' : 'danger'}
@@ -149,7 +159,7 @@ function LoadingTiles() {
         Loading overview…
       </span>
       {Array.from({ length: 8 }, (_, i) => (
-        <Skeleton key={i} className={cn('h-28', i < 2 && 'sm:col-span-2')} />
+        <Skeleton key={i} className={cn('h-32 rounded-xl', i < 2 && 'sm:col-span-2')} />
       ))}
     </div>
   )
@@ -182,17 +192,20 @@ export default function OverviewPage() {
 
   const data = overview.data
 
+  const emailTotal = data ? Object.values(data.emailsByStatus).reduce((a, b) => a + b, 0) : 0
+
   return (
     <>
       <PageHeader
         title="Overview"
-        description={
-          eventName ? `Where the research stands for ${eventName}.` : 'Where the research stands.'
-        }
+        description={eventName ? `${eventName} pipeline` : 'Pipeline overview'}
         actions={
           events.data && (
-            <div className="flex items-center gap-2">
-              <label htmlFor="edition" className="text-[13px] font-medium text-muted-foreground">
+            <div className="flex items-center gap-2.5">
+              <label
+                htmlFor="edition"
+                className="text-[0.8125rem] font-medium text-muted-foreground"
+              >
                 Edition
               </label>
               <Select
@@ -213,7 +226,7 @@ export default function OverviewPage() {
       />
 
       {(events.error || overview.error) && (
-        <div className="rounded-lg border border-border bg-surface">
+        <div className="card-elevated">
           <ErrorState
             error={events.error ?? overview.error}
             onRetry={() => {
@@ -227,11 +240,11 @@ export default function OverviewPage() {
       {!events.error && !overview.error && (!data || events.isPending) && <LoadingTiles />}
 
       {data && !overview.error && data.discovered === 0 && (
-        <div className="rounded-lg border border-border bg-surface">
+        <div className="card-elevated">
           <EmptyState
             icon={Building2}
             title="No companies discovered for this edition yet"
-            hint="Start a run to read the exhibitor directory."
+            hint="Start a run to discover exhibitors."
             action={
               <Button asChild variant="secondary">
                 <Link to="/runs">Go to runs</Link>
@@ -245,11 +258,15 @@ export default function OverviewPage() {
         <div className="flex flex-col gap-6">
           <Tiles data={data} />
 
-          <div className="flex items-center justify-between gap-3">
-            <p className="text-[13px] text-muted-foreground">
-              {formatNumber(data.unique)} unique {plural(data.unique, 'company', 'companies')} ·
-              click a bar or a number to see the companies behind it
-            </p>
+          <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border/80 bg-surface/70 px-4 py-2.5">
+            <div className="flex flex-wrap items-center gap-2 text-[0.8125rem] text-muted-foreground">
+              <span className="font-semibold text-foreground">{formatNumber(data.unique)}</span>{' '}
+              unique {plural(data.unique, 'company', 'companies')}
+              <span className="text-border-strong" aria-hidden>
+                ·
+              </span>
+              <span>Click any segment to filter</span>
+            </div>
             <ViewToggle
               view={view}
               onChange={(v) => setParam('view', v === 'table' ? 'table' : undefined)}
@@ -260,7 +277,11 @@ export default function OverviewPage() {
             <ChartCard
               className="lg:col-span-2"
               title="Progress by step"
-              subtitle="Each bar is every company in this edition, split by how far that step has got."
+              action={
+                <span className="rounded-full bg-muted px-2.5 py-0.5 text-xs font-medium tabular-nums text-muted-foreground">
+                  {formatNumber(data.discovered)} total
+                </span>
+              }
             >
               <StepStackChart
                 byStep={data.byStep}
@@ -271,7 +292,11 @@ export default function OverviewPage() {
             </ChartCard>
             <ChartCard
               title="Emails by status"
-              subtitle={`${formatNumber(Object.values(data.emailsByStatus).reduce((a, b) => a + b, 0))} email addresses in total.`}
+              action={
+                <span className="rounded-full bg-muted px-2.5 py-0.5 text-xs font-medium tabular-nums text-muted-foreground">
+                  {formatNumber(emailTotal)} total
+                </span>
+              }
             >
               <EmailSplitBar counts={data.emailsByStatus} edition={data.edition} view={view} />
             </ChartCard>

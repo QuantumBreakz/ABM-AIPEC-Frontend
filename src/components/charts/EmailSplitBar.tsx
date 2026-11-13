@@ -40,29 +40,34 @@ export function EmailSplitBar({ counts, edition, view }: Props) {
 
   if (view === 'table') {
     return (
-      <table className="w-full text-left text-[13px]">
+      <table className="w-full text-left text-[0.8125rem]">
         <caption className="sr-only">Email addresses by status</caption>
         <thead>
           <tr className="border-b border-border text-muted-foreground">
-            <th scope="col" className="py-2 pr-4 font-medium">
+            <th scope="col" className="py-2.5 pr-4 font-semibold">
               Status
             </th>
-            <th scope="col" className="px-2 py-2 text-right font-medium">
+            <th scope="col" className="px-2 py-2.5 text-right font-semibold">
               Emails
             </th>
-            <th scope="col" className="px-2 py-2 text-right font-medium">
+            <th scope="col" className="px-2 py-2.5 text-right font-semibold">
               Share
             </th>
           </tr>
         </thead>
         <tbody>
           {EMAIL_ORDER.map((status) => (
-            <tr key={status} className="border-b border-border last:border-0">
-              <th scope="row" className="py-2 pr-4 font-medium">
+            <tr
+              key={status}
+              className="border-b border-border/70 transition-colors last:border-0 hover:bg-muted/40"
+            >
+              <th scope="row" className="py-2.5 pr-4 font-medium text-foreground">
                 {EMAIL_STATUS_META[status].label}
               </th>
-              <td className="px-2 py-2 text-right tabular-nums">{formatNumber(counts[status])}</td>
-              <td className="px-2 py-2 text-right tabular-nums">
+              <td className="px-2 py-2.5 text-right tabular-nums">
+                {formatNumber(counts[status])}
+              </td>
+              <td className="px-2 py-2.5 text-right tabular-nums">
                 {Math.round((100 * counts[status]) / total)}%
               </td>
             </tr>
@@ -73,8 +78,8 @@ export function EmailSplitBar({ counts, edition, view }: Props) {
   }
 
   return (
-    <div className="flex flex-col gap-4">
-      <div className="flex h-7 gap-0.5" role="group" aria-label="Emails by status">
+    <div className="flex flex-col gap-5">
+      <div className="flex h-8 gap-0.5" role="group" aria-label="Emails by status">
         {segments.map((segment) => {
           const meta = EMAIL_STATUS_META[segment.key]
           const sentence = `${meta.label}: ${formatNumber(segment.count)} ${plural(segment.count, 'email', 'emails')} (${segment.percent}%)`
@@ -95,7 +100,7 @@ export function EmailSplitBar({ counts, edition, view }: Props) {
               <Link
                 to={`/companies?edition=${edition}&emailStatus=${segment.key}`}
                 aria-label={sentence}
-                className="flex min-w-1 items-center whitespace-nowrap px-2 text-xs font-semibold first:rounded-l-[4px] last:rounded-r-[4px]"
+                className="flex min-w-1 items-center whitespace-nowrap px-2 text-xs font-semibold tabular-nums transition-opacity duration-150 first:rounded-l-[5px] last:rounded-r-[5px] hover:opacity-85"
                 style={{
                   flex: `${segment.count} 1 0`,
                   background: EMAIL_FILL[segment.key],
@@ -117,8 +122,8 @@ export function EmailSplitBar({ counts, edition, view }: Props) {
           icon: EMAIL_STATUS_META[status].icon,
         }))}
       />
-      <p className="text-[13px] text-muted-foreground">
-        <strong className="font-medium text-foreground">Not checked</strong> means no permitted
+      <p className="rounded-lg border border-border/60 bg-muted/40 px-3 py-2.5 text-[0.8125rem] text-muted-foreground">
+        <strong className="font-semibold text-foreground">Not checked</strong> means no permitted
         check has run yet. It is not a verified address.
       </p>
     </div>

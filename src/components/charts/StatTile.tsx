@@ -1,4 +1,4 @@
-import type { LucideIcon } from 'lucide-react'
+import { ArrowUpRight, type LucideIcon } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { Link } from 'react-router'
 import { TONE_BADGE, type Tone } from '@/lib/status'
@@ -33,38 +33,61 @@ export function StatTile({
   className,
 }: Props) {
   const body = (
-    <>
+    <div className="flex h-full flex-col justify-between gap-3">
       <div className="flex items-start justify-between gap-3">
-        <p className="text-[13px] font-medium text-muted-foreground">{label}</p>
-        {Icon && (
-          <span
-            aria-hidden
+        <div className="flex items-center gap-2">
+          <p className="text-[0.8125rem] font-medium text-muted-foreground">{label}</p>
+          {reference && (
+            <span className="rounded-full bg-muted px-2 py-0.5 text-[0.6875rem] font-medium text-muted-foreground">
+              External
+            </span>
+          )}
+        </div>
+        <div className="flex items-center gap-1.5">
+          {Icon && (
+            <span
+              aria-hidden
+              className={cn(
+                'flex size-8 shrink-0 items-center justify-center rounded-lg ring-1 ring-inset ring-current/15',
+                TONE_BADGE[iconTone],
+              )}
+            >
+              <Icon className="size-4" />
+            </span>
+          )}
+        </div>
+      </div>
+
+      <div>
+        <div className="flex items-baseline justify-between gap-2">
+          <p
             className={cn(
-              'flex size-7 shrink-0 items-center justify-center rounded-full',
-              TONE_BADGE[iconTone],
+              'font-semibold tabular-nums tracking-[-0.03em]',
+              hero ? 'text-4xl sm:text-5xl' : 'text-[1.75rem] leading-tight',
+              reference ? 'text-muted-foreground' : 'text-foreground',
             )}
           >
-            <Icon className="size-4" />
-          </span>
-        )}
+            {value}
+          </p>
+          {to && (
+            <ArrowUpRight
+              aria-hidden
+              className="size-4 shrink-0 text-muted-foreground opacity-60 transition-transform duration-150 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-primary group-hover:opacity-100"
+            />
+          )}
+        </div>
+        {hint && <p className="mt-1.5 text-[0.8125rem] text-muted-foreground">{hint}</p>}
       </div>
-      <p
-        className={cn(
-          'mt-2 font-semibold tracking-tight',
-          hero ? 'text-5xl' : 'text-2xl',
-          reference && 'text-muted-foreground',
-        )}
-      >
-        {value}
-      </p>
-      {hint && <p className="mt-1 text-[13px] text-muted-foreground">{hint}</p>}
-    </>
+    </div>
   )
 
   const classes = cn(
-    'block rounded-lg border bg-surface p-4',
-    reference ? 'border-dashed border-border-strong' : 'border-border',
-    to && 'transition-colors hover:border-primary/60 hover:bg-muted/40',
+    'group relative block overflow-hidden rounded-xl border p-5 transition-all duration-150',
+    reference
+      ? 'border-dashed border-border-strong bg-surface/60'
+      : 'border-border bg-surface shadow-[0_1px_2px_rgb(14_23_38/0.04)]',
+    hero && 'border-t-2 border-t-primary bg-gradient-to-b from-primary/[0.03] to-surface',
+    to && 'hover:border-primary/60 hover:shadow-md',
     className,
   )
 
