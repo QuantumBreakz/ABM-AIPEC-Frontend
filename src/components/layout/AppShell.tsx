@@ -69,8 +69,8 @@ export function AppShell() {
         </Dialog.Portal>
       </Dialog.Root>
 
-      <div className="lg:pl-64">
-        <header className="sticky top-0 z-30 flex h-16 items-center justify-between gap-3 border-b border-border/80 bg-surface/85 px-4 backdrop-blur-md lg:px-8">
+      <div className="ambient-canvas min-h-screen lg:pl-64">
+        <header className="glass-header sticky top-0 z-30 flex h-16 items-center justify-between gap-3 border-b border-border/70 px-4 lg:px-8">
           <div className="flex items-center gap-2">
             <Button
               variant="ghost"

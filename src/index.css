@@ -158,6 +158,9 @@
     text-wrap: pretty;
   }
   /* Numbers line up in tables */
+  body {
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+  }
   table {
     font-variant-numeric: tabular-nums;
   }
@@ -187,17 +190,46 @@
   background-size: 2.25rem 2.25rem;
 }
 
+.ambient-canvas {
+  background-image: radial-gradient(
+    ellipse 85% 45% at 50% -12%,
+    color-mix(in srgb, var(--primary) 11%, transparent),
+    transparent 70%
+  );
+}
+
+.glass-header {
+  background: color-mix(in srgb, var(--surface) 82%, transparent);
+  backdrop-filter: blur(16px) saturate(180%);
+}
+
 .card-elevated {
   background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 0.75rem;
+  border: 1px solid color-mix(in srgb, var(--border) 80%, transparent);
+  border-radius: 0.875rem;
   box-shadow:
     0 1px 2px rgb(14 23 38 / 0.04),
-    0 4px 12px -4px rgb(14 23 38 / 0.03);
+    0 8px 24px -6px rgb(14 23 38 / 0.05);
 }
 
 .dark .card-elevated {
   box-shadow:
-    0 1px 2px rgb(0 0 0 / 0.28),
-    0 8px 24px -8px rgb(0 0 0 / 0.35);
+    inset 0 1px 0 0 rgb(255 255 255 / 0.05),
+    0 1px 2px rgb(0 0 0 / 0.32),
+    0 12px 32px -10px rgb(0 0 0 / 0.45);
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeInUp 0.28s cubic-bezier(0.16, 1, 0.3, 1) both;
 }

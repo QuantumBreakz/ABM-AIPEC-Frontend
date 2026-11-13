@@ -82,7 +82,7 @@ export function StatTile({
   )
 
   const classes = cn(
-    'group relative block overflow-hidden rounded-xl border p-5 transition-all duration-150',
+    'group relative block overflow-hidden rounded-2xl border p-5 transition-all duration-200',
     reference
       ? 'border-dashed border-border-strong bg-surface/60'
       : 'border-border bg-surface shadow-[0_1px_2px_rgb(14_23_38/0.04)]',
@@ -91,11 +91,22 @@ export function StatTile({
     className,
   )
 
+  const card = (
+    <>
+      {hero && (
+        <span
+          aria-hidden
+          className="pointer-events-none absolute -right-10 -top-10 size-36 rounded-full bg-[var(--primary)]/10 blur-2xl transition-opacity group-hover:opacity-100"
+        />
+      )}
+      {body}
+    </>
+  )
   return to ? (
     <Link to={to} className={classes}>
-      {body}
+      {card}
     </Link>
   ) : (
-    <div className={classes}>{body}</div>
+    <div className={classes}>{card}</div>
   )
 }
