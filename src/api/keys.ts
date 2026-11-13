@@ -4,6 +4,7 @@ export const keys = {
   reviewCounts: ['review-counts'] as const,
   events: ['events'] as const,
   companies: (params?: object) => ['companies', params ?? {}] as const,
+  company: (id: string | undefined) => ['company', id] as const,
   overview: (edition: number | undefined) => ['overview', edition] as const,
   /** Prefix of every runs list query, handy for invalidating them all. */
   runsAll: ['runs'] as const,

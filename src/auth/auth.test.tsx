@@ -94,7 +94,7 @@ describe('signed in', () => {
   it('opens deep links such as /companies/c_001/website', async () => {
     await signIn()
     renderApp('/companies/c_001/website')
-    expect(await screen.findByRole('heading', { name: 'Company' })).toBeInTheDocument()
+    expect(await screen.findByRole('navigation', { name: 'Company sections' })).toBeInTheDocument()
   })
 
   it('shows a 404 page for unknown addresses and bad review types', async () => {
