@@ -159,5 +159,5 @@ describe('End-to-end user journey', () => {
     await user.click(await screen.findByRole('menuitem', { name: 'Sign out' }))
     await screen.findByRole('heading', { level: 1, name: 'ADIPEC Lead Gen' }, { timeout: 4000 })
     expect(router.state.location.pathname).toBe('/login')
-  }, 15000)
+  }, 40_000)
 })

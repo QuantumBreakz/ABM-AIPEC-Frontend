@@ -37,8 +37,11 @@ Progress against the tickets in PLAN.md. Updated with each merged PR.
 | 1     | FE-1.4 Company detail       | Done        |
 | 2     | FE-2.1 Website + Socials    | Done        |
 | 2     | FE-2.2 Editing + History    | Done        |
-| 2     | FE-2.3 Review queue         | In review   |
-| 3     | People (contacts, Sales Nav)| Next        |
+| 2     | FE-2.3 Review queue         | Done        |
+| 3     | FE-3.1 Contacts             | In review   |
+| 3     | FE-3.2 CSV paste import     | Next        |
+| 3     | FE-3.3 Sales Nav task       | Not started |
+| 3     | FE-3.4 Review: contacts, emails | Not started |
 | 4     | AI review, first CSV        | Not started |
 | 5     | Email check, final CSV      | Not started |
 | 6     | Hardening and delivery      | Not started |
