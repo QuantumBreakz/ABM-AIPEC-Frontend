@@ -24,9 +24,9 @@ Progress against the tickets in PLAN.md. Updated with each merged PR.
 | ----- | --------------------------- | ----------- |
 | 0     | FE-0.1 Project setup        | Done        |
 | 0     | FE-0.3 API client           | Done        |
-| 0     | FE-0.6 Shared components    | In review   |
-| 0     | FE-0.4 Mock backend (MSW)   | Next        |
-| 0     | FE-0.5 App shell + auth     | Not started |
+| 0     | FE-0.6 Shared components    | Done        |
+| 0     | FE-0.4 Mock backend (MSW)   | In review   |
+| 0     | FE-0.5 App shell + auth     | Next        |
 | 0     | FE-0.2 Vercel deploy        | Not started |
 | 1     | Overview, Runs, Companies   | Not started |
 | 2     | Company research, review    | Not started |
@@ -47,6 +47,8 @@ Progress against the tickets in PLAN.md. Updated with each merged PR.
   `NotAvailable`, `DateTime`, `DataTable`, `FilterBar`, `EmptyState`, `ErrorState`, `Skeleton`,
   `ConfirmDialog`, `Drawer`, `PageHeader`, plus `ui/` basics (`Button`, `Input`, `Select`, `Tooltip`).
 - **URL-synced filters** (`src/lib/useUrlFilters.ts`): filters, page and sort live in the URL.
+- **Mock backend** (`src/mocks`): a fake server (MSW) that answers every endpoint of the API
+  contract with ~150 generated companies covering every status. See "Mock backend" below.
 - **Component gallery** (`src/pages/DevGallery.tsx`): every component on one page. `App.tsx` shows
   it for now; the real routes arrive with FE-0.5.
 
@@ -95,6 +97,24 @@ Vite env values are baked in at build time. To use the real backend locally, run
 and set `VITE_API_MOCK=false`; Vite forwards `/api/*` to `http://localhost:4000` (the same job the
 Vercel rewrite does in production).
 
+## Mock backend
+
+With `VITE_API_MOCK=true` (the default in dev) every `/api` call is answered in the browser by
+`src/mocks`, so screens can be built and demoed with no backend. Data lives in memory and resets
+on refresh. Sign in with `admin@example.com` or `reviewer@example.com`, password `password`.
+
+Add these to the page URL to test situations:
+
+| Switch                   | Effect                                                         |
+| ------------------------ | -------------------------------------------------------------- |
+| `?mock_role=reviewer`    | Signs you in as a reviewer (or `admin`) without the login form |
+| `?mock_wake=1`           | Server answers 503 for 5 s, to see the "waking up" banner      |
+| `?mock_fail=/companies`  | Forces a 500 on matching paths, to see error states            |
+
+Behaviour worth knowing: runs advance every time they are read (so polling shows progress), AI
+"Regenerate" finishes after ~2.5 s, the review queue is worked out from the data (resolving an item
+removes it), and CSV exports have an "initial" version (all emails Not Checked) and a "final" one.
+
 ## Project layout
 
 ```
@@ -102,7 +122,7 @@ src/
   main.tsx, App.tsx     entry point and routes
   index.css             design tokens (colours, fonts, themes)
   api/                  client.ts, types.ts, queryClient.ts, waking.ts, queries/
-  mocks/                fake backend (MSW), added in FE-0.4
+  mocks/                fake backend (MSW): seed data, handlers, tests
   auth/                 login state and route guards, added in FE-0.5
   components/           shared UI pieces; ui/ holds the basics
   pages/                one component per screen
