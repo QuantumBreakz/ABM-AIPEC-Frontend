@@ -49,14 +49,14 @@ export function StatusBadge(props: Props) {
       <span
         tabIndex={0}
         className={cn(
-          'inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-medium whitespace-nowrap',
+          'inline-flex items-center gap-1.5 whitespace-nowrap rounded-full px-2.5 py-0.5 text-xs font-medium ring-1 ring-inset ring-current/15',
           TONE_BADGE[meta.tone],
           props.className,
         )}
       >
         <Icon
           className={cn(
-            'size-3.5',
+            'size-3.5 shrink-0',
             props.kind === 'run' && props.status === 'running' && 'animate-spin',
           )}
           aria-hidden

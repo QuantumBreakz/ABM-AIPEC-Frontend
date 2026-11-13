@@ -3,7 +3,7 @@ import type { InputHTMLAttributes, SelectHTMLAttributes, TextareaHTMLAttributes 
 import { cn } from '@/lib/utils'
 
 const field =
-  'h-9 w-full rounded-md border border-border-strong bg-surface px-3 text-sm text-foreground placeholder:text-muted-foreground transition-colors hover:border-muted-foreground disabled:opacity-50'
+  'min-h-9 w-full rounded-lg border border-border-strong bg-surface px-3 py-1.5 text-sm text-foreground shadow-[inset_0_1px_2px_rgb(14_23_38/0.03)] placeholder:text-muted-foreground transition-colors hover:border-foreground/50 focus-visible:border-primary disabled:opacity-50'
 
 export function Input({ className, ...props }: InputHTMLAttributes<HTMLInputElement>) {
   return <input className={cn(field, className)} {...props} />
@@ -12,7 +12,7 @@ export function Input({ className, ...props }: InputHTMLAttributes<HTMLInputElem
 export function Select({ className, children, ...props }: SelectHTMLAttributes<HTMLSelectElement>) {
   return (
     <div className="relative">
-      <select className={cn(field, 'appearance-none pr-9', className)} {...props}>
+      <select className={cn(field, 'cursor-pointer appearance-none pr-9', className)} {...props}>
         {children}
       </select>
       <ChevronDown

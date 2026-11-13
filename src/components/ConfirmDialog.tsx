@@ -27,18 +27,20 @@ export function ConfirmDialog({
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 z-40 bg-foreground/40 backdrop-blur-[1px]" />
-        <Dialog.Content className="fixed left-1/2 top-1/2 z-50 w-[calc(100%-2rem)] max-w-md -translate-x-1/2 -translate-y-1/2 rounded-lg border border-border bg-surface p-6 shadow-xl">
-          <Dialog.Title className="text-base font-semibold">{title}</Dialog.Title>
+        <Dialog.Overlay className="fixed inset-0 z-40 bg-foreground/45 backdrop-blur-[2px]" />
+        <Dialog.Content className="fixed left-1/2 top-1/2 z-50 w-[calc(100%-2rem)] max-w-md -translate-x-1/2 -translate-y-1/2 overscroll-contain rounded-xl border border-border bg-surface p-6 shadow-2xl">
+          <Dialog.Title className="text-base font-semibold tracking-tight text-foreground">
+            {title}
+          </Dialog.Title>
           {description ? (
-            <Dialog.Description className="mt-2 text-muted-foreground">
+            <Dialog.Description className="mt-2 text-sm text-muted-foreground">
               {description}
             </Dialog.Description>
           ) : (
             <Dialog.Description className="sr-only">{title}</Dialog.Description>
           )}
           {children && <div className="mt-4">{children}</div>}
-          <div className="mt-6 flex justify-end gap-2">
+          <div className="mt-6 flex justify-end gap-2.5">
             <Dialog.Close asChild>
               <Button variant="secondary" disabled={pending}>
                 Cancel
