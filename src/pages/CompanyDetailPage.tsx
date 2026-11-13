@@ -4,6 +4,8 @@ import { useCompany } from '@/api/queries/companies'
 import { AdipecTab } from '@/components/company/AdipecTab'
 import { CompanyHeader } from '@/components/company/CompanyHeader'
 import { CompanyTabs } from '@/components/company/CompanyTabs'
+import { SocialsTab } from '@/components/company/SocialsTab'
+import { WebsiteTab } from '@/components/company/WebsiteTab'
 import { COMPANY_TABS, isCompanyTab } from '@/lib/companyTabs'
 import { StepsPanel } from '@/components/company/StepsPanel'
 import { EmptyState } from '@/components/EmptyState'
@@ -15,8 +17,6 @@ import { NotFoundPage } from './placeholders'
 
 /** Tabs that later tickets build. Each address already works, so links never break. */
 const COMING: Record<string, string> = {
-  website: 'FE-2.1',
-  socials: 'FE-2.1',
   contacts: 'FE-3.1',
   ai: 'FE-4.2',
   history: 'FE-2.2',
@@ -73,6 +73,10 @@ export default function CompanyDetailPage() {
 
       {current === 'adipec' ? (
         <AdipecTab company={data} />
+      ) : current === 'website' ? (
+        <WebsiteTab company={data} />
+      ) : current === 'socials' ? (
+        <SocialsTab company={data} />
       ) : (
         <div className="rounded-lg border border-dashed border-border bg-surface">
           <EmptyState

@@ -34,8 +34,10 @@ Progress against the tickets in PLAN.md. Updated with each merged PR.
 | 1     | FE-1.3 Company list         | Done        |
 | 1     | FE-1.1 Overview             | Done        |
 | 1     | FE-1.2 Runs                 | Done        |
-| 1     | FE-1.4 Company detail       | In review   |
-| 2     | Company research, review    | Next        |
+| 1     | FE-1.4 Company detail       | Done        |
+| 2     | FE-2.1 Website + Socials    | In review   |
+| 2     | FE-2.2 Editing + History    | Next        |
+| 2     | FE-2.3 Review queue         | Not started |
 | 3     | People (contacts, Sales Nav)| Not started |
 | 4     | AI review, first CSV        | Not started |
 | 5     | Email check, final CSV      | Not started |
@@ -72,6 +74,11 @@ Progress against the tickets in PLAN.md. Updated with each merged PR.
   each of the 8 steps) and tabs (ADIPEC, Website, Socials, Contacts, AI, History) that each have
   their own address. The ADIPEC tab has one card per edition with every published field; missing
   fields read "Not available" with the reason. The other tabs fill in over the next tickets.
+- **Website and Socials tabs**: what the official website says (summary, services, markets, contact
+  details with where they were found), a list of facts where every fact links to its source page and
+  guesses are labelled "Inference", the pages reviewed and the pages skipped with reasons, and each
+  social network as a link or "Not found". When most of a card is empty for one reason, the reason is
+  stated once at the top.
 - **Company list** (`/companies`): search, filters (edition dropdown, country, step status, email
   and AI status, duplicates…), sortable headings, 50 per page, show/hide columns, all kept in the
   URL. Missing data reads "Not available"; there are loading, empty and error states.
