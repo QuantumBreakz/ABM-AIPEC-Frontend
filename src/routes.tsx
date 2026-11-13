@@ -6,6 +6,8 @@ import CompaniesPage from './pages/CompaniesPage'
 import DevGallery from './pages/DevGallery'
 import LoginPage from './pages/LoginPage'
 import OverviewPage from './pages/OverviewPage'
+import RunDetailPage from './pages/RunDetailPage'
+import RunsPage from './pages/RunsPage'
 import {
   AdminProvidersPage,
   AdminSuppressionsPage,
@@ -16,8 +18,6 @@ import {
   GapReportPage,
   NotFoundPage,
   ReviewPage,
-  RunDetailPage,
-  RunsPage,
 } from './pages/placeholders'
 
 export const routes: RouteObject[] = [

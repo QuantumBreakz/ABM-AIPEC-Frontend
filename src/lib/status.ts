@@ -8,12 +8,13 @@ import {
   Loader,
   Lock,
   type LucideIcon,
+  Pause,
   ShieldAlert,
   ShieldCheck,
   TriangleAlert,
   XCircle,
 } from 'lucide-react'
-import type { AiStatus, EmailStatus, StepKey, StepStatus } from '@/api/types'
+import type { AiStatus, EmailStatus, Run, StepKey, StepStatus } from '@/api/types'
 
 /** Visual tone. Every tone is ALWAYS shown together with a text label and an icon. */
 export type Tone = 'success' | 'info' | 'warning' | 'neutral' | 'danger' | 'muted'
@@ -136,6 +137,33 @@ export const AI_STATUS_META: Record<AiStatus, StatusMeta> = {
     tone: 'danger',
     icon: XCircle,
     description: 'A reviewer rejected this copy.',
+  },
+}
+
+export const RUN_STATUS_META: Record<Run['status'], StatusMeta> = {
+  running: {
+    label: 'Running',
+    tone: 'info',
+    icon: Loader,
+    description: 'The run is working through the companies now.',
+  },
+  paused: {
+    label: 'Paused',
+    tone: 'neutral',
+    icon: Pause,
+    description: 'The run is stopped. Resume it to carry on where it left off.',
+  },
+  completed: {
+    label: 'Completed',
+    tone: 'success',
+    icon: CheckCircle2,
+    description: 'Every step of the run has finished.',
+  },
+  failed: {
+    label: 'Failed',
+    tone: 'danger',
+    icon: XCircle,
+    description: 'The run stopped because of an error. See the error list.',
   },
 }
 

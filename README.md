@@ -32,9 +32,9 @@ Progress against the tickets in PLAN.md. Updated with each merged PR.
 | 0     | FE-0.5 App shell + auth     | Done        |
 | 0     | FE-0.2 Vercel deploy        | Next        |
 | 1     | FE-1.3 Company list         | Done        |
-| 1     | FE-1.1 Overview             | In review   |
-| 1     | FE-1.2 Runs                 | Next        |
-| 1     | FE-1.4 Company detail       | Not started |
+| 1     | FE-1.1 Overview             | Done        |
+| 1     | FE-1.2 Runs                 | In review   |
+| 1     | FE-1.4 Company detail       | Next        |
 | 2     | Company research, review    | Not started |
 | 3     | People (contacts, Sales Nav)| Not started |
 | 4     | AI review, first CSV        | Not started |
@@ -62,6 +62,11 @@ Progress against the tickets in PLAN.md. Updated with each merged PR.
 - **Overview** (`/`): headline numbers (the advertised ADIPEC count is shown apart, as reference
   only), progress per step as stacked bars, and emails by status as one split bar. Every bar and
   number links to the matching company list. A Chart/Table switch shows the same data as a table.
+- **Runs** (`/runs`, `/runs/:id`): the list of runs with status and progress; an admin can start a
+  run (edition plus which steps, all ticked by default) and pause or resume it. A run page shows
+  progress per step, counts and the errors with links to the companies. Pages that show a running
+  run refresh every 5 seconds and stop when it is paused or finished. Starting while another run is
+  active shows the server's explanation and a link to that run.
 - **Company list** (`/companies`): search, filters (edition dropdown, country, step status, email
   and AI status, duplicates…), sortable headings, 50 per page, show/hide columns, all kept in the
   URL. Missing data reads "Not available"; there are loading, empty and error states.
