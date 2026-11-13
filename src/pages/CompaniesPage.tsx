@@ -227,7 +227,11 @@ export default function CompaniesPage() {
         }
       />
       <div className="flex flex-col gap-4">
-        <div role="group" aria-label="Quick views" className="flex flex-wrap items-center gap-1.5">
+        <div
+          role="group"
+          aria-label="Quick views"
+          className="skeuo-track inline-flex flex-wrap items-center gap-1 rounded-2xl p-1"
+        >
           {QUICK_VIEWS.map((view) => {
             const on = isQuickActive(filters, view.patch)
             return (
@@ -237,10 +241,10 @@ export default function CompaniesPage() {
                 aria-pressed={on}
                 onClick={() => applyQuick(view.patch)}
                 className={cn(
-                  'min-h-8 cursor-pointer rounded-full border px-3 py-1 text-xs font-medium transition-colors',
+                  'min-h-8 cursor-pointer rounded-xl px-3 py-1 text-xs font-medium transition-all',
                   on
-                    ? 'border-primary/40 bg-primary/10 text-primary-hover font-semibold'
-                    : 'border-border bg-surface text-muted-foreground hover:bg-muted/60 hover:text-foreground',
+                    ? 'skeuo-thumb text-primary-hover font-semibold'
+                    : 'text-muted-foreground hover:text-foreground',
                 )}
               >
                 {view.label}

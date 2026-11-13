@@ -91,50 +91,50 @@ export default function LoginPage() {
 
   return (
     <div className="grid min-h-screen bg-background lg:grid-cols-[1.05fr_1fr]">
-      {/* Architectural editorial showcase panel */}
-      <aside className="bg-grid-architectural relative hidden flex-col justify-between overflow-hidden bg-[#0b1622] p-10 text-[#e7edf5] lg:flex xl:p-14">
+      {/* Apple Pro Space Black editorial showcase panel */}
+      <aside className="bg-grid-architectural relative hidden flex-col justify-between overflow-hidden bg-[#0c0c0e] p-10 text-[#f5f5f7] lg:flex xl:p-14">
         <div
           aria-hidden
-          className="pointer-events-none absolute -left-24 -top-24 size-96 rounded-full bg-[#0b5b67]/35 blur-3xl"
+          className="pointer-events-none absolute -left-24 -top-24 size-96 rounded-full bg-[#0066cc]/30 blur-3xl"
         />
         <div
           aria-hidden
-          className="pointer-events-none absolute -bottom-24 -right-24 size-96 rounded-full bg-[#2dd4bf]/15 blur-3xl"
+          className="pointer-events-none absolute -bottom-24 -right-24 size-96 rounded-full bg-[#3898ff]/18 blur-3xl"
         />
 
         <div className="relative z-10 flex items-center gap-3">
-          <BrandMark className="bg-[#2dd4bf] text-[#090e17]" />
+          <BrandMark className="from-[#5eb0ff] to-[#0066cc] text-white" />
           <div>
             <span className="block text-sm font-semibold tracking-tight text-white">
               ADIPEC Lead Gen
             </span>
-            <span className="block text-[0.6875rem] font-medium uppercase tracking-[0.1em] text-[#9fb0c7]">
+            <span className="block text-[0.6875rem] font-medium uppercase tracking-[0.1em] text-[#aeaeb2]">
               ABM Intelligence Platform
             </span>
           </div>
         </div>
 
         <div className="relative z-10 max-w-md">
-          <p className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs font-medium text-[#5eead4]">
-            <span className="size-1.5 rounded-full bg-[#5eead4]" aria-hidden />
+          <p className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-3 py-1 text-xs font-medium text-[#60adff] shadow-[inset_0_1px_0_rgba(255,255,255,0.12)]">
+            <span className="size-1.5 rounded-full bg-[#60adff]" aria-hidden />
             Energy ABM Workspace
           </p>
           <h2 className="mt-5 text-3xl font-semibold leading-tight tracking-[-0.03em] text-white xl:text-4xl">
             Exhibitor lists to executive outreach.
           </h2>
 
-          <div className="mt-8 flex flex-col gap-2.5 rounded-2xl border border-white/12 bg-white/[0.04] p-4 backdrop-blur-xs">
+          <div className="mt-8 flex flex-col gap-2.5 rounded-2xl border border-white/12 bg-white/[0.05] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_16px_40px_rgba(0,0,0,0.45)] backdrop-blur-md">
             {PIPELINE_STEPS.map(({ num, label, tag, icon: Icon }) => (
               <div
                 key={num}
-                className="flex items-center justify-between gap-3 rounded-xl border border-white/8 bg-white/[0.03] px-3.5 py-2.5"
+                className="flex items-center justify-between gap-3 rounded-xl border border-white/10 bg-white/[0.04] px-3.5 py-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]"
               >
                 <div className="flex items-center gap-3">
-                  <span className="font-mono text-xs font-medium text-[#5eead4]">{num}</span>
-                  <Icon className="size-4 shrink-0 text-[#5eead4]" aria-hidden />
+                  <span className="font-mono text-xs font-medium text-[#60adff]">{num}</span>
+                  <Icon className="size-4 shrink-0 text-[#60adff]" aria-hidden />
                   <span className="text-sm font-medium text-white">{label}</span>
                 </div>
-                <span className="rounded-full bg-white/10 px-2 py-0.5 text-[0.6875rem] font-medium text-[#cbd5e1]">
+                <span className="rounded-full bg-white/10 px-2.5 py-0.5 text-[0.6875rem] font-medium text-[#e5e5ea]">
                   {tag}
                 </span>
               </div>
@@ -142,7 +142,7 @@ export default function LoginPage() {
           </div>
         </div>
 
-        <p className="relative z-10 text-xs text-[#7f91aa]">ADIPEC Pipeline · Role-based access</p>
+        <p className="relative z-10 text-xs text-[#8e8e93]">ADIPEC Pipeline · Role-based access</p>
       </aside>
 
       {/* Sign-in surface */}

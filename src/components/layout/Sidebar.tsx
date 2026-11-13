@@ -26,10 +26,10 @@ function NavItem({ item, onNavigate }: { item: Item; onNavigate?: () => void }) 
       onClick={onNavigate}
       className={({ isActive }) =>
         cn(
-          'group relative flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors',
+          'group relative flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium transition-all duration-150',
           isActive
-            ? 'bg-primary/10 text-primary-hover font-semibold'
-            : 'text-muted-foreground hover:bg-muted/70 hover:text-foreground',
+            ? 'skeuo-thumb text-primary-hover font-semibold'
+            : 'text-muted-foreground hover:bg-muted/60 hover:text-foreground',
         )
       }
     >

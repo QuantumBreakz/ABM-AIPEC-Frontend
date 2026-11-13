@@ -41,9 +41,9 @@ function ViewToggle({ view, onChange }: { view: View; onChange: (view: View) => 
       aria-pressed={view === value}
       onClick={() => onChange(value)}
       className={cn(
-        'inline-flex min-h-8 cursor-pointer items-center gap-1.5 rounded-md px-3 py-1 text-[0.8125rem] font-medium transition-all',
+        'inline-flex min-h-8 cursor-pointer items-center gap-1.5 rounded-lg px-3 py-1 text-[0.8125rem] font-medium transition-all',
         view === value
-          ? 'bg-surface text-foreground shadow-xs'
+          ? 'skeuo-thumb text-foreground'
           : 'text-muted-foreground hover:text-foreground',
       )}
     >
@@ -55,7 +55,7 @@ function ViewToggle({ view, onChange }: { view: View; onChange: (view: View) => 
     <div
       role="group"
       aria-label="Show data as"
-      className="inline-flex gap-0.5 rounded-lg border border-border/80 bg-muted p-0.5"
+      className="skeuo-track inline-flex gap-1 rounded-xl p-1"
     >
       {option('chart', 'Chart', BarChart3)}
       {option('table', 'Table', Table2)}
