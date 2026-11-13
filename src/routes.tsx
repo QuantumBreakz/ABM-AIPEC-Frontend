@@ -2,6 +2,7 @@ import { Navigate, type RouteObject } from 'react-router'
 import { RequireAuth, RequireRole } from './auth/guards'
 import { AppShell } from './components/layout/AppShell'
 import { Root } from './components/layout/Root'
+import CompaniesPage from './pages/CompaniesPage'
 import DevGallery from './pages/DevGallery'
 import LoginPage from './pages/LoginPage'
 import {
@@ -9,7 +10,6 @@ import {
   AdminSuppressionsPage,
   AdminUsersPage,
   AiReviewPage,
-  CompaniesPage,
   CompanyDetailPage,
   ExportsPage,
   GapReportPage,

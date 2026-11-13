@@ -42,14 +42,20 @@ type Props<T> = {
   empty?: ReactNode
   /** Remember hidden columns in localStorage under this key. */
   storageKey?: string
+  /** Columns hidden until the person turns them on, e.g. { stand: false }. */
+  defaultVisibility?: VisibilityState
 }
 
-function readVisibility(key: string | undefined): VisibilityState {
-  if (!key) return {}
+function readVisibility(
+  key: string | undefined,
+  fallback: VisibilityState | undefined,
+): VisibilityState {
+  if (!key) return fallback ?? {}
   try {
-    return JSON.parse(localStorage.getItem(`table:${key}`) ?? '{}') as VisibilityState
+    const stored = localStorage.getItem(`table:${key}`)
+    return stored ? (JSON.parse(stored) as VisibilityState) : (fallback ?? {})
   } catch {
-    return {}
+    return fallback ?? {}
   }
 }
 
@@ -81,8 +87,11 @@ export function DataTable<T>({
   rowLabel,
   empty,
   storageKey,
+  defaultVisibility,
 }: Props<T>) {
-  const [visibility, setVisibility] = useState<VisibilityState>(() => readVisibility(storageKey))
+  const [visibility, setVisibility] = useState<VisibilityState>(() =>
+    readVisibility(storageKey, defaultVisibility),
+  )
 
   // TanStack Table returns functions React Compiler cannot memoize; that is expected here.
   // eslint-disable-next-line react-hooks/incompatible-library

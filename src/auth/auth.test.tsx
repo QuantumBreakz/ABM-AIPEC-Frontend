@@ -1,25 +1,12 @@
-import { QueryClientProvider } from '@tanstack/react-query'
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { createMemoryRouter, RouterProvider } from 'react-router'
 import { api } from '@/api/client'
-import { createQueryClient } from '@/api/queryClient'
 import { beginWaking, endWaking } from '@/api/waking'
 import { WakingBanner } from '@/components/layout/WakingBanner'
-import { routes } from '@/routes'
 import { signIn, setupMockApi } from '@/test/mockApi'
+import { renderApp } from '@/test/renderApp'
 
 setupMockApi()
-
-function renderApp(path = '/') {
-  const router = createMemoryRouter(routes, { initialEntries: [path] })
-  render(
-    <QueryClientProvider client={createQueryClient()}>
-      <RouterProvider router={router} />
-    </QueryClientProvider>,
-  )
-  return router
-}
 
 async function submitLogin(email: string, password: string) {
   const user = userEvent.setup()
@@ -31,7 +18,7 @@ async function submitLogin(email: string, password: string) {
 
 describe('signed out', () => {
   it('sends you to login, then back to the page you wanted', async () => {
-    const router = renderApp('/companies')
+    const { router } = renderApp('/companies')
     await screen.findByRole('heading', { name: 'ADIPEC Lead Gen' })
     expect(router.state.location.pathname).toBe('/login')
     expect(router.state.location.search).toBe('?next=%2Fcompanies')
@@ -42,7 +29,7 @@ describe('signed out', () => {
   })
 
   it('never follows a next link to another site', async () => {
-    const router = renderApp('/login?next=https%3A%2F%2Fevil.example')
+    const { router } = renderApp('/login?next=https%3A%2F%2Fevil.example')
     await submitLogin('admin@example.com', 'password')
     await screen.findByRole('heading', { name: 'Overview' })
     expect(router.state.location.pathname).toBe('/')
@@ -88,7 +75,7 @@ describe('signed out', () => {
 describe('signed in', () => {
   it('skips the login page and shows the app shell', async () => {
     await signIn()
-    const router = renderApp('/login')
+    const { router } = renderApp('/login')
     await screen.findByRole('heading', { name: 'Overview' })
     expect(router.state.location.pathname).toBe('/')
     const nav = screen.getByRole('navigation', { name: 'Main' })
@@ -125,7 +112,7 @@ describe('signed in', () => {
 
   it('signs out from the account menu and returns to login', async () => {
     await signIn()
-    const router = renderApp('/')
+    const { router } = renderApp('/')
     const user = userEvent.setup()
     await user.click(await screen.findByRole('button', { name: /account menu/i }))
     await user.click(await screen.findByRole('menuitem', { name: 'Sign out' }))
@@ -159,7 +146,7 @@ describe('roles', () => {
 describe('session expiry', () => {
   it('goes to login when the server says the session ended', async () => {
     await signIn()
-    const router = renderApp('/companies')
+    const { router } = renderApp('/companies')
     await screen.findByRole('heading', { name: 'Companies' })
     await api.post('/auth/logout')
     // Any API call now gets a 401, which must land the person on the login page.

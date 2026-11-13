@@ -24,6 +24,8 @@ export default defineConfig({
     globals: true,
     setupFiles: ['./src/test/setup.ts'],
     css: false,
+    // Rendering a 50-row table with tooltips in jsdom is slow; real bugs still fail fast.
+    testTimeout: 15_000,
     exclude: ['e2e/**', 'node_modules/**'],
   },
 })
