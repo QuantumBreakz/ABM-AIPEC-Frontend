@@ -80,7 +80,7 @@ Each phase ends at a release gate from the PTC. Within a phase, the two sides wo
 | Mock backend | MSW (Mock Service Worker) | Works in the browser, dev, tests and previews |
 | Toasts | sonner | Small, works with shadcn |
 | Tests | Vitest + Testing Library; Playwright for smoke e2e | Unit + real-browser checks |
-| Lint/format | Biome | One tool, fast |
+| Lint/format | ESLint + Prettier | Biome's binary is blocked by Windows policy on the dev machine; these run on Node everywhere |
 
 ## Folder layout
 
@@ -157,7 +157,7 @@ Each ticket lists what it **needs** first. Those are only frontend tickets or J-
 ### Phase 0 — Foundations
 
 **FE-0.1 Project setup**
-Vite + React + TS, Tailwind, shadcn/ui init, Biome, Vitest, path alias `@/`, the folder layout above, Vite dev proxy for `/api`. CI (`ci.yml`): lint, typecheck, test, build. Branch protection on `main`.
+Vite + React + TS, Tailwind, shadcn/ui init, ESLint + Prettier, Vitest, path alias `@/`, the folder layout above, Vite dev proxy for `/api`. CI (`ci.yml`): lint, typecheck, test, build. Branch protection on `main`.
 - [ ] `npm run dev`, `build`, `test`, `lint` all work
 - [ ] CI is required for merging
 
