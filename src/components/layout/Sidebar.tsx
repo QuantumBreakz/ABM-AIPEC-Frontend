@@ -26,30 +26,46 @@ function NavItem({ item, onNavigate }: { item: Item; onNavigate?: () => void }) 
       onClick={onNavigate}
       className={({ isActive }) =>
         cn(
-          'flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors',
+          'group relative flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors',
           isActive
-            ? 'bg-primary/10 text-primary-hover'
-            : 'text-muted-foreground hover:bg-muted hover:text-foreground',
+            ? 'bg-primary/10 text-primary-hover font-semibold'
+            : 'text-muted-foreground hover:bg-muted/70 hover:text-foreground',
         )
       }
     >
-      <Icon className="size-4 shrink-0" aria-hidden />
-      <span className="flex-1">{item.label}</span>
-      {item.badge ? (
-        <span
-          className="rounded-full bg-primary px-2 py-0.5 text-xs font-semibold text-primary-foreground"
-          aria-label={`${item.badge} waiting`}
-        >
-          {item.badge > 99 ? '99+' : item.badge}
-        </span>
-      ) : null}
+      {({ isActive }) => (
+        <>
+          {isActive && (
+            <span
+              aria-hidden
+              className="absolute left-0 top-1.5 bottom-1.5 w-[3px] rounded-r-full bg-primary"
+            />
+          )}
+          <Icon
+            className={cn(
+              'size-4 shrink-0 transition-colors',
+              isActive ? 'text-primary' : 'text-muted-foreground group-hover:text-foreground',
+            )}
+            aria-hidden
+          />
+          <span className="flex-1 truncate">{item.label}</span>
+          {item.badge ? (
+            <span
+              className="rounded-full bg-primary px-2 py-0.5 text-xs font-semibold tabular-nums text-primary-foreground shadow-xs"
+              aria-label={`${item.badge} waiting`}
+            >
+              {item.badge > 99 ? '99+' : item.badge}
+            </span>
+          ) : null}
+        </>
+      )}
     </NavLink>
   )
 }
 
 /** Main navigation. Admin links are not rendered at all for reviewers (not just disabled). */
 export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
-  const { isAdmin } = useMe()
+  const { isAdmin, user } = useMe()
   const counts = useReviewCounts()
   const waiting = counts.data ? Object.values(counts.data).reduce((sum, n) => sum + n, 0) : 0
 
@@ -68,28 +84,47 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
   ]
 
   return (
-    <nav aria-label="Main" className="flex flex-col gap-6 p-3">
-      <ul className="flex flex-col gap-0.5">
-        {main.map((item) => (
-          <li key={item.to}>
-            <NavItem item={item} onNavigate={onNavigate} />
-          </li>
-        ))}
-      </ul>
-      {isAdmin && (
+    <div className="flex flex-1 flex-col justify-between p-3">
+      <nav aria-label="Main" className="flex flex-col gap-6">
         <div>
-          <p className="px-3 pb-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
-            Admin
+          <p className="px-3 pb-2 text-[0.6875rem] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
+            Workspace
           </p>
-          <ul className="flex flex-col gap-0.5">
-            {admin.map((item) => (
+          <ul className="flex flex-col gap-1">
+            {main.map((item) => (
               <li key={item.to}>
                 <NavItem item={item} onNavigate={onNavigate} />
               </li>
             ))}
           </ul>
         </div>
-      )}
-    </nav>
+        {isAdmin && (
+          <div>
+            <p className="px-3 pb-2 text-[0.6875rem] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
+              Administration
+            </p>
+            <ul className="flex flex-col gap-1">
+              {admin.map((item) => (
+                <li key={item.to}>
+                  <NavItem item={item} onNavigate={onNavigate} />
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </nav>
+
+      <div className="mt-6 rounded-lg border border-border/80 bg-muted/50 px-3 py-2.5 text-xs">
+        <div className="flex items-center justify-between gap-2">
+          <span className="font-medium text-foreground">Access role</span>
+          <span className="rounded-full bg-surface px-2 py-0.5 text-[0.6875rem] font-semibold capitalize text-foreground ring-1 ring-border">
+            {user.role}
+          </span>
+        </div>
+        <p className="mt-1 truncate text-[0.75rem] text-muted-foreground">
+          {import.meta.env.VITE_API_MOCK === 'true' ? 'MSW Mock Dataset' : 'Connected to Live API'}
+        </p>
+      </div>
+    </div>
   )
 }
