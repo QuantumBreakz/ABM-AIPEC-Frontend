@@ -52,8 +52,11 @@ function Field({
 }) {
   const id = useId()
   return (
-    <div className="flex min-w-40 flex-1 flex-col gap-1.5">
-      <label htmlFor={id} className="text-xs font-medium text-muted-foreground">
+    <div className="flex flex-col gap-1.5">
+      <label
+        htmlFor={id}
+        className="text-[0.75rem] font-semibold uppercase tracking-[0.04em] text-muted-foreground"
+      >
         {field.label}
       </label>
       {field.type === 'select' && (
@@ -122,9 +125,9 @@ export function FilterBar({
 
   return (
     <section aria-label="Filters" className={cn('flex flex-col gap-3', className)}>
-      <div className="flex flex-wrap items-center gap-2">
+      <div className="flex flex-wrap items-center gap-2.5">
         {search && (
-          <div className="relative min-w-64 flex-1 sm:max-w-sm">
+          <div className="relative min-w-64 flex-1 sm:max-w-md">
             <Search
               className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
               aria-hidden
@@ -149,7 +152,7 @@ export function FilterBar({
             <ListFilter className="size-4" aria-hidden />
             Filters
             {activeOther > 0 && (
-              <span className="rounded-full bg-primary px-1.5 text-xs text-primary-foreground">
+              <span className="rounded-full bg-primary px-1.5 py-0.5 text-[0.6875rem] font-semibold leading-none text-primary-foreground">
                 {activeOther}
               </span>
             )}
@@ -166,7 +169,7 @@ export function FilterBar({
       {open && others.length > 0 && (
         <div
           id={panelId}
-          className="flex flex-wrap gap-3 rounded-lg border border-border bg-surface p-4"
+          className="grid grid-cols-1 gap-3.5 rounded-xl border border-border bg-surface p-4 shadow-xs sm:grid-cols-2 lg:grid-cols-4"
         >
           {others.map((field) => (
             <Field

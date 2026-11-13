@@ -157,21 +157,24 @@ export function DataTable<T>({
   const to = total === undefined ? 0 : Math.min(page * pageSize, total)
 
   return (
-    <div className="overflow-hidden rounded-lg border border-border bg-surface">
+    <div className="card-elevated overflow-hidden">
       {hideable.length > 0 && (
-        <div className="flex justify-end border-b border-border px-3 py-2">
+        <div className="flex items-center justify-between border-b border-border/80 bg-muted/25 px-4 py-2">
+          <span className="text-xs text-muted-foreground">
+            {total !== undefined && !isLoading ? `${formatNumber(total)} total records` : ''}
+          </span>
           <Dropdown.Root>
             <Dropdown.Trigger asChild>
-              <Button variant="ghost" size="sm">
-                <Columns3 className="size-4" aria-hidden />
+              <Button variant="secondary" size="sm">
+                <Columns3 className="size-3.5" aria-hidden />
                 Columns
               </Button>
             </Dropdown.Trigger>
             <Dropdown.Portal>
               <Dropdown.Content
                 align="end"
-                sideOffset={4}
-                className="z-50 min-w-44 rounded-md border border-border bg-surface p-1 shadow-lg"
+                sideOffset={6}
+                className="z-50 min-w-48 rounded-xl border border-border bg-surface p-1.5 shadow-xl"
               >
                 {hideable.map((column) => (
                   <Dropdown.CheckboxItem
@@ -179,12 +182,12 @@ export function DataTable<T>({
                     checked={column.getIsVisible()}
                     onCheckedChange={(v) => column.toggleVisibility(!!v)}
                     onSelect={(e) => e.preventDefault()}
-                    className="flex cursor-pointer items-center gap-2 rounded px-2 py-1.5 text-sm outline-none data-[highlighted]:bg-muted"
+                    className="flex cursor-pointer items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-sm outline-none transition-colors data-[highlighted]:bg-muted"
                   >
                     <span
                       aria-hidden
                       className={cn(
-                        'flex size-4 items-center justify-center rounded border border-border-strong text-[10px]',
+                        'flex size-4 items-center justify-center rounded border border-border-strong text-[10px] transition-colors',
                         column.getIsVisible() &&
                           'border-primary bg-primary text-primary-foreground',
                       )}
@@ -200,7 +203,12 @@ export function DataTable<T>({
         </div>
       )}
 
-      <div className="overflow-x-auto">
+      <div
+        tabIndex={0}
+        role="region"
+        aria-label="Results table"
+        className="overflow-x-auto focus-visible:outline-offset-[-2px]"
+      >
         <table className="w-full border-collapse text-left" aria-busy={isLoading || isFetching}>
           <thead className="bg-muted/60">
             {table.getHeaderGroups().map((group) => (
@@ -216,7 +224,7 @@ export function DataTable<T>({
                         dir === 'asc' ? 'ascending' : dir === 'desc' ? 'descending' : undefined
                       }
                       className={cn(
-                        'h-10 whitespace-nowrap px-3 text-xs font-medium uppercase tracking-wide text-muted-foreground',
+                        'min-h-10 whitespace-nowrap border-b border-border px-3.5 py-2.5 text-[0.6875rem] font-semibold uppercase tracking-[0.06em] text-muted-foreground',
                         header.column.columnDef.meta?.sticky &&
                           'sticky left-0 z-10 bg-muted shadow-[1px_0_0_var(--border)]',
                       )}
@@ -225,13 +233,13 @@ export function DataTable<T>({
                         <button
                           type="button"
                           onClick={() => cycleSort(header.column.id)}
-                          className="inline-flex items-center gap-1.5 rounded uppercase hover:text-foreground"
+                          className="inline-flex cursor-pointer items-center gap-1.5 rounded uppercase transition-colors hover:text-foreground"
                         >
                           {flexRender(header.column.columnDef.header, header.getContext())}
                           {dir === 'asc' ? (
-                            <ArrowUp className="size-3.5" aria-hidden />
+                            <ArrowUp className="size-3.5 text-primary" aria-hidden />
                           ) : dir === 'desc' ? (
-                            <ArrowDown className="size-3.5" aria-hidden />
+                            <ArrowDown className="size-3.5 text-primary" aria-hidden />
                           ) : (
                             <ArrowUpDown className="size-3.5 opacity-50" aria-hidden />
                           )}
@@ -249,9 +257,9 @@ export function DataTable<T>({
           <tbody className={cn(isFetching && !isLoading && 'opacity-60 transition-opacity')}>
             {isLoading &&
               Array.from({ length: 8 }, (_, i) => (
-                <tr key={i} className="border-t border-border">
+                <tr key={i} className="border-t border-border/70">
                   {Array.from({ length: visibleColumns }, (_, j) => (
-                    <td key={j} className="h-11 px-3">
+                    <td key={j} className="px-3.5 py-3">
                       <Skeleton className="h-4 w-full max-w-40" />
                     </td>
                   ))}
@@ -268,15 +276,15 @@ export function DataTable<T>({
                   onClick={(e) => handleRowClick(e, row.original)}
                   onKeyDown={(e) => handleRowKey(e, row.original)}
                   className={cn(
-                    'group border-t border-border transition-colors',
-                    onRowClick && 'cursor-pointer hover:bg-muted/50 focus-visible:bg-muted/50',
+                    'group border-t border-border/70 transition-colors first:border-t-0',
+                    onRowClick && 'cursor-pointer hover:bg-muted/45 focus-visible:bg-muted/45',
                   )}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <td
                       key={cell.id}
                       className={cn(
-                        'h-11 px-3 align-middle',
+                        'px-3.5 py-3 align-middle text-[0.84375rem]',
                         cell.column.columnDef.meta?.sticky &&
                           'sticky left-0 z-10 bg-surface shadow-[1px_0_0_var(--border)] group-hover:bg-muted group-focus-visible:bg-muted',
                       )}
@@ -300,8 +308,8 @@ export function DataTable<T>({
         ))
       )}
 
-      <div className="flex flex-wrap items-center justify-between gap-3 border-t border-border px-4 py-3 text-muted-foreground">
-        <span aria-live="polite">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-t border-border bg-muted/20 px-4 py-3 text-[0.8125rem] text-muted-foreground">
+        <span aria-live="polite" className="tabular-nums">
           {total === undefined
             ? 'Loading…'
             : total === 0
@@ -309,7 +317,7 @@ export function DataTable<T>({
               : `${formatNumber(from)}–${formatNumber(to)} of ${formatNumber(total)}`}
         </span>
         <div className="flex items-center gap-2">
-          <span>
+          <span className="rounded-md bg-muted/70 px-2.5 py-1 text-xs font-medium tabular-nums text-foreground">
             Page {page} of {pageCount}
           </span>
           <Button

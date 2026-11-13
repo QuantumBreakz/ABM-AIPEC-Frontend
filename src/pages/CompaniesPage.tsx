@@ -15,9 +15,37 @@ import { PageHeader } from '@/components/PageHeader'
 import { StatusBadge } from '@/components/StatusBadge'
 import { StepDots } from '@/components/StepDots'
 import { Button } from '@/components/ui/button'
-import { COMPANY_FILTER_FIELDS, countActiveFilters, type FilterField } from '@/lib/filters'
+import {
+  COMPANY_FILTER_FIELDS,
+  countActiveFilters,
+  type FilterField,
+  type FilterValues,
+} from '@/lib/filters'
 import { formatNumber } from '@/lib/format'
 import { useUrlFilters } from '@/lib/useUrlFilters'
+import { cn } from '@/lib/utils'
+
+const QUICK_VIEWS: { label: string; patch: FilterValues }[] = [
+  { label: 'All', patch: {} },
+  { label: 'Has contacts', patch: { hasContacts: true } },
+  { label: 'Needs review', patch: { stepStatus: 'needs_review' } },
+  { label: 'Failed', patch: { stepStatus: 'failed' } },
+  { label: 'Duplicates', patch: { duplicate: true } },
+  { label: 'AI drafts', patch: { aiStatus: 'draft' } },
+]
+
+function isQuickActive(values: FilterValues, patch: FilterValues) {
+  const entries = Object.entries(patch)
+  if (entries.length === 0) {
+    return (
+      values.hasContacts === undefined &&
+      values.stepStatus === undefined &&
+      values.duplicate === undefined &&
+      values.aiStatus === undefined
+    )
+  }
+  return entries.every(([k, v]) => values[k] === v)
+}
 
 const columns: Columns<CompanyListItem> = [
   {
@@ -152,14 +180,14 @@ export default function CompaniesPage() {
     <EmptyState
       icon={SearchX}
       title="That page does not exist"
-      hint="There are fewer results than that. Go back to the first page."
+      hint="Go back to page 1."
       action={<Button onClick={() => setPage(1)}>Go to the first page</Button>}
     />
   ) : active > 0 ? (
     <EmptyState
       icon={SearchX}
       title="No companies match these filters"
-      hint="Try removing a filter or searching for something else."
+      hint="Adjust or clear your filters."
       action={
         <Button variant="secondary" onClick={clearFilters}>
           Clear filters
@@ -170,7 +198,7 @@ export default function CompaniesPage() {
     <EmptyState
       icon={Building2}
       title="No companies yet"
-      hint="Start a run to discover the exhibitors."
+      hint="Run pipeline discovery to populate exhibitors."
       action={
         <Button asChild variant="secondary">
           <Link to="/runs">Go to runs</Link>
@@ -179,6 +207,15 @@ export default function CompaniesPage() {
     />
   )
 
+  const applyQuick = (patch: FilterValues) => {
+    const next: FilterValues = { ...filters }
+    delete next.hasContacts
+    delete next.stepStatus
+    delete next.duplicate
+    delete next.aiStatus
+    setFilters({ ...next, ...patch })
+  }
+
   return (
     <>
       <PageHeader
@@ -186,10 +223,31 @@ export default function CompaniesPage() {
         description={
           data
             ? `${formatNumber(data.total)} ${active > 0 ? 'matching ' : ''}${data.total === 1 ? 'company' : 'companies'}`
-            : 'Every exhibitor, with filters.'
+            : 'Exhibitor directory'
         }
       />
       <div className="flex flex-col gap-4">
+        <div role="group" aria-label="Quick views" className="flex flex-wrap items-center gap-1.5">
+          {QUICK_VIEWS.map((view) => {
+            const on = isQuickActive(filters, view.patch)
+            return (
+              <button
+                key={view.label}
+                type="button"
+                aria-pressed={on}
+                onClick={() => applyQuick(view.patch)}
+                className={cn(
+                  'min-h-8 cursor-pointer rounded-full border px-3 py-1 text-xs font-medium transition-colors',
+                  on
+                    ? 'border-primary/40 bg-primary/10 text-primary-hover font-semibold'
+                    : 'border-border bg-surface text-muted-foreground hover:bg-muted/60 hover:text-foreground',
+                )}
+              >
+                {view.label}
+              </button>
+            )
+          })}
+        </div>
         <FilterBar fields={fields} values={filters} onChange={setFilters} onClear={clearFilters} />
         <DataTable
           columns={columns}
