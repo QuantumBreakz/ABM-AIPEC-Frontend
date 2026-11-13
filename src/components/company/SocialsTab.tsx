@@ -21,10 +21,7 @@ export function SocialsTab({ company }: { company: Company }) {
   const reason = missingReason(company.stages.social, 'No public page was found')
 
   return (
-    <ChartCard
-      title="Official social profiles"
-      subtitle="Public pages that belong to the company, found through its website."
-    >
+    <ChartCard title="Official social profiles">
       <DescriptionList
         missingLabel="Not found"
         missingReason={reason}

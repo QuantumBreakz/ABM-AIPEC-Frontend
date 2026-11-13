@@ -72,15 +72,8 @@ function OverrideForm({
       <p className="text-[13px] text-muted-foreground">
         Currently{' '}
         <strong className="text-foreground">{STEP_STATUS_META[current.status].label}</strong>.
-        {current.reason && (
-          <>
-            {' '}
-            <span className="block">Recorded reason: {current.reason}</span>
-          </>
-        )}
-        <span className="mt-1 block">
-          Your change replaces the automatic status and is recorded in the History tab.
-        </span>
+        {current.reason && <span className="block">Recorded reason: {current.reason}</span>}
+        <span className="mt-1 block">Overrides are logged in History.</span>
       </p>
       <div className="flex flex-col gap-1.5">
         <label htmlFor="override-status" className="text-sm font-medium">

@@ -33,10 +33,7 @@ export function WebsiteTab({ company }: { company: Company }) {
   return (
     <div className="flex flex-col gap-6">
       <div className="grid gap-6 lg:grid-cols-2">
-        <ChartCard
-          title="About the company"
-          subtitle="What the official website says about the business."
-        >
+        <ChartCard title="About the company">
           <DescriptionList
             missingReason={reason}
             items={[
@@ -72,10 +69,7 @@ export function WebsiteTab({ company }: { company: Company }) {
           />
         </ChartCard>
 
-        <ChartCard
-          title="Contact details"
-          subtitle="General details published on the website, with where they were found."
-        >
+        <ChartCard title="Contact details">
           <DescriptionList
             missingReason={missingReason(step, 'No contact details were found on the website')}
             items={[
@@ -115,7 +109,13 @@ export function WebsiteTab({ company }: { company: Company }) {
 
       <ChartCard
         title="Facts and inferences"
-        subtitle="Every fact links to the page it came from. An inference is our own reading of the site, a guess to check."
+        action={
+          site.facts.length > 0 ? (
+            <span className="rounded-full bg-muted px-2.5 py-0.5 text-xs font-medium tabular-nums text-muted-foreground">
+              {site.facts.length} items
+            </span>
+          ) : undefined
+        }
       >
         {site.facts.length > 0 ? (
           <ul aria-label="Facts and inferences">
@@ -133,10 +133,7 @@ export function WebsiteTab({ company }: { company: Company }) {
       </ChartCard>
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <ChartCard
-          title={`Pages reviewed (${site.pagesReviewed.length})`}
-          subtitle="The pages we read to build this profile."
-        >
+        <ChartCard title={`Pages reviewed (${site.pagesReviewed.length})`}>
           {site.pagesReviewed.length > 0 ? (
             <ul aria-label="Pages reviewed" className="flex flex-col divide-y divide-border">
               {site.pagesReviewed.map((page) => (
@@ -158,10 +155,7 @@ export function WebsiteTab({ company }: { company: Company }) {
           )}
         </ChartCard>
 
-        <ChartCard
-          title={`Pages skipped (${site.skipped.length})`}
-          subtitle="Pages we did not read, and why. Nothing is skipped silently."
-        >
+        <ChartCard title={`Pages skipped (${site.skipped.length})`}>
           {site.skipped.length > 0 ? (
             <ul aria-label="Pages skipped" className="flex flex-col divide-y divide-border">
               {site.skipped.map((page) => (

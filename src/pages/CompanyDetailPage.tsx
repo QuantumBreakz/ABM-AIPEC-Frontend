@@ -1,4 +1,4 @@
-import { ArrowLeft, Hammer } from 'lucide-react'
+import { ArrowLeft, Sparkles } from 'lucide-react'
 import { Link, useParams } from 'react-router'
 import { useCompany } from '@/api/queries/companies'
 import { AdipecTab } from '@/components/company/AdipecTab'
@@ -8,7 +8,7 @@ import { ContactsTab } from '@/components/company/ContactsTab'
 import { HistoryTab } from '@/components/company/HistoryTab'
 import { SocialsTab } from '@/components/company/SocialsTab'
 import { WebsiteTab } from '@/components/company/WebsiteTab'
-import { COMPANY_TABS, isCompanyTab } from '@/lib/companyTabs'
+import { isCompanyTab } from '@/lib/companyTabs'
 import { StepsPanel } from '@/components/company/StepsPanel'
 import { EmptyState } from '@/components/EmptyState'
 import { ErrorState } from '@/components/ErrorState'
@@ -16,11 +16,6 @@ import { Skeleton } from '@/components/Skeleton'
 import { Button } from '@/components/ui/button'
 import { usePageTitle } from '@/lib/usePageTitle'
 import { NotFoundPage } from './placeholders'
-
-/** Tabs that later tickets build. Each address already works, so links never break. */
-const COMING: Record<string, string> = {
-  ai: 'FE-4.2',
-}
 
 export default function CompanyDetailPage() {
   const { id, tab } = useParams()
@@ -82,11 +77,11 @@ export default function CompanyDetailPage() {
       ) : current === 'history' ? (
         <HistoryTab companyId={data.id} />
       ) : (
-        <div className="rounded-lg border border-dashed border-border bg-surface">
+        <div className="card-elevated border-dashed">
           <EmptyState
-            icon={Hammer}
-            title={`The ${COMPANY_TABS.find((t) => t.key === current)?.label} tab is being built`}
-            hint={`It arrives with ticket ${COMING[current]}.`}
+            icon={Sparkles}
+            title="AI drafts coming soon"
+            hint="Personalized outreach messages and editorial controls will appear here."
           />
         </div>
       )}

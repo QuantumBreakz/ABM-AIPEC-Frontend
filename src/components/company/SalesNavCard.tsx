@@ -37,11 +37,17 @@ export function SalesNavCard({ company }: { company: Company }) {
   return (
     <ChartCard
       title="Sales Navigator account"
-      subtitle="Find the company in Sales Navigator yourself, then record what you found. Nothing here is automated."
+      action={
+        <div className="flex flex-wrap items-center gap-3 text-sm">
+          {company.leadershipCoverage !== 'reviewed' && (
+            <span className="rounded-full bg-warning-soft px-2.5 py-0.5 text-xs font-medium text-warning-ink">
+              Coverage unconfirmed
+            </span>
+          )}
+          <SourceLink href={sn.searchUrl} label="Open the Sales Navigator search" />
+        </div>
+      }
     >
-      <p className="mb-4 text-sm">
-        <SourceLink href={sn.searchUrl} label="Open the Sales Navigator search" />
-      </p>
       <DescriptionList
         missingReason={missingReason(company.stages.account, 'Not recorded yet')}
         items={[
@@ -72,11 +78,6 @@ export function SalesNavCard({ company }: { company: Company }) {
           },
         ]}
       />
-      {company.leadershipCoverage !== 'reviewed' && (
-        <p className="mt-4 text-[13px] text-muted-foreground">
-          The list of executives is not confirmed complete.
-        </p>
-      )}
     </ChartCard>
   )
 }
