@@ -1,7 +1,8 @@
-import type { AiStatus, EmailStatus, StepStatus } from '@/api/types'
+import type { AiStatus, EmailStatus, Run, StepStatus } from '@/api/types'
 import {
   AI_STATUS_META,
   EMAIL_STATUS_META,
+  RUN_STATUS_META,
   STEP_STATUS_META,
   type StatusMeta,
   TONE_BADGE,
@@ -13,6 +14,7 @@ type Props =
   | { kind: 'step'; status: StepStatus; reason?: string; className?: string }
   | { kind: 'email'; status: EmailStatus; reason?: string; className?: string }
   | { kind: 'ai'; status: AiStatus; reason?: string; className?: string }
+  | { kind: 'run'; status: Run['status']; reason?: string; className?: string }
 
 function metaFor(props: Props): StatusMeta {
   switch (props.kind) {
@@ -22,6 +24,8 @@ function metaFor(props: Props): StatusMeta {
       return EMAIL_STATUS_META[props.status]
     case 'ai':
       return AI_STATUS_META[props.status]
+    case 'run':
+      return RUN_STATUS_META[props.status]
   }
 }
 
@@ -50,7 +54,13 @@ export function StatusBadge(props: Props) {
           props.className,
         )}
       >
-        <Icon className="size-3.5" aria-hidden />
+        <Icon
+          className={cn(
+            'size-3.5',
+            props.kind === 'run' && props.status === 'running' && 'animate-spin',
+          )}
+          aria-hidden
+        />
         {meta.label}
       </span>
     </Tooltip>
