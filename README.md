@@ -26,9 +26,11 @@ Progress against the tickets in PLAN.md. Updated with each merged PR.
 | 0     | FE-0.3 API client           | Done        |
 | 0     | FE-0.6 Shared components    | Done        |
 | 0     | FE-0.4 Mock backend (MSW)   | Done        |
-| 0     | FE-0.5 App shell + auth     | In review   |
+| 0     | FE-0.5 App shell + auth     | Done        |
 | 0     | FE-0.2 Vercel deploy        | Next        |
-| 1     | Overview, Runs, Companies   | Not started |
+| 1     | FE-1.3 Company list         | In review   |
+| 1     | FE-1.1 Overview             | Next        |
+| 1     | FE-1.2 Runs, FE-1.4 Detail  | Not started |
 | 2     | Company research, review    | Not started |
 | 3     | People (contacts, Sales Nav)| Not started |
 | 4     | AI review, first CSV        | Not started |
@@ -53,6 +55,9 @@ Progress against the tickets in PLAN.md. Updated with each merged PR.
   sidebar with a review-count badge, top bar with theme toggle and account menu, route guards
   (signed out goes to login and back; reviewers cannot open admin pages), 404 page and the "server
   is waking up" banner. Screens that later tickets build are placeholders for now.
+- **Company list** (`/companies`): search, filters (edition dropdown, country, step status, email
+  and AI status, duplicates…), sortable headings, 50 per page, show/hide columns, all kept in the
+  URL. Missing data reads "Not available"; there are loading, empty and error states.
 - **Component gallery** (`src/pages/DevGallery.tsx`): every component on one page, at `/dev/ui` in
   development builds only.
 
