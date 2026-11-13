@@ -180,7 +180,7 @@ describe('Company list', () => {
     const target = db.companies.find((c) => c.name.toLowerCase().includes('gulf'))
     const user = userEvent.setup()
     await user.click(await screen.findByRole('row', { name: `Open ${target?.name}` }))
-    await screen.findByRole('heading', { name: 'Company' })
+    await screen.findByRole('heading', { level: 1, name: target?.name })
     expect(router.state.location.pathname).toBe(`/companies/${target?.id}`)
 
     await router.navigate('/companies?q=Gulf')

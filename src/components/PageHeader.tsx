@@ -1,4 +1,5 @@
-import { type ReactNode, useEffect } from 'react'
+import type { ReactNode } from 'react'
+import { usePageTitle } from '@/lib/usePageTitle'
 
 /**
  * Title row at the top of every page: heading, optional description, actions on the right.
@@ -13,9 +14,7 @@ export function PageHeader({
   description?: string
   actions?: ReactNode
 }) {
-  useEffect(() => {
-    document.title = `${title} · ADIPEC Lead Gen`
-  }, [title])
+  usePageTitle(title)
 
   return (
     <header className="mb-6 flex flex-wrap items-start justify-between gap-4">

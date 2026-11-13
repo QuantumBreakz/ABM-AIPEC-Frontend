@@ -2,7 +2,7 @@ import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import type { FilterValues } from '@/lib/filters'
 import { api } from '../client'
 import { keys } from '../keys'
-import type { CompanyListItem, Paged } from '../types'
+import type { Company, CompanyListItem, Paged } from '../types'
 
 export const COMPANY_PAGE_SIZE = 50
 
@@ -22,5 +22,14 @@ export function useCompanies(
     queryFn: ({ signal }) => api.get<Paged<CompanyListItem>>('/companies', params, signal),
     placeholderData: keepPreviousData,
     enabled,
+  })
+}
+
+/** One company with everything we know about it. */
+export function useCompany(id: string | undefined) {
+  return useQuery({
+    queryKey: keys.company(id),
+    queryFn: ({ signal }) => api.get<Company>(`/companies/${id}`, undefined, signal),
+    enabled: !!id,
   })
 }

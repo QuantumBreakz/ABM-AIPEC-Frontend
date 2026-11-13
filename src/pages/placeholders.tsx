@@ -5,7 +5,6 @@ import { ComingSoon } from './ComingSoon'
 
 // Each of these is replaced by a real screen in the ticket named below.
 
-export const CompanyDetailPage = () => <ComingSoon title="Company" ticket="FE-1.4" />
 export const AiReviewPage = () => <ComingSoon title="AI review" ticket="FE-4.1" />
 export const ExportsPage = () => (
   <ComingSoon
