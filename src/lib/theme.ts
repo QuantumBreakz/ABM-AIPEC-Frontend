@@ -26,7 +26,9 @@ export function isDark(theme: Theme) {
   return typeof matchMedia === 'function' && matchMedia('(prefers-color-scheme: dark)').matches
 }
 
-/** Switch the whole app between light and dark by toggling a class on <html>. */
+/** Switch the whole app between light and dark by toggling a class and color-scheme on <html>. */
 export function applyTheme(theme: Theme) {
-  document.documentElement.classList.toggle('dark', isDark(theme))
+  const dark = isDark(theme)
+  document.documentElement.classList.toggle('dark', dark)
+  document.documentElement.style.colorScheme = dark ? 'dark' : 'light'
 }

@@ -2,85 +2,83 @@
 @import '@fontsource-variable/jetbrains-mono';
 @import 'tailwindcss';
 
-/* ---------- Design tokens: change the look of the whole app here ----------
-   Every text pair is at least 6:1 (WCAG AA asks for 4.5:1) and every control outline is at least
-   3:1. They were measured, not eyeballed; re-measure after changing a colour. */
+/* ---------- Design tokens: Precision Energy Intelligence ----------
+   Warm mineral stone + deep petroleum teal (light) / deep marine obsidian + seafoam teal (dark).
+   Every text pair is >= 4.5:1 (most >= 7:1) and every control outline is >= 3:1 (tested in contrast.test.ts). */
 :root {
-  --background: #f8fafc;
+  --background: #f5f4ef;
   --surface: #ffffff;
-  --foreground: #0f172a;
-  --muted: #f1f5f9;
-  --muted-foreground: #4b5a70; /* 6.4:1 on grey, 7.0:1 on white */
-  --border: #d5dce8; /* quiet dividers and card edges */
-  --border-strong: #7a889d; /* outlines of inputs, buttons and dots: 3.6:1 */
-  --track: color-mix(in srgb, var(--neutral) 30%, var(--surface)); /* empty part of a bar */
-  --primary: #4f46e5;
-  --primary-hover: #4338ca;
+  --foreground: #0e1726;
+  --muted: #eae8e1;
+  --muted-foreground: #4a5568;
+  --border: #dcd8ce;
+  --border-strong: #7b8494;
+  --track: color-mix(in srgb, var(--neutral) 28%, var(--surface));
+  --primary: #0b5b67;
+  --primary-hover: #084650;
   --primary-foreground: #ffffff;
-  --ring: #6366f1;
+  --ring: #0e7482;
 
-  /* Status colours: always paired with a text label, never colour-only.
-     The plain colour is for dots, icons and bars; the "-ink" colour is for text on the soft fill. */
-  --success: #15803d;
+  --success: #157a3c;
   --success-soft: #dcfce7;
-  --success-ink: #166534;
+  --success-ink: #14532d;
   --info: #1d4ed8;
   --info-soft: #dbeafe;
-  --info-ink: #1e40af;
+  --info-ink: #1e3a8a;
   --warning: #b45309;
   --warning-soft: #fef3c7;
-  --warning-ink: #92400e;
+  --warning-ink: #78350f;
   --neutral: #475569;
-  --neutral-soft: #e2e8f0;
-  --neutral-ink: #334155;
+  --neutral-soft: #e4e7ec;
+  --neutral-ink: #273244;
   --danger: #b91c1c;
   --danger-soft: #fee2e2;
-  --danger-ink: #991b1b;
+  --danger-ink: #7f1d1d;
 
-  /* Chart fills. The stack order in lib/overview.ts was checked with the dataviz validator:
-     neighbouring segments stay distinguishable (colour-blind ΔE >= 14.7, normal vision >= 19.4),
-     and every filled segment is at least 3:1 against the white card (not started is an
-     intentionally empty grey). */
+  /* Chart fills: neighbouring segments stay distinct for colour-blind & normal vision, >= 3:1 on surface. */
   --seg-approved: #14532d;
-  --seg-completed: #50a06e;
+  --seg-completed: #429965;
   --seg-in-progress: var(--info);
   --seg-needs-review: #92400e;
   --seg-partial: #c28200;
   --seg-restricted: #334155;
-  --seg-pending-access: #75808f;
+  --seg-pending-access: #717c8c;
   --seg-failed: var(--danger);
-  --seg-not-started: #c8ccd2;
-  /* Text printed inside a strong fill: white on dark fills (light theme) */
+  --seg-not-started: #cbc8bf;
   --ink-on-strong: #ffffff;
+
+  --scrollbar-track: #eceae3;
+  --scrollbar-thumb: #7b8494;
+  color-scheme: light;
 }
 
 .dark {
-  --background: #0b1120;
-  --surface: #111a2e;
-  --foreground: #e2e8f0;
-  --muted: #1a2438;
-  --muted-foreground: #a3b1c6; /* 7.1:1 or better everywhere */
-  --border: #2d3a55;
-  --border-strong: #62728d; /* 3.6:1 on the card */
-  --primary: #818cf8;
-  --primary-hover: #a5b4fc;
-  --primary-foreground: #0b1120;
-  --ring: #818cf8;
+  --background: #090e17;
+  --surface: #101827;
+  --foreground: #e7edf5;
+  --muted: #182234;
+  --muted-foreground: #9fb0c7;
+  --border: #253247;
+  --border-strong: #62738d;
+  --primary: #2dd4bf;
+  --primary-hover: #5eead4;
+  --primary-foreground: #090e17;
+  --ring: #2dd4bf;
 
   --success: #4ade80;
-  --success-soft: #14301f;
+  --success-soft: #122d1d;
   --success-ink: #4ade80;
   --info: #93c5fd;
-  --info-soft: #172554;
+  --info-soft: #15254d;
   --info-ink: #93c5fd;
   --warning: #fbbf24;
-  --warning-soft: #3a2a0a;
+  --warning-soft: #362709;
   --warning-ink: #fbbf24;
   --neutral: #cbd5e1;
-  --neutral-soft: #243049;
+  --neutral-soft: #202c42;
   --neutral-ink: #cbd5e1;
   --danger: #fca5a5;
-  --danger-soft: #3b1414;
+  --danger-soft: #3a1416;
   --danger-ink: #fca5a5;
 
   --seg-approved: var(--success);
@@ -92,8 +90,11 @@
   --seg-pending-access: color-mix(in srgb, var(--neutral) 50%, var(--surface));
   --seg-failed: var(--danger);
   --seg-not-started: color-mix(in srgb, var(--neutral) 30%, var(--surface));
-  /* ...and near-black on the lighter fills of the dark theme */
-  --ink-on-strong: #0b1120;
+  --ink-on-strong: #090e17;
+
+  --scrollbar-track: #101827;
+  --scrollbar-thumb: #4b5c75;
+  color-scheme: dark;
 }
 
 @theme inline {
@@ -137,12 +138,24 @@
     font-family: var(--font-sans);
     font-feature-settings: 'cv11', 'ss01';
     -webkit-font-smoothing: antialiased;
+    scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+    scrollbar-width: thin;
   }
   body {
     background: var(--background);
     color: var(--foreground);
-    font-size: 14px;
+    font-size: 0.875rem;
     line-height: 1.5;
+    text-align: start;
+  }
+  h1,
+  h2,
+  h3,
+  th {
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
   }
   /* Numbers line up in tables */
   table {
@@ -152,10 +165,39 @@
     outline: 2px solid var(--ring);
     outline-offset: 2px;
   }
+  dialog:modal {
+    overscroll-behavior: contain;
+  }
+  dialog::backdrop {
+    overflow: hidden;
+    overscroll-behavior: contain;
+  }
   @media (prefers-reduced-motion: reduce) {
     * {
       animation-duration: 0.01ms !important;
       transition-duration: 0.01ms !important;
     }
   }
+}
+
+.bg-grid-architectural {
+  background-image:
+    linear-gradient(to right, rgb(148 163 184 / 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(148 163 184 / 0.08) 1px, transparent 1px);
+  background-size: 2.25rem 2.25rem;
+}
+
+.card-elevated {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  box-shadow:
+    0 1px 2px rgb(14 23 38 / 0.04),
+    0 4px 12px -4px rgb(14 23 38 / 0.03);
+}
+
+.dark .card-elevated {
+  box-shadow:
+    0 1px 2px rgb(0 0 0 / 0.28),
+    0 8px 24px -8px rgb(0 0 0 / 0.35);
 }
