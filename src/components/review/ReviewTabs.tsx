@@ -18,7 +18,7 @@ export function ReviewTabs() {
                 cn(
                   'flex items-center gap-2 whitespace-nowrap border-b-2 px-4 py-2.5 text-sm font-medium transition-colors',
                   isActive
-                    ? 'border-primary text-foreground'
+                    ? 'border-primary text-foreground font-semibold'
                     : 'border-transparent text-muted-foreground hover:border-border-strong hover:text-foreground',
                 )
               }
@@ -27,7 +27,7 @@ export function ReviewTabs() {
               {counts.data && (
                 <>
                   {/* a real space, so it is read aloud as "Website 12" */}{' '}
-                  <span className="rounded-full bg-muted px-1.5 text-xs tabular-nums text-muted-foreground">
+                  <span className="rounded-full bg-muted px-2 py-0.5 text-xs font-semibold tabular-nums text-foreground">
                     {counts.data[type]}
                   </span>
                 </>

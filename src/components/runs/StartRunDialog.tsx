@@ -67,7 +67,7 @@ function StartRunFormInner({ events, onClose }: { events: Event[]; onClose: () =
       {serverError && (
         <div
           role="alert"
-          className="flex items-start gap-2 rounded-md bg-danger-soft px-3 py-2.5 text-sm text-danger-ink"
+          className="flex items-start gap-2.5 rounded-lg border border-danger/25 bg-danger-soft px-3.5 py-2.5 text-sm text-danger-ink"
         >
           <TriangleAlert className="mt-0.5 size-4 shrink-0" aria-hidden />
           <div>
@@ -86,7 +86,7 @@ function StartRunFormInner({ events, onClose }: { events: Event[]; onClose: () =
       )}
 
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="run-edition" className="text-sm font-medium">
+        <label htmlFor="run-edition" className="text-[0.8125rem] font-medium text-foreground">
           Edition
         </label>
         <Select id="run-edition" {...register('edition', { valueAsNumber: true })}>
@@ -96,33 +96,35 @@ function StartRunFormInner({ events, onClose }: { events: Event[]; onClose: () =
             </option>
           ))}
         </Select>
-        {errors.edition && <p className="text-[13px] text-danger-ink">{errors.edition.message}</p>}
+        {errors.edition && (
+          <p className="text-[0.8125rem] text-danger-ink">{errors.edition.message}</p>
+        )}
       </div>
 
-      <fieldset className="flex flex-col gap-2">
+      <fieldset className="flex flex-col gap-2.5">
         <div className="flex items-center justify-between">
-          <legend className="text-sm font-medium">Steps to run</legend>
-          <div className="flex gap-3 text-[13px]">
+          <legend className="text-[0.8125rem] font-medium text-foreground">Steps to run</legend>
+          <div className="flex gap-3 text-[0.8125rem]">
             <button
               type="button"
-              className="font-medium text-primary underline-offset-2 hover:underline"
+              className="cursor-pointer font-medium text-primary underline-offset-2 hover:underline"
               onClick={() => setValue('steps', [...RUN_STEPS], { shouldValidate: true })}
             >
               Select all
             </button>
             <button
               type="button"
-              className="font-medium text-primary underline-offset-2 hover:underline"
+              className="cursor-pointer font-medium text-primary underline-offset-2 hover:underline"
               onClick={() => setValue('steps', [], { shouldValidate: true })}
             >
               Select none
             </button>
           </div>
         </div>
-        <ul className="grid gap-1 sm:grid-cols-2">
+        <ul className="grid gap-1.5 rounded-xl border border-border bg-muted/25 p-2 sm:grid-cols-2">
           {RUN_STEPS.map((step) => (
             <li key={step}>
-              <label className="flex cursor-pointer items-center gap-2 rounded-md px-2 py-1.5 text-sm hover:bg-muted">
+              <label className="flex cursor-pointer items-center gap-2 rounded-lg px-2.5 py-1.5 text-sm transition-colors hover:bg-surface">
                 <input
                   type="checkbox"
                   value={step}
@@ -134,18 +136,17 @@ function StartRunFormInner({ events, onClose }: { events: Event[]; onClose: () =
             </li>
           ))}
         </ul>
-        <p className="text-[13px] text-muted-foreground">
-          {chosen.length} of {RUN_STEPS.length} steps selected. Leave them all ticked for a normal
-          run.
+        <p className="text-[0.8125rem] text-muted-foreground">
+          {chosen.length} of {RUN_STEPS.length} steps selected
         </p>
         {errors.steps && (
-          <p role="alert" className="text-[13px] text-danger-ink">
+          <p role="alert" className="text-[0.8125rem] text-danger-ink">
             {errors.steps.message}
           </p>
         )}
       </fieldset>
 
-      <div className="flex justify-end gap-2">
+      <div className="flex justify-end gap-2.5 border-t border-border/70 pt-4">
         <Dialog.Close asChild>
           <Button variant="secondary" disabled={isSubmitting}>
             Cancel
@@ -177,14 +178,15 @@ export function StartRunDialog({
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 z-40 bg-foreground/40 backdrop-blur-[1px]" />
-        <Dialog.Content className="fixed left-1/2 top-1/2 z-50 max-h-[calc(100vh-2rem)] w-[calc(100%-2rem)] max-w-lg -translate-x-1/2 -translate-y-1/2 overflow-y-auto rounded-lg border border-border bg-surface p-6 shadow-xl">
-          <div className="mb-5 flex items-start justify-between gap-4">
+        <Dialog.Overlay className="fixed inset-0 z-40 bg-foreground/45 backdrop-blur-[2px]" />
+        <Dialog.Content className="fixed left-1/2 top-1/2 z-50 max-h-[calc(100vh-2rem)] w-[calc(100%-2rem)] max-w-lg -translate-x-1/2 -translate-y-1/2 overflow-y-auto overscroll-contain rounded-xl border border-border bg-surface p-6 shadow-2xl">
+          <div className="mb-5 flex items-start justify-between gap-4 border-b border-border/70 pb-4">
             <div>
-              <Dialog.Title className="text-base font-semibold">Start a run</Dialog.Title>
-              <Dialog.Description className="mt-1 text-muted-foreground">
-                A run reads the exhibitor directory and researches each company. Only one run can
-                work at a time.
+              <Dialog.Title className="text-base font-semibold tracking-tight text-foreground">
+                Start a run
+              </Dialog.Title>
+              <Dialog.Description className="mt-0.5 text-[0.8125rem] text-muted-foreground">
+                Select edition and stages.
               </Dialog.Description>
             </div>
             <Dialog.Close asChild>

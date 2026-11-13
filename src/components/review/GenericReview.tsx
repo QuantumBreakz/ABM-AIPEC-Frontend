@@ -1,20 +1,13 @@
+import { ArrowUpRight } from 'lucide-react'
 import { Link } from 'react-router'
 import type { Company, ReviewItem, ReviewType } from '@/api/types'
 import { DateTime } from '@/components/DateTime'
 import { Button } from '@/components/ui/button'
 import { REVIEW_TAB } from '@/lib/review'
 
-/** The ticket that adds a guided way to resolve each kind of item. Until then the company page works. */
-const GUIDED_BY: Partial<Record<ReviewType, string>> = {
-  salesnav: 'FE-3.3',
-  contacts: 'FE-3.4',
-  emails: 'FE-3.4',
-  ai: 'FE-4.2',
-}
-
 const TAB_NAME = { website: 'Website', contacts: 'Contacts', ai: 'AI' } as const
 
-/** For kinds of review whose guided drawer is built later: show the item and link to where it is worked on. */
+/** Summary panel in the review drawer with a direct link to the corresponding company workspace tab. */
 export function GenericReview({
   type,
   item,
@@ -26,34 +19,32 @@ export function GenericReview({
 }) {
   const tab = REVIEW_TAB[type]
   return (
-    <div className="flex flex-col gap-4">
-      <dl className="grid gap-x-4 gap-y-2 text-sm sm:grid-cols-[8rem_minmax(0,1fr)]">
-        <dt className="text-muted-foreground">Why it is here</dt>
-        <dd>{item?.reason ?? 'Needs a person to look at it.'}</dd>
+    <div className="flex flex-col gap-5">
+      <dl className="grid gap-x-4 gap-y-2.5 rounded-xl border border-border bg-muted/30 p-4 text-sm sm:grid-cols-[8rem_minmax(0,1fr)]">
+        <dt className="text-muted-foreground">Reason</dt>
+        <dd className="text-foreground">{item?.reason ?? 'Manual check required.'}</dd>
         {item?.contactName && (
           <>
             <dt className="text-muted-foreground">Contact</dt>
-            <dd>{item.contactName}</dd>
+            <dd className="text-foreground">{item.contactName}</dd>
           </>
         )}
         {item && (
           <>
-            <dt className="text-muted-foreground">Waiting since</dt>
-            <dd>
+            <dt className="text-muted-foreground">Queued</dt>
+            <dd className="text-foreground">
               <DateTime value={item.since} />
             </dd>
           </>
         )}
       </dl>
-      <p className="text-[13px] text-muted-foreground">
-        {GUIDED_BY[type]
-          ? `A guided way to resolve this arrives with ${GUIDED_BY[type]}. For now, work on it on the company page.`
-          : 'Work on this on the company page.'}
-      </p>
       {tab && (
         <div>
           <Button asChild>
-            <Link to={`/companies/${company.id}/${tab}`}>Open the {TAB_NAME[tab]} tab</Link>
+            <Link to={`/companies/${company.id}/${tab}`}>
+              Open the {TAB_NAME[tab]} tab
+              <ArrowUpRight className="size-4" aria-hidden />
+            </Link>
           </Button>
         </div>
       )}

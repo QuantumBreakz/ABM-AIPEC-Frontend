@@ -107,7 +107,7 @@ export default function RunsPage() {
     <>
       <PageHeader
         title="Runs"
-        description="Start, pause and follow research runs."
+        description="Pipeline execution history"
         actions={
           isAdmin && (
             <Button onClick={() => setStarting(true)}>
@@ -118,9 +118,9 @@ export default function RunsPage() {
         }
       />
       {running && (
-        <p className="mb-3 flex items-center gap-2 text-[13px] text-muted-foreground">
+        <p className="mb-3 flex items-center gap-2 text-[0.8125rem] font-medium text-info-ink">
           <span aria-hidden className="size-2 animate-pulse rounded-full bg-info" />A run is in
-          progress. This list updates every 5 seconds.
+          progress · Live
         </p>
       )}
       <DataTable

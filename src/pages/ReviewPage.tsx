@@ -97,7 +97,7 @@ function Queue({ type }: { type: ReviewType }) {
           <EmptyState
             icon={PartyPopper}
             title="Nothing to review here"
-            hint="You are all caught up. New items appear when a run finds something that needs a person."
+            hint="You are all caught up."
           />
         }
       />
@@ -121,7 +121,7 @@ export default function ReviewPage() {
   if (!isReviewType(type)) return <NotFoundPage />
   return (
     <>
-      <PageHeader title="Review queue" description="Items that need a person to look at them." />
+      <PageHeader title="Review queue" description="Items needing manual verification." />
       <ReviewTabs />
       <Queue type={type} />
     </>

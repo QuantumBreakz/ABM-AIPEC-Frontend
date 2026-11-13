@@ -11,14 +11,12 @@ export const REVIEW_LABEL: Record<ReviewType, string> = {
 }
 
 export const REVIEW_DESCRIPTION: Record<ReviewType, string> = {
-  website:
-    'Companies whose website could not be read, or where a person has to choose the right one.',
-  duplicate:
-    'Records that look like the same company. Compare them, then merge or mark them as different.',
-  salesnav: 'Companies waiting for someone to find them in Sales Navigator.',
-  contacts: 'Companies with no decision-makers saved after review.',
-  emails: 'Email addresses that are invalid, risky or could not be confirmed.',
-  ai: 'Drafts that were rejected or that did not have enough evidence to write.',
+  website: 'Verify or assign official website',
+  duplicate: 'Compare and merge matching companies',
+  salesnav: 'Locate company in Sales Navigator',
+  contacts: 'Add missing decision-maker contacts',
+  emails: 'Review invalid or unverified addresses',
+  ai: 'Approve or rewrite flagged drafts',
 }
 
 export const isReviewType = (value: string | undefined): value is ReviewType =>

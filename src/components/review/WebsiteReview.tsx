@@ -93,9 +93,11 @@ export function WebsiteReview({
 
       <section
         aria-label="What we know"
-        className="rounded-lg border border-border bg-muted/40 p-4"
+        className="rounded-xl border border-border bg-muted/35 p-4"
       >
-        <h3 className="mb-2 text-sm font-semibold">What we know</h3>
+        <h3 className="mb-2.5 text-xs font-semibold uppercase tracking-[0.06em] text-muted-foreground">
+          Current status
+        </h3>
         <dl className="grid gap-x-4 gap-y-2 text-sm sm:grid-cols-[8rem_minmax(0,1fr)]">
           <dt className="text-muted-foreground">Website step</dt>
           <dd>
@@ -115,7 +117,7 @@ export function WebsiteReview({
       </section>
 
       <form onSubmit={saveUrl} noValidate className="flex flex-col gap-2">
-        <h3 className="text-sm font-semibold">Set the official website</h3>
+        <h3 className="text-sm font-semibold">Official website</h3>
         <label htmlFor="review-url" className="text-[13px] text-muted-foreground">
           Website address
         </label>
@@ -141,7 +143,7 @@ export function WebsiteReview({
       <hr className="border-border" />
 
       <form onSubmit={markNoWebsite} noValidate className="flex flex-col gap-2">
-        <h3 className="text-sm font-semibold">Or: this company has no website</h3>
+        <h3 className="text-sm font-semibold">No website</h3>
         <label htmlFor="review-no-site" className="text-[13px] text-muted-foreground">
           Reason
         </label>

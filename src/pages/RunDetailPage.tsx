@@ -32,7 +32,7 @@ const COUNTS: { key: keyof Run['counts']; label: string }[] = [
 function LiveNote({ status }: { status: Run['status'] }) {
   if (status === 'running') {
     return (
-      <p className="flex items-center gap-2 text-[13px] text-muted-foreground">
+      <p className="inline-flex items-center gap-2 rounded-full bg-info-soft px-3 py-1 text-xs font-medium text-info-ink">
         <span aria-hidden className="size-2 animate-pulse rounded-full bg-info" />
         Updating every 5 seconds
       </p>
@@ -40,7 +40,7 @@ function LiveNote({ status }: { status: Run['status'] }) {
   }
   if (status === 'paused') {
     return (
-      <p className="text-[13px] text-muted-foreground">
+      <p className="rounded-full bg-muted px-3 py-1 text-xs font-medium text-muted-foreground">
         Paused. This page stops updating until the run is resumed.
       </p>
     )
@@ -67,7 +67,7 @@ export default function RunDetailPage() {
   }
 
   const back = (
-    <Button asChild variant="ghost" size="sm" className="-ml-2 mb-2">
+    <Button asChild variant="ghost" size="sm" className="-ml-2 mb-3">
       <Link to="/runs">
         <ArrowLeft className="size-4" aria-hidden />
         All runs
@@ -82,8 +82,8 @@ export default function RunDetailPage() {
         <div role="status" className="flex flex-col gap-4" aria-busy="true">
           <span className="sr-only">Loading run…</span>
           <Skeleton className="h-10 w-64" />
-          <Skeleton className="h-32" />
-          <Skeleton className="h-64" />
+          <Skeleton className="h-32 rounded-xl" />
+          <Skeleton className="h-64 rounded-xl" />
         </div>
       </>
     )
@@ -93,7 +93,7 @@ export default function RunDetailPage() {
     return (
       <>
         {back}
-        <div className="rounded-lg border border-border bg-surface">
+        <div className="card-elevated">
           <ErrorState error={run.error} onRetry={() => void run.refetch()} />
         </div>
       </>
@@ -127,7 +127,7 @@ export default function RunDetailPage() {
       {actionError && (
         <div
           role="alert"
-          className="mb-4 flex items-start gap-2 rounded-md bg-danger-soft px-3 py-2.5 text-sm text-danger-ink"
+          className="mb-4 flex items-start gap-2.5 rounded-xl border border-danger/25 bg-danger-soft px-4 py-3 text-sm text-danger-ink"
         >
           <TriangleAlert className="mt-0.5 size-4 shrink-0" aria-hidden />
           {actionError}
@@ -135,14 +135,11 @@ export default function RunDetailPage() {
       )}
 
       <div className="flex flex-col gap-6">
-        <section
-          aria-label="Run summary"
-          className="rounded-lg border border-border bg-surface p-5"
-        >
+        <section aria-label="Run summary" className="card-elevated p-5 sm:p-6">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <div className="flex items-center gap-3">
+            <div className="flex flex-wrap items-center gap-3">
               <StatusBadge kind="run" status={data.status} />
-              <span className="text-[13px] text-muted-foreground">
+              <span className="text-[0.8125rem] text-muted-foreground">
                 Started <DateTime value={data.createdAt} />
                 {finished && data.finishedAt && (
                   <>

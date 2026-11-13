@@ -1,25 +1,24 @@
-import { Hammer } from 'lucide-react'
+import { Clock } from 'lucide-react'
+import { Link } from 'react-router'
 import { EmptyState } from '@/components/EmptyState'
 import { PageHeader } from '@/components/PageHeader'
+import { Button } from '@/components/ui/button'
 
-/** Placeholder for a screen that a later ticket builds. */
-export function ComingSoon({
-  title,
-  description,
-  ticket,
-}: {
-  title: string
-  description?: string
-  ticket: string
-}) {
+/** Product placeholder view for upcoming workspace modules. */
+export function ComingSoon({ title, description }: { title: string; description?: string }) {
   return (
     <>
       <PageHeader title={title} description={description} />
-      <div className="rounded-lg border border-dashed border-border bg-surface">
+      <div className="card-elevated border-dashed">
         <EmptyState
-          icon={Hammer}
-          title="This screen is being built"
-          hint={`It arrives with ticket ${ticket}.`}
+          icon={Clock}
+          title={`${title} coming soon`}
+          hint={description ?? 'This module is scheduled for an upcoming release.'}
+          action={
+            <Button asChild variant="secondary" size="sm">
+              <Link to="/">Back to overview</Link>
+            </Button>
+          }
         />
       </div>
     </>
