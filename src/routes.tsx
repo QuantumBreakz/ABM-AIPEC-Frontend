@@ -5,6 +5,7 @@ import { Root } from './components/layout/Root'
 import CompaniesPage from './pages/CompaniesPage'
 import DevGallery from './pages/DevGallery'
 import LoginPage from './pages/LoginPage'
+import OverviewPage from './pages/OverviewPage'
 import {
   AdminProvidersPage,
   AdminSuppressionsPage,
@@ -14,7 +15,6 @@ import {
   ExportsPage,
   GapReportPage,
   NotFoundPage,
-  OverviewPage,
   ReviewPage,
   RunDetailPage,
   RunsPage,

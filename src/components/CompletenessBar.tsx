@@ -9,7 +9,7 @@ export function CompletenessBar({ value }: { value: number }) {
         aria-valuemax={100}
         aria-valuenow={percent}
         aria-label="Completeness"
-        className="h-1.5 w-16 overflow-hidden rounded-full bg-muted"
+        className="h-1.5 w-12 overflow-hidden rounded-full bg-track"
       >
         <div className="h-full rounded-full bg-primary" style={{ width: `${percent}%` }} />
       </div>

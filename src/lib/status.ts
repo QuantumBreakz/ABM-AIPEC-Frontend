@@ -152,11 +152,11 @@ export const STEP_LABEL: Record<StepKey, string> = {
 
 /** Tailwind classes per tone (soft background + strong text from the design tokens). */
 export const TONE_BADGE: Record<Tone, string> = {
-  success: 'bg-success-soft text-success',
-  info: 'bg-info-soft text-info',
-  warning: 'bg-warning-soft text-warning',
-  neutral: 'bg-neutral-soft text-neutral',
-  danger: 'bg-danger-soft text-danger',
+  success: 'bg-success-soft text-success-ink',
+  info: 'bg-info-soft text-info-ink',
+  warning: 'bg-warning-soft text-warning-ink',
+  neutral: 'bg-neutral-soft text-neutral-ink',
+  danger: 'bg-danger-soft text-danger-ink',
   muted: 'bg-muted text-muted-foreground',
 }
 

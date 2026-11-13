@@ -39,7 +39,7 @@ function Field({
       </label>
       {children}
       {error && (
-        <p id={`${id}-error`} className="text-[13px] text-danger">
+        <p id={`${id}-error`} className="text-[13px] text-danger-ink">
           {error}
         </p>
       )}
@@ -100,7 +100,7 @@ export default function LoginPage() {
           {serverError && (
             <div
               role="alert"
-              className="flex items-start gap-2 rounded-md bg-danger-soft px-3 py-2.5 text-sm text-danger"
+              className="flex items-start gap-2 rounded-md bg-danger-soft px-3 py-2.5 text-sm text-danger-ink"
             >
               <TriangleAlert className="mt-0.5 size-4 shrink-0" aria-hidden />
               <span>{serverError}</span>

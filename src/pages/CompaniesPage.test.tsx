@@ -30,7 +30,6 @@ describe('Company list', () => {
     expect(screen.getByText(`1–50 of ${db.companies.length}`)).toBeInTheDocument()
     for (const header of [
       'Company',
-      'Website',
       'Country',
       'Progress',
       'Contacts',
@@ -53,6 +52,34 @@ describe('Company list', () => {
     await user.click(await screen.findByRole('menuitemcheckbox', { name: /stand/i }))
     await user.keyboard('{Escape}') // close the menu; while open it hides the page from screen readers
     expect(await screen.findByRole('columnheader', { name: /stand/i })).toBeInTheDocument()
+  })
+
+  it('hides the secondary columns by default, so the table fits at 1280px', async () => {
+    await open()
+    for (const hidden of ['Website', 'Category', 'Stand']) {
+      expect(
+        screen.queryByRole('columnheader', { name: new RegExp(hidden, 'i') }),
+      ).not.toBeInTheDocument()
+    }
+  })
+
+  it('pins the Company column so it stays visible when scrolling sideways', async () => {
+    await open()
+    const header = screen.getByRole('columnheader', { name: /company/i })
+    expect(header.className).toContain('sticky')
+    const firstRowCell = dataRows()[0]?.querySelector('td')
+    expect(firstRowCell?.className).toContain('sticky')
+  })
+
+  it('folds extra email states into "+N more" instead of growing the row', async () => {
+    const company = db.companies.find((c) => Object.keys(c.emailsByStatus).length >= 3)
+    expect(company).toBeTruthy()
+    await open(`/companies?q=${encodeURIComponent(company?.name ?? '')}`)
+    const row = await screen.findByRole('row', { name: `Open ${company?.name}` })
+    const list = within(row).getByRole('list', { name: 'Emails by status' })
+    // two pills + one "+N more"
+    expect(within(list).getAllByRole('listitem')).toHaveLength(3)
+    expect(within(list).getByText(/\+\d+ more/)).toBeInTheDocument()
   })
 
   it('keeps filters in the URL, so the same link gives the same results', async () => {
@@ -164,7 +191,7 @@ describe('Company list', () => {
   })
 
   it('shows missing data as "Not available", never a blank', async () => {
-    const company = db.companies.find((c) => !c.domain)
+    const company = db.companies.find((c) => !c.country)
     expect(company).toBeTruthy()
     await open(`/companies?q=${encodeURIComponent(company?.name ?? '')}`)
     const row = await screen.findByRole('row', { name: `Open ${company?.name}` })

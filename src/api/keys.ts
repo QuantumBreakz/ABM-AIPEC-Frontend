@@ -4,4 +4,5 @@ export const keys = {
   reviewCounts: ['review-counts'] as const,
   events: ['events'] as const,
   companies: (params?: object) => ['companies', params ?? {}] as const,
+  overview: (edition: number | undefined) => ['overview', edition] as const,
 }

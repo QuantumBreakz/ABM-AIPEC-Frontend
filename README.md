@@ -11,6 +11,9 @@ The backend lives in a separate repo: [ABM-AIPEC-Backend](https://github.com/Qua
 
 - **Never hide missing data.** Unknown values show "Not available" plus the reason, never a blank.
 - **Every fact links to its source.** Facts that are guesses are labelled "Inference".
+- **Contrast is measured, not guessed.** Text is at least 4.5:1 (most is 6:1 or more), control
+  outlines and chart fills at least 3:1, in light and dark. `src/test/contrast.test.ts` checks the
+  real colour tokens in `src/index.css` and fails if a colour drops below its bar.
 - **Statuses are never colour-only.** Every badge has an icon and a text label.
 - **Emails are never "Verified" without a recorded check.** `Not checked` and `Unknown` look different.
 - **No automation on LinkedIn or Sales Navigator.** A person does that part; the app only links out.
@@ -28,9 +31,10 @@ Progress against the tickets in PLAN.md. Updated with each merged PR.
 | 0     | FE-0.4 Mock backend (MSW)   | Done        |
 | 0     | FE-0.5 App shell + auth     | Done        |
 | 0     | FE-0.2 Vercel deploy        | Next        |
-| 1     | FE-1.3 Company list         | In review   |
-| 1     | FE-1.1 Overview             | Next        |
-| 1     | FE-1.2 Runs, FE-1.4 Detail  | Not started |
+| 1     | FE-1.3 Company list         | Done        |
+| 1     | FE-1.1 Overview             | In review   |
+| 1     | FE-1.2 Runs                 | Next        |
+| 1     | FE-1.4 Company detail       | Not started |
 | 2     | Company research, review    | Not started |
 | 3     | People (contacts, Sales Nav)| Not started |
 | 4     | AI review, first CSV        | Not started |
@@ -55,6 +59,9 @@ Progress against the tickets in PLAN.md. Updated with each merged PR.
   sidebar with a review-count badge, top bar with theme toggle and account menu, route guards
   (signed out goes to login and back; reviewers cannot open admin pages), 404 page and the "server
   is waking up" banner. Screens that later tickets build are placeholders for now.
+- **Overview** (`/`): headline numbers (the advertised ADIPEC count is shown apart, as reference
+  only), progress per step as stacked bars, and emails by status as one split bar. Every bar and
+  number links to the matching company list. A Chart/Table switch shows the same data as a table.
 - **Company list** (`/companies`): search, filters (edition dropdown, country, step status, email
   and AI status, duplicates…), sortable headings, 50 per page, show/hide columns, all kept in the
   URL. Missing data reads "Not available"; there are loading, empty and error states.
@@ -123,6 +130,12 @@ Add these to the page URL to test situations:
 Behaviour worth knowing: runs advance every time they are read (so polling shows progress), AI
 "Regenerate" finishes after ~2.5 s, the review queue is worked out from the data (resolving an item
 removes it), and CSV exports have an "initial" version (all emails Not Checked) and a "final" one.
+
+## Troubleshooting
+
+- **"useAuth must be used inside AuthProvider" in the browser (Windows).** Vite can load files twice
+  when the folder path differs in drive-letter case (`c:` vs `C:`). `vite.config.ts` already uses
+  the canonical path for the root and the `@/` alias; keep it that way.
 
 ## Project layout
 

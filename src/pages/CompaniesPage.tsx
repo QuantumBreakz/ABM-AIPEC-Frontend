@@ -23,6 +23,7 @@ const columns: Columns<CompanyListItem> = [
   {
     id: 'name',
     accessorKey: 'name', // sortable columns need an accessor
+    meta: { sticky: true },
     header: 'Company',
     enableSorting: true,
     enableHiding: false,
@@ -35,7 +36,7 @@ const columns: Columns<CompanyListItem> = [
           {row.original.name}
         </Link>
         {row.original.duplicateOf && (
-          <span className="rounded-full bg-neutral-soft px-2 py-0.5 text-xs font-medium text-neutral">
+          <span className="rounded-full bg-neutral-soft px-2 py-0.5 text-xs font-medium text-neutral-ink">
             Possible duplicate
           </span>
         )}
@@ -47,22 +48,35 @@ const columns: Columns<CompanyListItem> = [
     header: 'Website',
     cell: ({ row }) =>
       row.original.domain ? (
-        <span className="font-mono text-[13px]">{row.original.domain}</span>
+        <span className="block max-w-44 truncate font-mono text-[13px]" title={row.original.domain}>
+          {row.original.domain}
+        </span>
       ) : (
-        <NotAvailable />
+        <NotAvailable className="whitespace-nowrap" />
       ),
   },
   {
     id: 'country',
     header: 'Country',
-    cell: ({ row }) => row.original.country ?? <NotAvailable />,
+    cell: ({ row }) => row.original.country ?? <NotAvailable className="whitespace-nowrap" />,
   },
   {
     id: 'category',
     header: 'Category',
-    cell: ({ row }) => row.original.category ?? <NotAvailable />,
+    cell: ({ row }) =>
+      row.original.category ? (
+        <span className="block max-w-40 truncate" title={row.original.category}>
+          {row.original.category}
+        </span>
+      ) : (
+        <NotAvailable className="whitespace-nowrap" />
+      ),
   },
-  { id: 'stand', header: 'Stand', cell: ({ row }) => row.original.stand ?? <NotAvailable /> },
+  {
+    id: 'stand',
+    header: 'Stand',
+    cell: ({ row }) => row.original.stand ?? <NotAvailable className="whitespace-nowrap" />,
+  },
   {
     id: 'stages',
     header: 'Progress',
@@ -195,7 +209,7 @@ export default function CompaniesPage() {
           rowLabel={(c) => `Open ${c.name}`}
           empty={empty}
           storageKey="companies"
-          defaultVisibility={{ stand: false }}
+          defaultVisibility={{ stand: false, category: false, domain: false }}
         />
       </div>
     </>

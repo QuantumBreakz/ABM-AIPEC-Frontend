@@ -35,7 +35,7 @@ export function RequireAuth() {
 export function Forbidden() {
   return (
     <div className="flex flex-col items-center justify-center gap-3 px-6 py-24 text-center">
-      <div className="flex size-11 items-center justify-center rounded-full bg-neutral-soft text-neutral">
+      <div className="flex size-11 items-center justify-center rounded-full bg-neutral-soft text-neutral-ink">
         <LockKeyhole className="size-5" aria-hidden />
       </div>
       <h1 className="text-xl font-semibold">You do not have access to this page</h1>

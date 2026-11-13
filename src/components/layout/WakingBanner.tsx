@@ -8,7 +8,7 @@ export function WakingBanner() {
   return (
     <div
       role="status"
-      className="sticky top-0 z-[60] flex items-center justify-center gap-2 bg-warning-soft px-4 py-2 text-sm font-medium text-warning"
+      className="sticky top-0 z-[60] flex items-center justify-center gap-2 bg-warning-soft px-4 py-2 text-sm font-medium text-warning-ink"
     >
       <Loader2 className="size-4 animate-spin" aria-hidden />
       Server is waking up… this can take up to a minute. Your request will continue automatically.

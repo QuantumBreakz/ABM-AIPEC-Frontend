@@ -18,7 +18,7 @@ export function ErrorState({ error, onRetry }: { error?: unknown; onRetry?: () =
       role="alert"
       className="flex flex-col items-center justify-center gap-3 px-6 py-14 text-center"
     >
-      <div className="flex size-11 items-center justify-center rounded-full bg-danger-soft text-danger">
+      <div className="flex size-11 items-center justify-center rounded-full bg-danger-soft text-danger-ink">
         <TriangleAlert className="size-5" aria-hidden />
       </div>
       <div>
