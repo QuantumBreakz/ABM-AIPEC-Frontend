@@ -2,98 +2,98 @@
 @import '@fontsource-variable/jetbrains-mono';
 @import 'tailwindcss';
 
-/* ---------- Design tokens: Precision Energy Intelligence ----------
-   Warm mineral stone + deep petroleum teal (light) / deep marine obsidian + seafoam teal (dark).
-   Every text pair is >= 4.5:1 (most >= 7:1) and every control outline is >= 3:1 (tested in contrast.test.ts). */
+/* ---------- Design tokens: Apple Studio Porcelain & Tactile Skeuomorphism ----------
+   Crisp iOS/macOS grouped porcelain + System Blue (light) / Pro Space Black + Vibrant Blue (dark).
+   Every text pair is >= 4.5:1 and every control outline is >= 3:1 (tested in contrast.test.ts). */
 :root {
-  --background: #f5f4ef;
+  --background: #f2f2f7;
   --surface: #ffffff;
-  --foreground: #0e1726;
-  --muted: #eae8e1;
-  --muted-foreground: #4a5568;
-  --border: #dcd8ce;
-  --border-strong: #7b8494;
-  --track: color-mix(in srgb, var(--neutral) 28%, var(--surface));
-  --primary: #0b5b67;
-  --primary-hover: #084650;
+  --foreground: #1c1c1e;
+  --muted: #e5e5ea;
+  --muted-foreground: #52525b;
+  --border: #d1d1d6;
+  --border-strong: #787880;
+  --track: color-mix(in srgb, var(--neutral) 22%, var(--surface));
+  --primary: #0066cc;
+  --primary-hover: #004ea2;
   --primary-foreground: #ffffff;
-  --ring: #0e7482;
+  --ring: #0066cc;
 
-  --success: #157a3c;
-  --success-soft: #dcfce7;
-  --success-ink: #14532d;
-  --info: #1d4ed8;
-  --info-soft: #dbeafe;
-  --info-ink: #1e3a8a;
-  --warning: #b45309;
-  --warning-soft: #fef3c7;
-  --warning-ink: #78350f;
-  --neutral: #475569;
-  --neutral-soft: #e4e7ec;
-  --neutral-ink: #273244;
-  --danger: #b91c1c;
-  --danger-soft: #fee2e2;
-  --danger-ink: #7f1d1d;
+  --success: #16803c;
+  --success-soft: #e3f7ea;
+  --success-ink: #115e2c;
+  --info: #0066cc;
+  --info-soft: #e5f1ff;
+  --info-ink: #004999;
+  --warning: #b25000;
+  --warning-soft: #fff2e0;
+  --warning-ink: #7c3800;
+  --neutral: #52525b;
+  --neutral-soft: #e5e5ea;
+  --neutral-ink: #2c2c2e;
+  --danger: #c92a2a;
+  --danger-soft: #ffe8e8;
+  --danger-ink: #8f1919;
 
-  /* Chart fills: neighbouring segments stay distinct for colour-blind & normal vision, >= 3:1 on surface. */
-  --seg-approved: #14532d;
-  --seg-completed: #429965;
+  /* Chart fills: high-contrast Apple Activity-inspired palette, >= 3:1 on surface. */
+  --seg-approved: #115e2c;
+  --seg-completed: #258547;
   --seg-in-progress: var(--info);
-  --seg-needs-review: #92400e;
-  --seg-partial: #c28200;
-  --seg-restricted: #334155;
-  --seg-pending-access: #717c8c;
+  --seg-needs-review: #b25000;
+  --seg-partial: #c96a00;
+  --seg-restricted: #3a3a3c;
+  --seg-pending-access: #6e6e73;
   --seg-failed: var(--danger);
-  --seg-not-started: #cbc8bf;
+  --seg-not-started: #d1d1d6;
   --ink-on-strong: #ffffff;
 
-  --scrollbar-track: #eceae3;
-  --scrollbar-thumb: #7b8494;
+  --scrollbar-track: #e5e5ea;
+  --scrollbar-thumb: #8e8e93;
   color-scheme: light;
 }
 
 .dark {
-  --background: #090e17;
-  --surface: #101827;
-  --foreground: #e7edf5;
-  --muted: #182234;
-  --muted-foreground: #9fb0c7;
-  --border: #253247;
-  --border-strong: #62738d;
-  --primary: #2dd4bf;
-  --primary-hover: #5eead4;
-  --primary-foreground: #090e17;
-  --ring: #2dd4bf;
+  --background: #0c0c0e;
+  --surface: #1c1c1e;
+  --foreground: #f5f5f7;
+  --muted: #2c2c2e;
+  --muted-foreground: #aeaeb2;
+  --border: #38383a;
+  --border-strong: #7c7c80;
+  --primary: #3898ff;
+  --primary-hover: #60adff;
+  --primary-foreground: #0c0c0e;
+  --ring: #3898ff;
 
-  --success: #4ade80;
-  --success-soft: #122d1d;
-  --success-ink: #4ade80;
-  --info: #93c5fd;
-  --info-soft: #15254d;
-  --info-ink: #93c5fd;
-  --warning: #fbbf24;
-  --warning-soft: #362709;
-  --warning-ink: #fbbf24;
-  --neutral: #cbd5e1;
-  --neutral-soft: #202c42;
-  --neutral-ink: #cbd5e1;
-  --danger: #fca5a5;
-  --danger-soft: #3a1416;
-  --danger-ink: #fca5a5;
+  --success: #30d158;
+  --success-soft: #102e1a;
+  --success-ink: #30d158;
+  --info: #5eb0ff;
+  --info-soft: #122742;
+  --info-ink: #5eb0ff;
+  --warning: #ffd60a;
+  --warning-soft: #362b08;
+  --warning-ink: #ffd60a;
+  --neutral: #d1d1d6;
+  --neutral-soft: #2c2c2e;
+  --neutral-ink: #d1d1d6;
+  --danger: #ff6961;
+  --danger-soft: #3d1414;
+  --danger-ink: #ff6961;
 
   --seg-approved: var(--success);
-  --seg-completed: color-mix(in srgb, var(--success) 50%, var(--surface));
+  --seg-completed: color-mix(in srgb, var(--success) 55%, var(--surface));
   --seg-in-progress: var(--info);
   --seg-needs-review: var(--warning);
-  --seg-partial: color-mix(in srgb, var(--warning) 50%, var(--surface));
+  --seg-partial: color-mix(in srgb, var(--warning) 55%, var(--surface));
   --seg-restricted: var(--neutral);
   --seg-pending-access: color-mix(in srgb, var(--neutral) 50%, var(--surface));
   --seg-failed: var(--danger);
-  --seg-not-started: color-mix(in srgb, var(--neutral) 30%, var(--surface));
-  --ink-on-strong: #090e17;
+  --seg-not-started: #3e3e42;
+  --ink-on-strong: #0c0c0e;
 
-  --scrollbar-track: #101827;
-  --scrollbar-thumb: #4b5c75;
+  --scrollbar-track: #1c1c1e;
+  --scrollbar-thumb: #545458;
   color-scheme: dark;
 }
 
@@ -204,19 +204,57 @@
 }
 
 .card-elevated {
-  background: var(--surface);
-  border: 1px solid color-mix(in srgb, var(--border) 80%, transparent);
-  border-radius: 0.875rem;
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--surface) 100%, white),
+    color-mix(in srgb, var(--surface) 98%, var(--background))
+  );
+  border: 1px solid color-mix(in srgb, var(--border) 85%, transparent);
+  border-radius: 1rem;
   box-shadow:
-    0 1px 2px rgb(14 23 38 / 0.04),
-    0 8px 24px -6px rgb(14 23 38 / 0.05);
+    inset 0 1px 0 0 rgb(255 255 255 / 0.9),
+    0 1px 2px rgb(0 0 0 / 0.05),
+    0 6px 18px -4px rgb(0 0 0 / 0.06);
 }
 
 .dark .card-elevated {
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--surface) 97%, white),
+    var(--surface)
+  );
   box-shadow:
-    inset 0 1px 0 0 rgb(255 255 255 / 0.05),
-    0 1px 2px rgb(0 0 0 / 0.32),
-    0 12px 32px -10px rgb(0 0 0 / 0.45);
+    inset 0 1px 0 0 rgb(255 255 255 / 0.08),
+    0 1px 2px rgb(0 0 0 / 0.4),
+    0 10px 28px -8px rgb(0 0 0 / 0.55);
+}
+
+.skeuo-track {
+  background: color-mix(in srgb, var(--muted) 88%, var(--background));
+  box-shadow:
+    inset 0 1px 2px rgb(0 0 0 / 0.09),
+    0 1px 0 rgb(255 255 255 / 0.65);
+}
+
+.dark .skeuo-track {
+  box-shadow:
+    inset 0 1px 3px rgb(0 0 0 / 0.55),
+    0 1px 0 rgb(255 255 255 / 0.05);
+}
+
+.skeuo-thumb {
+  background: var(--surface);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.9),
+    0 1px 3px rgb(0 0 0 / 0.12),
+    0 0 0 1px color-mix(in srgb, var(--border) 60%, transparent);
+}
+
+.dark .skeuo-thumb {
+  background: color-mix(in srgb, var(--muted) 75%, white);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.14),
+    0 1px 3px rgb(0 0 0 / 0.45);
 }
 
 @keyframes fadeInUp {
