@@ -25,9 +25,9 @@ Progress against the tickets in PLAN.md. Updated with each merged PR.
 | 0     | FE-0.1 Project setup        | Done        |
 | 0     | FE-0.3 API client           | Done        |
 | 0     | FE-0.6 Shared components    | Done        |
-| 0     | FE-0.4 Mock backend (MSW)   | In review   |
-| 0     | FE-0.5 App shell + auth     | Next        |
-| 0     | FE-0.2 Vercel deploy        | Not started |
+| 0     | FE-0.4 Mock backend (MSW)   | Done        |
+| 0     | FE-0.5 App shell + auth     | In review   |
+| 0     | FE-0.2 Vercel deploy        | Next        |
 | 1     | Overview, Runs, Companies   | Not started |
 | 2     | Company research, review    | Not started |
 | 3     | People (contacts, Sales Nav)| Not started |
@@ -49,8 +49,12 @@ Progress against the tickets in PLAN.md. Updated with each merged PR.
 - **URL-synced filters** (`src/lib/useUrlFilters.ts`): filters, page and sort live in the URL.
 - **Mock backend** (`src/mocks`): a fake server (MSW) that answers every endpoint of the API
   contract with ~150 generated companies covering every status. See "Mock backend" below.
-- **Component gallery** (`src/pages/DevGallery.tsx`): every component on one page. `App.tsx` shows
-  it for now; the real routes arrive with FE-0.5.
+- **App shell and sign-in** (`src/routes.tsx`, `src/auth`, `src/components/layout`): login page,
+  sidebar with a review-count badge, top bar with theme toggle and account menu, route guards
+  (signed out goes to login and back; reviewers cannot open admin pages), 404 page and the "server
+  is waking up" banner. Screens that later tickets build are placeholders for now.
+- **Component gallery** (`src/pages/DevGallery.tsx`): every component on one page, at `/dev/ui` in
+  development builds only.
 
 ## Stack
 
@@ -119,11 +123,11 @@ removes it), and CSV exports have an "initial" version (all emails Not Checked) 
 
 ```
 src/
-  main.tsx, App.tsx     entry point and routes
+  main.tsx, App.tsx     entry point; routes.tsx lists every route
   index.css             design tokens (colours, fonts, themes)
   api/                  client.ts, types.ts, queryClient.ts, waking.ts, queries/
   mocks/                fake backend (MSW): seed data, handlers, tests
-  auth/                 login state and route guards, added in FE-0.5
+  auth/                 sign-in state (AuthProvider, useMe) and route guards
   components/           shared UI pieces; ui/ holds the basics
   pages/                one component per screen
   lib/                  helpers: status maps, formatting, URL filters
