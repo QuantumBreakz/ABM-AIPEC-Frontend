@@ -206,9 +206,14 @@ export const contactHandlers = [
     Object.assign(found.contact, rest, { updatedAt: new Date().toISOString() })
     if (emails) {
       // Replace the list, but keep the check result of addresses that stay.
-      found.contact.emails = emails.map(
-        (e) => found.contact.emails.find((x) => x.address === e.address) ?? newEmail(e),
-      )
+      // The type and source can be corrected; the check result is never touched.
+      found.contact.emails = emails.map((e) => {
+        const same = found.contact.emails.find((x) => x.address === e.address)
+        if (!same) return newEmail(e)
+        if (e.type) same.type = e.type
+        if (e.provider) same.provider = e.provider
+        return same
+      })
     }
     refresh(found.company, true)
     return json<Contact>(found.contact)

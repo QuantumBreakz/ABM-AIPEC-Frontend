@@ -1,20 +1,16 @@
-import { Users } from 'lucide-react'
 import type { Company } from '@/api/types'
-import { EmptyState } from '@/components/EmptyState'
+import { ContactsCard } from '@/components/contacts/ContactsCard'
 import { SalesNavCard } from './SalesNavCard'
 
-/** Account & Sales Navigator details plus the upcoming contact directory placeholder. */
+/**
+ * The Sales Navigator account and leadership coverage sit above the list of decision-makers,
+ * because coverage describes how complete that list is (it is never claimed complete unless reviewed).
+ */
 export function ContactsTab({ company }: { company: Company }) {
   return (
     <div className="flex flex-col gap-6">
       <SalesNavCard company={company} />
-      <div className="card-elevated border-dashed">
-        <EmptyState
-          icon={Users}
-          title="Contact directory coming soon"
-          hint="Decision-makers and verification status will appear here."
-        />
-      </div>
+      <ContactsCard company={company} />
     </div>
   )
 }

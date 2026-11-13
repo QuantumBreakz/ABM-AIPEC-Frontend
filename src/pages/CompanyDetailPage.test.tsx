@@ -206,7 +206,7 @@ describe('Tabs', () => {
       }),
     )
     await waitFor(() => expect(router.state.location.pathname).toBe('/companies/c_001/contacts'))
-    expect(await screen.findByText('Contact directory coming soon')).toBeInTheDocument()
+    expect(await screen.findByRole('region', { name: /Decision-makers/ })).toBeInTheDocument()
     expect(screen.getByRole('region', { name: 'Sales Navigator account' })).toBeInTheDocument()
     // the header and steps stay put
     expect(screen.getByRole('region', { name: 'Steps' })).toBeInTheDocument()
