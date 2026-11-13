@@ -35,9 +35,9 @@ Progress against the tickets in PLAN.md. Updated with each merged PR.
 | 1     | FE-1.1 Overview             | Done        |
 | 1     | FE-1.2 Runs                 | Done        |
 | 1     | FE-1.4 Company detail       | Done        |
-| 2     | FE-2.1 Website + Socials    | In review   |
-| 2     | FE-2.2 Editing + History    | Next        |
-| 2     | FE-2.3 Review queue         | Not started |
+| 2     | FE-2.1 Website + Socials    | Done        |
+| 2     | FE-2.2 Editing + History    | In review   |
+| 2     | FE-2.3 Review queue         | Next        |
 | 3     | People (contacts, Sales Nav)| Not started |
 | 4     | AI review, first CSV        | Not started |
 | 5     | Email check, final CSV      | Not started |
@@ -79,6 +79,13 @@ Progress against the tickets in PLAN.md. Updated with each merged PR.
   guesses are labelled "Inference", the pages reviewed and the pages skipped with reasons, and each
   social network as a link or "Not found". When most of a card is empty for one reason, the reason is
   stated once at the top.
+- **Editing and history**: the website address, summary, services, markets and social links can be
+  edited in place (pencil button, Enter to save, Escape to cancel). The screen changes at once and
+  the old value comes back with a message if the server refuses. A lock marks fields a person has
+  edited, so automatic updates will not overwrite them. Anyone can set a step's status by hand (a
+  reason is required). The Contacts tab holds the Sales Navigator account, match confidence and
+  leadership coverage (never shown as complete unless a person reviewed it). The History tab lists
+  every change with before, after, who and when.
 - **Company list** (`/companies`): search, filters (edition dropdown, country, step status, email
   and AI status, duplicates…), sortable headings, 50 per page, show/hide columns, all kept in the
   URL. Missing data reads "Not available"; there are loading, empty and error states.

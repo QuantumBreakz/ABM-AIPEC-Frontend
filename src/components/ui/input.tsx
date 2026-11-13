@@ -1,5 +1,5 @@
 import { ChevronDown } from 'lucide-react'
-import type { InputHTMLAttributes, SelectHTMLAttributes } from 'react'
+import type { InputHTMLAttributes, SelectHTMLAttributes, TextareaHTMLAttributes } from 'react'
 import { cn } from '@/lib/utils'
 
 const field =
@@ -20,5 +20,11 @@ export function Select({ className, children, ...props }: SelectHTMLAttributes<H
         aria-hidden
       />
     </div>
+  )
+}
+
+export function Textarea({ className, ...props }: TextareaHTMLAttributes<HTMLTextAreaElement>) {
+  return (
+    <textarea className={cn(field, 'h-auto min-h-24 py-2 leading-relaxed', className)} {...props} />
   )
 }

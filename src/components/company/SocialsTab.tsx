@@ -4,6 +4,7 @@ import { DescriptionList } from '@/components/DescriptionList'
 import { SourceLink } from '@/components/SourceLink'
 import { shortUrl } from '@/lib/format'
 import { missingReason } from '@/lib/missing'
+import { useCompanyEdit } from './useCompanyEdit'
 
 const NETWORKS = [
   ['linkedin', 'LinkedIn'],
@@ -16,6 +17,7 @@ const NETWORKS = [
 /** The company's public social pages. Each network shows its link, or "Not found" and why. */
 export function SocialsTab({ company }: { company: Company }) {
   const { socials } = company
+  const edit = useCompanyEdit(company)
   const reason = missingReason(company.stages.social, 'No public page was found')
 
   return (
@@ -32,6 +34,7 @@ export function SocialsTab({ company }: { company: Company }) {
             value: socials[key] ? (
               <SourceLink href={socials[key]} label={shortUrl(socials[key])} />
             ) : undefined,
+            edit: edit.url(`socials.${key}`, socials[key]),
           })),
           {
             label: 'Other',
@@ -45,6 +48,7 @@ export function SocialsTab({ company }: { company: Company }) {
                   ))}
                 </ul>
               ) : undefined,
+            edit: edit.urlList('socials.other', socials.other),
           },
         ]}
       />

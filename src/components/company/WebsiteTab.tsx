@@ -9,6 +9,7 @@ import { SourceLink } from '@/components/SourceLink'
 import { TagList } from '@/components/TagList'
 import { shortUrl } from '@/lib/format'
 import { missingReason } from '@/lib/missing'
+import { useCompanyEdit } from './useCompanyEdit'
 
 function PlainList({ items, label }: { items: string[]; label: string }) {
   return (
@@ -23,6 +24,7 @@ function PlainList({ items, label }: { items: string[]; label: string }) {
 /** What the official website says: summary, services, markets, contact details, sourced facts and the pages read. */
 export function WebsiteTab({ company }: { company: Company }) {
   const site = company.website
+  const edit = useCompanyEdit(company)
   const step = company.stages.website
   const reason = missingReason(step, 'The website does not say')
   const contact = site.contactDetails
@@ -38,19 +40,33 @@ export function WebsiteTab({ company }: { company: Company }) {
           <DescriptionList
             missingReason={reason}
             items={[
-              { label: 'Website', value: site.url ? <SourceLink href={site.url} /> : undefined },
-              { label: 'Summary', value: site.summary },
+              {
+                label: 'Website',
+                value: site.url ? <SourceLink href={site.url} /> : undefined,
+                edit: edit.url('website.url', site.url),
+              },
+              {
+                label: 'Summary',
+                value: site.summary,
+                edit: edit.textarea('website.summary', site.summary),
+              },
               {
                 label: 'Services',
                 value: site.services.length ? (
                   <TagList items={site.services} label="Services" />
                 ) : undefined,
+                edit: edit.list('website.services', site.services, {
+                  hint: 'One service per line.',
+                }),
               },
               {
                 label: 'Markets',
                 value: site.markets.length ? (
                   <TagList items={site.markets} label="Markets" />
                 ) : undefined,
+                edit: edit.list('website.markets', site.markets, {
+                  hint: 'One market per line.',
+                }),
               },
             ]}
           />
