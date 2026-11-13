@@ -153,10 +153,11 @@ describe('ADIPEC tab', () => {
     const c = company('c_012') // profile page returned 404, nothing was captured
     await open('/companies/c_012', c?.name)
     const card = screen.getByRole('region', { name: 'ADIPEC 2026' })
+    // four fields are missing for one reason, so the card states it once and each row says "Not available"
+    expect(within(card).getAllByText('Profile page returned 404.')).toHaveLength(1)
     for (const label of ['Stand', 'Category', 'Country', 'Description']) {
       const row = within(card).getByText(label).nextElementSibling as HTMLElement
       expect(row).toHaveTextContent('Not available')
-      expect(row).toHaveTextContent('Profile page returned 404.')
     }
     // the profile link and capture date are still there
     expect(within(card).getByRole('link', { name: /Open the ADIPEC profile/ })).toBeInTheDocument()
@@ -201,11 +202,11 @@ describe('Tabs', () => {
     const { router } = await open('/companies/c_001', c?.name)
     await userEvent.setup().click(
       within(screen.getByRole('navigation', { name: 'Company sections' })).getByRole('link', {
-        name: 'Website',
+        name: /^Contacts/,
       }),
     )
-    await waitFor(() => expect(router.state.location.pathname).toBe('/companies/c_001/website'))
-    expect(await screen.findByText(/Website tab is being built/)).toBeInTheDocument()
+    await waitFor(() => expect(router.state.location.pathname).toBe('/companies/c_001/contacts'))
+    expect(await screen.findByText(/Contacts tab is being built/)).toBeInTheDocument()
     // the header and steps stay put
     expect(screen.getByRole('region', { name: 'Steps' })).toBeInTheDocument()
   })

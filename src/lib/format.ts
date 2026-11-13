@@ -42,3 +42,12 @@ export function safeHttpUrl(value: string | undefined): URL | undefined {
     return undefined
   }
 }
+
+/** "https://www.example.com/about/" -> "example.com/about". Falls back to the raw text if it is not a URL. */
+export function shortUrl(value: string | undefined): string {
+  const url = safeHttpUrl(value)
+  if (!url) return value ?? ''
+  const host = url.hostname.replace(/^www\./, '')
+  const path = url.pathname.replace(/\/+$/, '')
+  return `${host}${path}`
+}
