@@ -78,7 +78,8 @@ export function useOverrideStep(id: string) {
       queryClient.setQueryData(keys.company(id), company)
       void queryClient.invalidateQueries({ queryKey: keys.history(id) })
       void queryClient.invalidateQueries({ queryKey: ['companies'] })
-      void queryClient.invalidateQueries({ queryKey: ['review-counts'] })
+      void queryClient.invalidateQueries({ queryKey: keys.reviewCounts })
+      void queryClient.invalidateQueries({ queryKey: keys.reviewAll })
     },
   })
 }

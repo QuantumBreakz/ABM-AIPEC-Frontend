@@ -36,9 +36,9 @@ Progress against the tickets in PLAN.md. Updated with each merged PR.
 | 1     | FE-1.2 Runs                 | Done        |
 | 1     | FE-1.4 Company detail       | Done        |
 | 2     | FE-2.1 Website + Socials    | Done        |
-| 2     | FE-2.2 Editing + History    | In review   |
-| 2     | FE-2.3 Review queue         | Next        |
-| 3     | People (contacts, Sales Nav)| Not started |
+| 2     | FE-2.2 Editing + History    | Done        |
+| 2     | FE-2.3 Review queue         | In review   |
+| 3     | People (contacts, Sales Nav)| Next        |
 | 4     | AI review, first CSV        | Not started |
 | 5     | Email check, final CSV      | Not started |
 | 6     | Hardening and delivery      | Not started |
@@ -86,6 +86,13 @@ Progress against the tickets in PLAN.md. Updated with each merged PR.
   reason is required). The Contacts tab holds the Sales Navigator account, match confidence and
   leadership coverage (never shown as complete unless a person reviewed it). The History tab lists
   every change with before, after, who and when.
+- **Review queue** (`/review/:type`): six tabs (Website, Duplicates, Sales Navigator, Contacts,
+  Emails, AI drafts) with how many items wait in each. Each row says why it is there and how long it
+  has waited; clicking it opens a drawer whose address can be shared. For websites you set the right
+  address or mark "no website" with a reason. For duplicates you compare both records side by side,
+  then merge (with a confirmation, choosing which to keep) or mark them as different. Resolved items
+  leave the list and the counts and sidebar badge go down. The other tabs link to the company page
+  until their guided drawers arrive.
 - **Company list** (`/companies`): search, filters (edition dropdown, country, step status, email
   and AI status, duplicates…), sortable headings, 50 per page, show/hide columns, all kept in the
   URL. Missing data reads "Not available"; there are loading, empty and error states.
