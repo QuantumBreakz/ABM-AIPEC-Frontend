@@ -122,7 +122,13 @@ async function toApiError(res: Response): Promise<ApiError> {
 }
 
 // ---------- the request loop ----------
-type RequestOptions = { params?: Params; body?: unknown; signal?: AbortSignal }
+type RequestOptions = {
+  params?: Params
+  body?: unknown
+  signal?: AbortSignal
+  /** Return the response itself (a file) instead of reading JSON. */
+  raw?: boolean
+}
 
 async function request<T>(method: string, path: string, opts: RequestOptions = {}): Promise<T> {
   const url = apiUrl(path, opts.params)
@@ -131,7 +137,7 @@ async function request<T>(method: string, path: string, opts: RequestOptions = {
     credentials: 'include',
     signal: opts.signal,
     headers: {
-      Accept: 'application/json',
+      Accept: opts.raw ? 'text/csv,*/*' : 'application/json',
       ...(opts.body !== undefined ? { 'Content-Type': 'application/json' } : {}),
     },
     body: opts.body !== undefined ? JSON.stringify(opts.body) : undefined,
@@ -150,7 +156,9 @@ async function request<T>(method: string, path: string, opts: RequestOptions = {
         // network error: treat as "backend not reachable yet"
       }
 
-      if (res && !looksLikeWaking(res)) return await handle<T>(res, path)
+      if (res && !looksLikeWaking(res)) {
+        return opts.raw ? ((await handleRaw(res, path)) as T) : await handle<T>(res, path)
+      }
 
       // Backend not ready: retry until the wake timeout runs out.
       const elapsed = Date.now() - startedAt
@@ -172,11 +180,23 @@ async function request<T>(method: string, path: string, opts: RequestOptions = {
   }
 }
 
+async function handleRaw(res: Response, path: string): Promise<Response> {
+  if (res.status === 401 && !NO_REDIRECT_ON_401.includes(path)) unauthorizedHandler()
+  if (!res.ok) throw await toApiError(res)
+  return res
+}
+
 async function handle<T>(res: Response, path: string): Promise<T> {
   if (res.status === 401 && !NO_REDIRECT_ON_401.includes(path)) unauthorizedHandler()
   if (!res.ok) throw await toApiError(res)
   if (res.status === 204) return undefined as T
   return (await res.json()) as T
+}
+
+/** The file name the server suggests, e.g. from Content-Disposition: attachment; filename="x.csv". */
+function fileNameOf(res: Response, fallback: string) {
+  const header = res.headers.get('Content-Disposition') ?? ''
+  return /filename="?([^";]+)"?/.exec(header)?.[1] ?? fallback
 }
 
 export const api = {
@@ -186,5 +206,13 @@ export const api = {
     request<T>('POST', path, { body, signal }),
   patch: <T>(path: string, body?: unknown, signal?: AbortSignal) =>
     request<T>('PATCH', path, { body, signal }),
+  /** Fetch a file. The browser then saves it; errors come back as ApiError like any other call. */
+  download: async (path: string, params?: Params, signal?: AbortSignal) => {
+    const res = await request<Response>('GET', path, { params, signal, raw: true })
+    return {
+      blob: await res.blob(),
+      filename: fileNameOf(res, path.split('/').pop() ?? 'download'),
+    }
+  },
   del: <T = void>(path: string, signal?: AbortSignal) => request<T>('DELETE', path, { signal }),
 }

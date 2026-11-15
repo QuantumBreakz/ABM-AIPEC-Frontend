@@ -6,6 +6,7 @@ import AiReviewPage from './pages/AiReviewPage'
 import CompaniesPage from './pages/CompaniesPage'
 import CompanyDetailPage from './pages/CompanyDetailPage'
 import DevGallery from './pages/DevGallery'
+import ExportsPage from './pages/ExportsPage'
 import LoginPage from './pages/LoginPage'
 import OverviewPage from './pages/OverviewPage'
 import ReviewPage from './pages/ReviewPage'
@@ -15,7 +16,6 @@ import {
   AdminProvidersPage,
   AdminSuppressionsPage,
   AdminUsersPage,
-  ExportsPage,
   GapReportPage,
   NotFoundPage,
 } from './pages/placeholders'

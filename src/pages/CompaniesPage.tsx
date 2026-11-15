@@ -1,8 +1,7 @@
 import { Building2, SearchX } from 'lucide-react'
-import { useMemo } from 'react'
+
 import { Link, useNavigate } from 'react-router'
 import { COMPANY_PAGE_SIZE, useCompanies } from '@/api/queries/companies'
-import { useEvents } from '@/api/queries/events'
 import type { CompanyListItem } from '@/api/types'
 import { CompletenessBar } from '@/components/CompletenessBar'
 import { type Columns, DataTable } from '@/components/DataTable'
@@ -15,13 +14,9 @@ import { PageHeader } from '@/components/PageHeader'
 import { StatusBadge } from '@/components/StatusBadge'
 import { StepDots } from '@/components/StepDots'
 import { Button } from '@/components/ui/button'
-import {
-  COMPANY_FILTER_FIELDS,
-  countActiveFilters,
-  type FilterField,
-  type FilterValues,
-} from '@/lib/filters'
+import { countActiveFilters, type FilterValues } from '@/lib/filters'
 import { formatNumber } from '@/lib/format'
+import { useFilterFields } from '@/lib/useFilterFields'
 import { useUrlFilters } from '@/lib/useUrlFilters'
 import { cn } from '@/lib/utils'
 
@@ -145,26 +140,6 @@ const columns: Columns<CompanyListItem> = [
     cell: ({ row }) => <DateTime value={row.original.updatedAt} />,
   },
 ]
-
-/** Same filters as always, but "Edition" becomes a dropdown of the editions we know about. */
-function useFilterFields(): { fields: FilterField[]; ready: boolean } {
-  const events = useEvents()
-  const fields = useMemo<FilterField[]>(() => {
-    const list = events.data
-    if (!list) return COMPANY_FILTER_FIELDS
-    return COMPANY_FILTER_FIELDS.map((field) =>
-      field.key === 'edition'
-        ? {
-            key: 'edition',
-            label: 'Edition',
-            type: 'select',
-            options: list.map((e) => ({ value: String(e.edition), label: e.name })),
-          }
-        : field,
-    )
-  }, [events.data])
-  return { fields, ready: !events.isPending }
-}
 
 export default function CompaniesPage() {
   const navigate = useNavigate()
