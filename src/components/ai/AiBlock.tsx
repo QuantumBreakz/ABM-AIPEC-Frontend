@@ -37,7 +37,7 @@ function FieldValue({ def, value }: { def: AiFieldDef; value: string }) {
 }
 
 /** Read-only list of fields. Used for the draft, an older version and the approved copy. */
-function FieldList({
+export function FieldList({
   defs,
   values,
   copyable,

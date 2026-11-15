@@ -104,7 +104,9 @@ Progress against the tickets in PLAN.md. Updated with each merged PR.
   the left; on the right the company draft and one block per contact. Each block can be edited (saved
   as a new version), approved, rejected (reason required) or regenerated. The approved copy is shown
   separately and never changes until you approve again. A draft with not enough evidence cannot be
-  approved. Drafts are copied and sent by people; the app never sends anything.
+  approved. Drafts are copied and sent by people; the app never sends anything. The company page
+  has an **AI tab** with a read-only view of the drafts and their status, and the AI review queue
+  lists drafts that were rejected or had too little evidence.
 - **Company list** (`/companies`): search, filters (edition dropdown, country, step status, email
   and AI status, duplicates…), sortable headings, 50 per page, show/hide columns, all kept in the
   URL. Missing data reads "Not available"; there are loading, empty and error states.
