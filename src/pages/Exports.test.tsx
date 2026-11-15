@@ -20,9 +20,15 @@ beforeEach(() => {
   HTMLAnchorElement.prototype.click = function click() {}
 })
 
-/** Read a Blob's bytes (the test browser's Blob cannot be passed to Response). */
-function readBytes(blob: Blob) {
-  return new Promise<Uint8Array>((resolve, reject) => {
+/**
+ * Read a Blob's bytes. Depending on the Node version the saved file is Node's own Blob (which can
+ * read itself) or the test browser's Blob (which needs a FileReader), so both are handled.
+ */
+function readBytes(blob: Blob): Promise<Uint8Array> {
+  if (typeof blob.arrayBuffer === 'function') {
+    return blob.arrayBuffer().then((buffer) => new Uint8Array(buffer))
+  }
+  return new Promise((resolve, reject) => {
     const reader = new FileReader()
     reader.onload = () => resolve(new Uint8Array(reader.result as ArrayBuffer))
     reader.onerror = () => reject(reader.error)
