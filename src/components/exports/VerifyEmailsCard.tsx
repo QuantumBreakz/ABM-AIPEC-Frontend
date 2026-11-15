@@ -17,7 +17,7 @@ import { StatusBadge } from '@/components/StatusBadge'
 import { Button } from '@/components/ui/button'
 import { Select } from '@/components/ui/input'
 import { formatNumber } from '@/lib/format'
-import { runPercent, stepProgress } from '@/lib/runs'
+import { isRunning, runPercent, stepProgress } from '@/lib/runs'
 
 /**
  * Admin only. Checks every email that has never been checked, for one edition. Which checker is
@@ -58,13 +58,17 @@ export function VerifyEmailsCard({ defaultEdition }: { defaultEdition?: number }
   }, [latest?.status, queryClient])
 
   const running = latest?.status === 'running'
+  // Only one run can be active at a time; the server refuses to start another.
+  const otherRunActive = !running && !!runs.data?.items.some(isRunning)
   const blocker = !initial.data
     ? 'Download an initial export first. The check runs after that file exists.'
     : running
       ? 'A check is already running.'
-      : toCheck === 0
-        ? 'Every email in this edition has already been checked.'
-        : undefined
+      : otherRunActive
+        ? 'Another run is in progress. Wait for it to finish, or pause it on the Runs page, then check the emails.'
+        : toCheck === 0
+          ? 'Every email in this edition has already been checked.'
+          : undefined
 
   const run = async () => {
     if (edition === undefined) return

@@ -11,6 +11,9 @@ import { renderApp } from '@/test/renderApp'
 setupMockApi()
 beforeEach(() => {
   polling.runsMs = 40
+  // The sample data has a run in progress. Only one run can be active, so pause it up front;
+  // otherwise whether a check can start would depend on how fast the polling happens to be.
+  for (const run of db.runs) if (run.status === 'running') run.status = 'paused'
   return signIn()
 })
 afterEach(() => {
@@ -55,6 +58,16 @@ describe('Check emails (admin)', () => {
     const section = await card()
     expect(within(section).getByRole('button', { name: 'Check emails' })).toBeDisabled()
     expect(section).toHaveTextContent(/Download an initial export first/)
+  })
+
+  it('stays off while another run is in progress, and says so', async () => {
+    const other = db.runs[0]
+    if (other) other.status = 'running'
+    addInitialExport()
+    await open()
+    const section = await card()
+    await waitFor(() => expect(section).toHaveTextContent(/Another run is in progress/))
+    expect(within(section).getByRole('button', { name: 'Check emails' })).toBeDisabled()
   })
 
   it('turns on once an initial export is in the log', async () => {
