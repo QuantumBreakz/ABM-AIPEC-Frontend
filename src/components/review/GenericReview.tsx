@@ -38,7 +38,17 @@ export function GenericReview({
           </>
         )}
       </dl>
-      {tab && (
+      {type === 'ai' && (
+        <div>
+          <Button asChild>
+            <Link to={`/ai/${company.id}`}>
+              Open AI review
+              <ArrowUpRight className="size-4" aria-hidden />
+            </Link>
+          </Button>
+        </div>
+      )}
+      {tab && type !== 'ai' && (
         <div>
           <Button asChild>
             <Link to={`/companies/${company.id}/${tab}`}>

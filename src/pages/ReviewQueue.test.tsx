@@ -134,13 +134,13 @@ describe('The item drawer', () => {
     expect(router.state.location.search).not.toContain('item=')
   })
 
-  it('points AI items at the AI tab', async () => {
+  it('opens the AI review page for AI items', async () => {
     await open('/review/ai')
     const first = items('ai')[0]
     const dialog = await openRow(first as Item)
-    expect(within(dialog).getByRole('link', { name: 'Open the AI tab' })).toHaveAttribute(
+    expect(within(dialog).getByRole('link', { name: /Open AI review/ })).toHaveAttribute(
       'href',
-      `/companies/${first?.companyId}/ai`,
+      `/ai/${first?.companyId}`,
     )
   })
 })

@@ -28,11 +28,13 @@ export function useCompanies(
 }
 
 /** One company with everything we know about it. */
-export function useCompany(id: string | undefined) {
+export function useCompany(id: string | undefined, options?: { poll?: boolean }) {
   return useQuery({
     queryKey: keys.company(id),
     queryFn: ({ signal }) => api.get<Company>(`/companies/${id}`, undefined, signal),
     enabled: !!id,
+    // Used while a draft is being generated, to pick up the new version when it is ready.
+    refetchInterval: options?.poll ? 1500 : false,
   })
 }
 
