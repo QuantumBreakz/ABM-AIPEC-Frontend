@@ -45,9 +45,9 @@ Progress against the tickets in PLAN.md. Updated with each merged PR.
 | 4     | FE-4.1 AI review            | Done        |
 | 4     | FE-4.2 AI tab               | Done        |
 | 4     | FE-4.3 Exports              | Done        |
-| 5     | FE-5.1 Email statuses and check | In review   |
-| 6     | FE-6.1 Admin and gap report | Next        |
-| 6     | FE-6.2 Quality, e2e, guide  | Not started |
+| 5     | FE-5.1 Email statuses and check | Done        |
+| 6     | FE-6.1 Admin and gap report | In review   |
+| 6     | FE-6.2 Quality, e2e, guide  | Next        |
 
 ## What exists today
 
@@ -119,6 +119,13 @@ Progress against the tickets in PLAN.md. Updated with each merged PR.
   MillionVerifier it is an MX-only check that cannot mark anything Verified), and progress shows
   on the page and in the run details. Emails are never shown as Verified without a recorded check;
   Not checked and Unknown look different from Verified and say why on hover.
+- **Admin screens** (admins only; a reviewer sees a "no access" page and no links): **Users**
+  (add, change role, reset password, delete with confirmation; you cannot change or delete
+  yourself), **Providers** (read-only: which outside tools are on and what the team does by hand
+  while one is off), **Suppressions** (emails and domains that opted out; they cannot be saved as
+  contacts). The **Gap report** (open to everyone) shows the headline numbers, companies per step,
+  and every blocked record with its reason and a link, with a CSV download. Its numbers match the
+  Overview for the same edition.
 - **Company list** (`/companies`): search, filters (edition dropdown, country, step status, email
   and AI status, duplicates…), sortable headings, 50 per page, show/hide columns, all kept in the
   URL. Missing data reads "Not available"; there are loading, empty and error states.

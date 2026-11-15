@@ -1,19 +1,5 @@
 import { Link } from 'react-router'
 import { Button } from '@/components/ui/button'
-import { ComingSoon } from './ComingSoon'
-
-export const GapReportPage = () => (
-  <ComingSoon title="Gap report" description="Stage completion and blocker summary." />
-)
-export const AdminUsersPage = () => (
-  <ComingSoon title="Users" description="Manage workspace accounts and roles." />
-)
-export const AdminProvidersPage = () => (
-  <ComingSoon title="Providers" description="Configure API keys and integrations." />
-)
-export const AdminSuppressionsPage = () => (
-  <ComingSoon title="Suppressions" description="Manage opt-out emails and domains." />
-)
 
 export function NotFoundPage() {
   return (

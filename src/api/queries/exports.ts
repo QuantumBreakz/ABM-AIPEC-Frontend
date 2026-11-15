@@ -1,4 +1,5 @@
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { saveBlob } from '@/lib/download'
 import type { FilterValues } from '@/lib/filters'
 import { api } from '../client'
 import type { ExportKind, ExportLogEntry, Paged } from '../types'
@@ -49,14 +50,7 @@ export function useDownloadExport() {
         ...input.filters,
         version: input.version,
       })
-      const url = URL.createObjectURL(blob)
-      const link = document.createElement('a')
-      link.href = url
-      link.download = filename
-      document.body.append(link)
-      link.click()
-      link.remove()
-      URL.revokeObjectURL(url)
+      saveBlob(blob, filename)
       return filename
     },
     onSuccess: () => void queryClient.invalidateQueries({ queryKey: exportKeys.logAll }),
