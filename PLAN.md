@@ -297,39 +297,28 @@ Needs: FE-0.6
 
 ### Phase 5 — Email check + final CSV (Gate 4)
 
-**FE-5.1 Email statuses everywhere**
-Email status filter on the company list and exports. Overview emails-by-status. Contact emails show status, checked date and source on hover.
-Needs: FE-3.1, FE-1.1
+**FE-5.1 Email statuses and verification run**
+Email statuses everywhere: an email status filter on the company list and on exports, emails-by-status on the overview, and contact emails that show status, checked date and source on hover. Then the admin "Check emails" button on the Exports page, enabled once an initial export exists in the log. A confirm dialog explains which checker will be used (from `/settings/providers`), and progress shows through the run.
+Needs: FE-3.1, FE-1.1, FE-4.3
 - [ ] `not_checked` and `unknown` look different from `verified`, and the labels say why (FR-21)
-
-**FE-5.2 Run verification (admin)**
-"Check emails" button on the Exports page, enabled once an initial export exists in the log. Confirm dialog explaining which checker will be used (from `/settings/providers`). Shows progress via the run.
-Needs: FE-4.3
 - [ ] With no MillionVerifier, the dialog says checks will be MX-only and can't mark anything Verified
 
 ### Phase 6 — Hardening & delivery (Gate 6)
 
-**FE-6.1 Admin screens**
-Users (list, add, change role, reset password, delete with confirm). Providers (read-only on/off list with what "off" means for each step). Suppressions (list, add email/domain with reason, delete).
-Needs: FE-0.5
+**FE-6.1 Admin screens and gap report**
+Users (list, add, change role, reset password, delete with confirm). Providers (read-only on/off list with what "off" means for each step). Suppressions (list, add email/domain with reason, delete). Gap report: summary numbers, per-step status table, and a blocked-records table (company, step, status, reason, with a link), with a CSV download.
+Needs: FE-0.5, FE-0.6
 - [ ] A reviewer gets 403-safe UI everywhere (hidden, not just disabled)
+- [ ] The gap report numbers match the overview for the same edition
 
-**FE-6.2 Gap report**
-Summary numbers, per-step status table, and a blocked-records table (company, step, status, reason, with a link). Download CSV.
-Needs: FE-0.6
-- [ ] The numbers match the overview for the same edition
-
-**FE-6.3 Quality pass**
-Every screen has loading/empty/error states. Keyboard-only walkthrough of the main flows. axe check with no serious issues. Works from 1280 px wide. Long names and texts don't break the layout. Check in Chrome, Safari and Firefox.
-- [ ] Checklist in the PR description ticked
-
-**FE-6.4 E2E smoke tests**
+**FE-6.2 Quality pass, end-to-end tests and reviewer guide**
+Every screen has loading/empty/error states. Keyboard-only walkthrough of the main flows. axe check with no serious issues. Works from 1280 px wide. Long names and texts don't break the layout. Checked in Chrome, Safari and Firefox.
 Playwright on mocks, run in CI: login → company list filter → company detail → add contact → approve AI → export download → admin adds a user. Plus a reviewer run that checks admin pages are blocked.
-- [ ] Runs in CI under 3 minutes
-
-**FE-6.5 Reviewer guide**
-`docs/user-guide.md`: how to start a run, work the review queue, do the Sales Nav task, review AI, export, and what each status means. Add screenshots once the UI is stable.
-- [ ] Someone new can do the Sales Nav task using only this guide
+`docs/user-guide.md`: how to start a run, work the review queue, do the Sales Nav task, review AI, export, and what each status means, with screenshots once the UI is stable.
+Needs: all other tickets
+- [ ] Checklist in the PR description ticked
+- [ ] Playwright runs in CI under 3 minutes
+- [ ] Someone new can do the Sales Nav task using only the guide
 
 ---
 

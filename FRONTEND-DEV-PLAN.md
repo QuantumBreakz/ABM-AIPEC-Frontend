@@ -28,11 +28,11 @@ FE-0.1 setup ─┬─ FE-0.2 Vercel
  Phase 2: FE-2.1 Website/Socials → FE-2.2 Editing/History → FE-2.3 Review queue (website, duplicate)
  Phase 3: FE-3.1 Contacts → FE-3.2 CSV paste · FE-3.3 Sales Nav task · FE-3.4 Review (contacts, emails)
  Phase 4: FE-4.1 AI review → FE-4.2 AI tab · FE-4.3 Exports
- Phase 5: FE-5.1 Email statuses · FE-5.2 Run verification
- Phase 6: FE-6.1 Admin · FE-6.2 Gap report · FE-6.3 Quality · FE-6.4 E2E · FE-6.5 Guide
+ Phase 5: FE-5.1 Email statuses and verification run
+ Phase 6: FE-6.1 Admin and gap report → FE-6.2 Quality, E2E and guide
 ```
 
-Parallelisable once Phase 0 is done: FE-1.1, FE-1.2, FE-1.3 are independent; FE-4.3 (Exports) and FE-6.1/6.2 only need shared components and can be pulled forward if blocked elsewhere.
+Parallelisable once Phase 0 is done: FE-1.1, FE-1.2, FE-1.3 are independent; FE-4.3 (Exports) and FE-6.1 only need shared components and can be pulled forward if blocked elsewhere.
 
 ### Suggested sequencing (solo, ~6 weeks; adjust to your pace)
 
@@ -157,7 +157,7 @@ Each item adds detail to the matching PLAN.md ticket.
 - Download = `<a href>` to the CSV endpoint (browser handles the file and the cookie).
 - "Check emails" (admin): enabled only when an initial export exists; confirm dialog states which checker is active (`/settings/providers`). If MillionVerifier is off, say checks are MX-only and cannot produce Verified.
 
-### Admin + Gap report (FE-6.1, 6.2)
+### Admin + Gap report (FE-6.1)
 
 - Users, Providers (read-only, each row explains what "off" means), Suppressions, Gap report (numbers must equal Overview for the same edition; test that).
 
@@ -185,7 +185,7 @@ Rules: every ticket adds tests for logic it introduces; every bug fix adds a reg
 | Vercel Preview    | on                               | none                             | Every PR clickable                               |
 | Vercel Production | on until backend ready, then off | Render via `vercel.json` rewrite | Env vars baked at build; redeploy after changing |
 
-- `ci.yml`: install → ESLint + Prettier → `tsc --noEmit` → Vitest → build. Playwright job added in FE-6.4.
+- `ci.yml`: install → ESLint + Prettier → `tsc --noEmit` → Vitest → build. Playwright job added in FE-6.2.
 - Branch protection on `main`; squash merge; one ticket = one branch = one PR; ticket ID in title.
 - Before flipping production to `VITE_API_MOCK=false`: confirm `/health`, login works through the rewrite, and a smoke click-through passes.
 

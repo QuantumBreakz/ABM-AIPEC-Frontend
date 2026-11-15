@@ -42,9 +42,12 @@ Progress against the tickets in PLAN.md. Updated with each merged PR.
 | 3     | FE-3.2 CSV paste import     | Done        |
 | 3     | FE-3.3 Sales Nav task       | Done        |
 | 3     | FE-3.4 Review: contacts, emails | Done        |
-| 4     | AI review, first CSV        | In progress |
-| 5     | Email check, final CSV      | Not started |
-| 6     | Hardening and delivery      | Not started |
+| 4     | FE-4.1 AI review            | Done        |
+| 4     | FE-4.2 AI tab               | Done        |
+| 4     | FE-4.3 Exports              | In review   |
+| 5     | FE-5.1 Email statuses and check | Next        |
+| 6     | FE-6.1 Admin and gap report | Not started |
+| 6     | FE-6.2 Quality, e2e, guide  | Not started |
 
 ## What exists today
 
@@ -107,6 +110,11 @@ Progress against the tickets in PLAN.md. Updated with each merged PR.
   approved. Drafts are copied and sent by people; the app never sends anything. The company page
   has an **AI tab** with a read-only view of the drafts and their status, and the AI review queue
   lists drafts that were rejected or had too little evidence.
+- **Exports** (`/exports`): choose the file (companies, contacts or outreach) and the version
+  (initial, before the email check; final, after it), narrow the companies with the same filters as
+  the company list, and see how many rows the file will have before downloading. The download is a
+  UTF-8 CSV that opens in Excel with correct characters. Every download is listed in the export
+  history with its filters and who made it.
 - **Company list** (`/companies`): search, filters (edition dropdown, country, step status, email
   and AI status, duplicates…), sortable headings, 50 per page, show/hide columns, all kept in the
   URL. Missing data reads "Not available"; there are loading, empty and error states.
@@ -195,7 +203,7 @@ src/
   pages/                one component per screen
   lib/                  helpers: status maps, formatting, URL filters
   test/                 test setup
-e2e/                    Playwright tests, added in FE-6.4
+e2e/                    Playwright tests, added in FE-6.2
 ```
 
 ## How we work
