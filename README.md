@@ -41,8 +41,8 @@ Progress against the tickets in PLAN.md. Updated with each merged PR.
 | 3     | FE-3.1 Contacts             | Done        |
 | 3     | FE-3.2 CSV paste import     | Done        |
 | 3     | FE-3.3 Sales Nav task       | Done        |
-| 3     | FE-3.4 Review: contacts, emails | In review   |
-| 4     | AI review, first CSV        | Next        |
+| 3     | FE-3.4 Review: contacts, emails | Done        |
+| 4     | AI review, first CSV        | In progress |
 | 5     | Email check, final CSV      | Not started |
 | 6     | Hardening and delivery      | Not started |
 
@@ -100,6 +100,11 @@ Progress against the tickets in PLAN.md. Updated with each merged PR.
   reason. Email items let you correct an address, remove it, or add another (a source is always
   required); every change shows in the History tab. AI items link to the company page until their
   guided drawer arrives.
+- **AI review** (`/ai/:companyId`): the evidence (facts with sources, services, ADIPEC description) on
+  the left; on the right the company draft and one block per contact. Each block can be edited (saved
+  as a new version), approved, rejected (reason required) or regenerated. The approved copy is shown
+  separately and never changes until you approve again. A draft with not enough evidence cannot be
+  approved. Drafts are copied and sent by people; the app never sends anything.
 - **Company list** (`/companies`): search, filters (edition dropdown, country, step status, email
   and AI status, duplicates…), sortable headings, 50 per page, show/hide columns, all kept in the
   URL. Missing data reads "Not available"; there are loading, empty and error states.

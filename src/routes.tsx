@@ -2,6 +2,7 @@ import { Navigate, type RouteObject } from 'react-router'
 import { RequireAuth, RequireRole } from './auth/guards'
 import { AppShell } from './components/layout/AppShell'
 import { Root } from './components/layout/Root'
+import AiReviewPage from './pages/AiReviewPage'
 import CompaniesPage from './pages/CompaniesPage'
 import CompanyDetailPage from './pages/CompanyDetailPage'
 import DevGallery from './pages/DevGallery'
@@ -14,7 +15,6 @@ import {
   AdminProvidersPage,
   AdminSuppressionsPage,
   AdminUsersPage,
-  AiReviewPage,
   ExportsPage,
   GapReportPage,
   NotFoundPage,

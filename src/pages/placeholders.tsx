@@ -2,9 +2,6 @@ import { Link } from 'react-router'
 import { Button } from '@/components/ui/button'
 import { ComingSoon } from './ComingSoon'
 
-export const AiReviewPage = () => (
-  <ComingSoon title="AI review" description="Review and approve generated outreach drafts." />
-)
 export const ExportsPage = () => (
   <ComingSoon title="Exports" description="Download company, contact, and outreach CSVs." />
 )

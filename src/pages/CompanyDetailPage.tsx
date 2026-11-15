@@ -81,7 +81,12 @@ export default function CompanyDetailPage() {
           <EmptyState
             icon={Sparkles}
             title="AI drafts coming soon"
-            hint="Personalized outreach messages and editorial controls will appear here."
+            hint="A summary of the drafts will appear here. You can already review and approve them."
+            action={
+              <Button asChild>
+                <Link to={`/ai/${data.id}`}>Open AI review</Link>
+              </Button>
+            }
           />
         </div>
       )}
