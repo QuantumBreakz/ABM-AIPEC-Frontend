@@ -4,7 +4,9 @@ import type { ReviewItem, ReviewType } from '@/api/types'
 import { Drawer } from '@/components/Drawer'
 import { ErrorState } from '@/components/ErrorState'
 import { Skeleton } from '@/components/Skeleton'
+import { ContactsReview } from './ContactsReview'
 import { DuplicateReview } from './DuplicateReview'
+import { EmailsReview } from './EmailsReview'
 import { GenericReview } from './GenericReview'
 import { SalesNavReview } from './SalesNavReview'
 import { WebsiteReview } from './WebsiteReview'
@@ -57,6 +59,10 @@ export function ReviewDrawer({
             <DuplicateReview company={company.data} onResolved={onClose} />
           ) : type === 'salesnav' ? (
             <SalesNavReview company={company.data} onResolved={onClose} />
+          ) : type === 'contacts' ? (
+            <ContactsReview company={company.data} item={item} onResolved={onClose} />
+          ) : type === 'emails' ? (
+            <EmailsReview company={company.data} item={item} />
           ) : (
             <GenericReview type={type} item={item} company={company.data} />
           )}

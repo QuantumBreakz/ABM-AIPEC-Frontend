@@ -198,13 +198,32 @@ export const contactHandlers = [
     return json({ created, updated, errors })
   }),
 
-  route.patch('/contacts/:id', 'user', async ({ params, body }) => {
+  route.patch('/contacts/:id', 'user', async ({ params, body, user }) => {
     const found = findContact(params.id as string)
     if (!found) throw notFound('Contact')
     const data = validateInput(await body<Partial<ContactInput>>(), true)
     const { emails, ...rest } = data
     Object.assign(found.contact, rest, { updatedAt: new Date().toISOString() })
+    const { company, contact } = found
+    if (Object.keys(rest).length > 0) {
+      addHistory(
+        company.id,
+        `contact:${contact.id}`,
+        undefined,
+        `${contact.firstName} ${contact.lastName}`,
+        user.email,
+      )
+    }
     if (emails) {
+      // Every removed or added address is logged.
+      for (const old of contact.emails) {
+        if (!emails.some((e) => e.address === old.address))
+          addHistory(company.id, `email:${contact.id}`, old.address, undefined, user.email)
+      }
+      for (const e of emails) {
+        if (!contact.emails.some((x) => x.address === e.address))
+          addHistory(company.id, `email:${contact.id}`, undefined, e.address, user.email)
+      }
       // Replace the list, but keep the check result of addresses that stay.
       // The type and source can be corrected; the check result is never touched.
       found.contact.emails = emails.map((e) => {
