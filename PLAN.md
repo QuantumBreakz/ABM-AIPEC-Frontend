@@ -158,7 +158,7 @@ Each ticket lists what it **needs** first. Those are only frontend tickets or J-
 
 **FE-0.1 Project setup**
 Vite + React + TS, Tailwind, shadcn/ui init, ESLint + Prettier, Vitest, path alias `@/`, the folder layout above, Vite dev proxy for `/api`. CI (`ci.yml`): lint, typecheck, test, build. Branch protection on `main`.
-- [ ] `npm run dev`, `build`, `test`, `lint` all work
+- [x] `npm run dev`, `build`, `test`, `lint` all work
 - [ ] CI is required for merging
 
 **FE-0.2 Vercel**
@@ -176,24 +176,24 @@ Needs: FE-0.1
 - QueryClient defaults: no retry on 4xx; `staleTime` of 30 s for lists
 
 Needs: FE-0.1
-- [ ] Tests: retry stops on success; gives up after 90 s; 401 redirects; error shape is parsed
+- [x] Tests: retry stops on success; gives up after 90 s; 401 redirects; error shape is parsed
 
 **FE-0.4 Mock backend (MSW)**
 Handlers for **every** endpoint in the contract, with the same paths, shapes and error codes. `mocks/db.ts` generates ~150 fake companies covering every step status, email status and AI status, plus a few duplicates, a running run and a paused run. Mutations change the in-memory data, so flows feel real. Filtering, sorting and paging work. 200–600 ms fake delay. `?mock_wake=1` makes the next 5 s return 503 to test the banner. `?mock_role=reviewer` logs in as a reviewer.
 Needs: J-0.1, FE-0.3
-- [ ] Every enum value is visible somewhere in the mock data
-- [ ] Mock responses type-check against `api/types.ts`
+- [x] Every enum value is visible somewhere in the mock data
+- [x] Mock responses type-check against `api/types.ts`
 
 **FE-0.5 App shell + auth**
 Layout (sidebar with Overview, Runs, Companies, Review (with counts), Exports, Admin), header with user and logout, all routes with placeholder pages, `AuthProvider` (`/auth/me`), login page (react-hook-form + zod; shows the 429 message), `RequireAuth`, `RequireRole`, 404 page, `WakingBanner`, toasts.
 Needs: FE-0.3, FE-0.4
-- [ ] Logged out → any route goes to login, then back to where you were
-- [ ] Reviewer can't see admin nav or reach admin routes
+- [x] Logged out → any route goes to login, then back to where you were
+- [x] Reviewer can't see admin nav or reach admin routes
 
 **FE-0.6 Shared components**
 `DataTable` (server paging/sort, column visibility, row click), `FilterBar` (synced to URL, debounced search), `StatusBadge` (step / email / AI variants), `StepDots` (8 steps in a row, tooltip with reason), `SourceLink`, `EmptyState`, `ErrorState`, `Skeleton`, `ConfirmDialog`, `Drawer`, `DateTime` (relative time with exact time on hover), `PageHeader`.
 Needs: FE-0.1
-- [ ] Tests: filter ↔ URL round trip; StatusBadge covers every enum value
+- [x] Tests: filter ↔ URL round trip; StatusBadge covers every enum value
 - [ ] All components work by keyboard
 
 **J-0.1 Freeze the API contract** (joint, see below)
@@ -203,36 +203,36 @@ Needs: FE-0.1
 **FE-1.1 Overview**
 Edition picker. Number cards: advertised (labelled "ADIPEC advertised — reference only"), discovered, unique, duplicates, contacts, companies with contacts, AI drafts, failures. Per-step stacked bars by status. Emails-by-status bar. Clicking a segment opens the company list with that filter.
 Needs: FE-0.5, FE-0.6
-- [ ] Advertised and discovered are always shown as separate numbers (PTC §1.2)
+- [x] Advertised and discovered are always shown as separate numbers (PTC §1.2)
 
 **FE-1.2 Runs**
 List of runs. "Start run" dialog (admin): edition plus optional steps, with all selected by default. Run detail: status, progress per step (queued/done/failed), counts, pause/resume (admin), and an error list with links to companies. Polls every 5 s while running and stops polling when done or paused.
 Needs: FE-0.5, FE-0.6
-- [ ] Start → shows running → pause → paused → resume, all in mocks
-- [ ] Starting while another run is active shows the 409 message clearly
+- [x] Start → shows running → pause → paused → resume, all in mocks
+- [x] Starting while another run is active shows the 409 message clearly
 
 **FE-1.3 Company list**
 Columns: name, domain, country, category, stand, `StepDots`, contacts count, email summary, AI status, completeness, updated. Every filter from `CompanyFilters` is in the URL. Sort on name, updated and completeness. 50 per page. Row click opens the detail.
 Needs: FE-0.6
-- [ ] Filter, refresh the page: same results
-- [ ] Empty filter result shows a "clear filters" action
+- [x] Filter, refresh the page: same results
+- [x] Empty filter result shows a "clear filters" action
 
 **FE-1.4 Company detail — ADIPEC tab + steps panel**
 Header: name, domain, completeness, duplicate banner (with a link to the other record). Steps panel: each step's status, reason and time. ADIPEC tab: one card per edition with all captured fields, profile link and captured date.
 Needs: FE-1.3
-- [ ] A company with missing fields shows "Not available" plus the reason, not blanks (AT-02)
+- [x] A company with missing fields shows "Not available" plus the reason, not blanks (AT-02)
 
 ### Phase 2 — Company research (Gate 2)
 
 **FE-2.1 Website + Socials tabs**
 Website: URL, summary, services, markets, generic contact details (with source), facts list (with source link and fact/inference badge), pages reviewed, skipped pages with reasons. Socials: each network with link or "Not found".
 Needs: FE-1.4
-- [ ] Every fact shows its source link (AT-03)
+- [x] Every fact shows its source link (AT-03)
 
 **FE-2.2 Editing + history**
 Inline edit for website URL, summary, services, markets, socials, Sales Nav account URL and confidence, and leadership coverage (PATCH, optimistic update with rollback on error). A lock icon on human-edited fields (`lockedFields`). A step override control: pick a status, reason required. History tab: timeline of field, old value → new value, who and when.
 Needs: FE-2.1
-- [ ] After an edit, the history tab shows it straight away
+- [x] After an edit, the history tab shows it straight away
 
 **FE-2.3 Review queue — shell + website + duplicate**
 `/review/:type` with tabs and counts from `/review/counts`. A list with reason and age; clicking a row opens a drawer.
@@ -240,20 +240,20 @@ Needs: FE-2.1
 - **Duplicate tab:** side-by-side compare of both records, then "Merge into…" (confirm dialog) or "Not a duplicate".
 
 Needs: FE-0.6, FE-2.2
-- [ ] Resolving an item removes it from the list and updates the counts
+- [x] Resolving an item removes it from the list and updates the counts
 
 ### Phase 3 — People (Gate 3)
 
 **FE-3.1 Contacts tab**
 Table of contacts with emails (each with a status badge, provider and captured date). Add/edit form (react-hook-form + zod, same rules as `ContactInput`). Delete (admin, with confirm). The leadership coverage selector sits above the table.
 Needs: FE-1.4
-- [ ] Several contacts per company, no duplicates on re-save (AT-05)
-- [ ] An email without a source can't be saved (AT-06)
+- [x] Several contacts per company, no duplicates on re-save (AT-05)
+- [x] An email without a source can't be saved (AT-06)
 
 **FE-3.2 Contact CSV paste import**
 Textarea plus a "download template" link (header row only). Preview the first 10 rows, import, then show the result: created, updated, and a per-row error table.
 Needs: FE-3.1
-- [ ] A paste with bad rows imports the good ones and lists the bad ones
+- [x] A paste with bad rows imports the good ones and lists the bad ones
 
 **FE-3.3 Sales Navigator review task**
 Review tab `salesnav`, drawer per company:
@@ -264,13 +264,13 @@ Review tab `salesnav`, drawer per company:
 5. "Mark account and people done", which calls the steps endpoint for `account` and `people`.
 
 Needs: FE-2.3, FE-3.1
-- [ ] Nothing in the UI suggests the list of executives is complete unless coverage is Reviewed (FR-16)
+- [x] Nothing in the UI suggests the list of executives is complete unless coverage is Reviewed (FR-16)
 
 **FE-3.4 Review tabs — contacts + emails**
 `contacts`: companies with no contacts after review. Link to the Sales Nav task, or mark as "none found" with a reason.
 `emails`: invalid, risky or pending emails. Edit, remove, or add manually with a source.
 Needs: FE-2.3, FE-3.1
-- [ ] Every action is visible in the history tab
+- [x] Every action is visible in the history tab
 
 ### Phase 4 — AI + first CSV (Gate 5)
 
@@ -282,8 +282,8 @@ Needs: FE-2.3, FE-3.1
 - **Guidance:** `insufficient_evidence` shows a warning explaining why. Soft character guides follow PTC §5.1 (summary 2–5 sentences, hyper-personalization 1–3).
 
 Needs: FE-1.4
-- [ ] Approve → regenerate → the approved copy is still shown unchanged (FR-30)
-- [ ] Every signal shows a clickable source (AT-08)
+- [x] Approve → regenerate → the approved copy is still shown unchanged (FR-30)
+- [x] Every signal shows a clickable source (AT-08)
 
 **FE-4.2 AI in company detail + review tab**
 An AI tab on the company page (read view plus an "Open AI review" button). The `ai` review tab lists insufficient-evidence and rejected drafts.
@@ -292,24 +292,24 @@ Needs: FE-4.1, FE-2.3
 **FE-4.3 Exports page**
 Pick the type (company / contact / outreach) and version (initial / final), reusing `FilterBar`. Live row count from `/count`. Download button: a plain link to `/api/exports/:kind.csv?...`, so the browser handles the file and the cookie is sent. Export history table from `/exports/log`.
 Needs: FE-0.6
-- [ ] The downloaded file opens in Excel with correct characters (mock serves a sample CSV)
-- [ ] The row count matches what the list page shows for the same filters
+- [x] The downloaded file opens in Excel with correct characters (mock serves a sample CSV)
+- [x] The row count matches what the list page shows for the same filters
 
 ### Phase 5 — Email check + final CSV (Gate 4)
 
 **FE-5.1 Email statuses and verification run**
 Email statuses everywhere: an email status filter on the company list and on exports, emails-by-status on the overview, and contact emails that show status, checked date and source on hover. Then the admin "Check emails" button on the Exports page, enabled once an initial export exists in the log. A confirm dialog explains which checker will be used (from `/settings/providers`), and progress shows through the run.
 Needs: FE-3.1, FE-1.1, FE-4.3
-- [ ] `not_checked` and `unknown` look different from `verified`, and the labels say why (FR-21)
-- [ ] With no MillionVerifier, the dialog says checks will be MX-only and can't mark anything Verified
+- [x] `not_checked` and `unknown` look different from `verified`, and the labels say why (FR-21)
+- [x] With no MillionVerifier, the dialog says checks will be MX-only and can't mark anything Verified
 
 ### Phase 6 — Hardening & delivery (Gate 6)
 
 **FE-6.1 Admin screens and gap report**
 Users (list, add, change role, reset password, delete with confirm). Providers (read-only on/off list with what "off" means for each step). Suppressions (list, add email/domain with reason, delete). Gap report: summary numbers, per-step status table, and a blocked-records table (company, step, status, reason, with a link), with a CSV download.
 Needs: FE-0.5, FE-0.6
-- [ ] A reviewer gets 403-safe UI everywhere (hidden, not just disabled)
-- [ ] The gap report numbers match the overview for the same edition
+- [x] A reviewer gets 403-safe UI everywhere (hidden, not just disabled)
+- [x] The gap report numbers match the overview for the same edition
 
 **FE-6.2 Quality pass, end-to-end tests and reviewer guide**
 Every screen has loading/empty/error states. Keyboard-only walkthrough of the main flows. axe check with no serious issues. Works from 1280 px wide. Long names and texts don't break the layout. Checked in Chrome, Safari and Firefox.
