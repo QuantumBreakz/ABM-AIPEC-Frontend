@@ -7,6 +7,7 @@ import { Button } from '../ui/button'
 import { Sidebar } from './Sidebar'
 import { ThemeToggle } from './ThemeToggle'
 import { UserMenu } from './UserMenu'
+import { useFocusReturn } from '@/lib/useFocusReturn'
 
 function Brand() {
   return (
@@ -27,6 +28,7 @@ function Brand() {
 /** Sidebar + top bar around every signed-in page. */
 export function AppShell() {
   const [menuOpen, setMenuOpen] = useState(false)
+  const focusReturn = useFocusReturn()
 
   return (
     <div className="min-h-screen bg-background">
@@ -51,7 +53,10 @@ export function AppShell() {
       <Dialog.Root open={menuOpen} onOpenChange={setMenuOpen}>
         <Dialog.Portal>
           <Dialog.Overlay className="fixed inset-0 z-40 bg-foreground/40 backdrop-blur-[2px]" />
-          <Dialog.Content className="fixed inset-y-0 left-0 z-50 flex w-72 flex-col border-r border-border bg-surface shadow-2xl">
+          <Dialog.Content
+            {...focusReturn}
+            className="fixed inset-y-0 left-0 z-50 flex w-72 flex-col border-r border-border bg-surface shadow-2xl"
+          >
             <Dialog.Title className="sr-only">Navigation</Dialog.Title>
             <Dialog.Description className="sr-only">Main navigation menu</Dialog.Description>
             <div className="flex h-16 items-center justify-between border-b border-border pr-2">

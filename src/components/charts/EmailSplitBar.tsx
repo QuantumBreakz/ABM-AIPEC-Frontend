@@ -82,7 +82,7 @@ export function EmailSplitBar({ counts, edition, view }: Props) {
       <div className="flex h-8 gap-0.5" role="group" aria-label="Emails by status">
         {segments.map((segment) => {
           const meta = EMAIL_STATUS_META[segment.key]
-          const sentence = `${meta.label}: ${formatNumber(segment.count)} ${plural(segment.count, 'email', 'emails')} (${segment.percent}%)`
+          const sentence = `${meta.label}: ${formatNumber(segment.count)} ${plural(segment.count, 'email', 'emails')}, ${segment.percent}%`
           return (
             <Tooltip
               key={segment.key}

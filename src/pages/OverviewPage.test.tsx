@@ -210,7 +210,7 @@ describe('Emails by status', () => {
     const group = screen.getByRole('group', { name: 'Emails by status' })
     for (const link of within(group).getAllByRole('link')) {
       const printed = link.textContent ?? ''
-      const percent = Number(/\((\d+)%\)/.exec(link.getAttribute('aria-label') ?? '')?.[1])
+      const percent = Number(/(\d+)%$/.exec(link.getAttribute('aria-label') ?? '')?.[1])
       if (printed) expect(printed).toBe(`${percent}%`)
       if (percent < 15) expect(printed).toBe('')
     }

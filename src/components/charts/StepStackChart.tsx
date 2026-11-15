@@ -94,7 +94,7 @@ export function StepStackChart({ byStep, total, edition, view }: Props) {
               >
                 {segments.map((segment) => {
                   const meta = STEP_STATUS_META[segment.key]
-                  const sentence = `${STEP_LABEL[key]}: ${meta.label}, ${formatNumber(segment.count)} ${plural(segment.count, 'company', 'companies')} (${segment.percent}%)`
+                  const sentence = `${STEP_LABEL[key]}: ${meta.label}, ${formatNumber(segment.count)} ${plural(segment.count, 'company', 'companies')}, ${segment.percent}%`
                   return (
                     <Tooltip
                       key={segment.key}

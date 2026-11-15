@@ -46,8 +46,8 @@ Progress against the tickets in PLAN.md. Updated with each merged PR.
 | 4     | FE-4.2 AI tab               | Done        |
 | 4     | FE-4.3 Exports              | Done        |
 | 5     | FE-5.1 Email statuses and check | Done        |
-| 6     | FE-6.1 Admin and gap report | In review   |
-| 6     | FE-6.2 Quality, e2e, guide  | Next        |
+| 6     | FE-6.1 Admin and gap report | Done        |
+| 6     | FE-6.2 Quality, e2e, guide  | In review   |
 
 ## What exists today
 
@@ -66,7 +66,7 @@ Progress against the tickets in PLAN.md. Updated with each merged PR.
 - **App shell and sign-in** (`src/routes.tsx`, `src/auth`, `src/components/layout`): login page,
   sidebar with a review-count badge, top bar with theme toggle and account menu, route guards
   (signed out goes to login and back; reviewers cannot open admin pages), 404 page and the "server
-  is waking up" banner. Screens that later tickets build are placeholders for now.
+  is waking up" banner.
 - **Overview** (`/`): headline numbers (the advertised ADIPEC count is shown apart, as reference
   only), progress per step as stacked bars, and emails by status as one split bar. Every bar and
   number links to the matching company list. A Chart/Table switch shows the same data as a table.
@@ -143,9 +143,20 @@ Progress against the tickets in PLAN.md. Updated with each merged PR.
 | Styling / UI | Tailwind CSS v4, Radix UI primitives      |
 | Forms        | react-hook-form + zod                     |
 | Mock backend | MSW (Mock Service Worker)                 |
-| Tests        | Vitest + Testing Library (Playwright later) |
+| Tests        | Vitest + Testing Library; Playwright (browser) |
 | Lint, format | ESLint + Prettier                         |
 | Hosting      | Vercel                                    |
+
+## For the people who use it
+
+The step-by-step guide, with screenshots, is in [docs/user-guide.md](docs/user-guide.md).
+
+## Browser tests
+
+`npm run e2e` builds the app with the mock backend and runs real-browser tests: the main journey
+(sign in, filter, add a contact, approve an AI draft, export, add a user), reviewer access, keyboard-only
+use, no sideways scrolling at 1280 px, and an accessibility scan (axe) of every main screen in light
+and dark. The first time, run `npx playwright install chromium`. The same tests run in CI.
 
 ## Getting started
 
@@ -160,6 +171,7 @@ npm run dev          # http://localhost:5173, mock backend on by default
 | ------------------- | --------------------------------------------- |
 | `npm run dev`       | Dev server with hot reload                    |
 | `npm test`          | Unit and component tests (once)               |
+| `npm run e2e`       | Browser tests (Playwright) against the built app and the mock backend |
 | `npm run test:watch`| Tests in watch mode                           |
 | `npm run lint`      | ESLint and Prettier check (what CI runs)      |
 | `npm run format`    | Fix formatting and auto-fixable lint issues   |
@@ -214,13 +226,14 @@ src/
   pages/                one component per screen
   lib/                  helpers: status maps, formatting, URL filters
   test/                 test setup
-e2e/                    Playwright tests, added in FE-6.2
+e2e/                    Playwright browser tests (journey, access, keyboard, layout, accessibility)
+docs/                   user-guide.md for the people who use the workspace, with screenshots
 ```
 
 ## How we work
 
 - One ticket is one branch (`fe-0.6-shared-components`) and one PR, with the ticket ID in the title.
-- `main` is protected: CI (lint, typecheck, test, build) must pass. Squash merge.
+- `main` is protected: CI (lint, typecheck, test, build and the browser tests) must pass. Squash merge.
 - Every ticket needs tests for its logic and the four states (loading, empty, error, data) on screens.
 - **The repo is public.** Never commit `.env` files, real contact data, CSV exports, database
   dumps or API keys. Test data uses fake names and `example.com`.

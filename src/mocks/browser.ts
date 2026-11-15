@@ -1,5 +1,5 @@
 import { setupWorker } from 'msw/browser'
-import { mockState, pageParam } from './config'
+import { disableDelays, mockState, pageParam } from './config'
 import { handlers } from './handlers'
 
 /**
@@ -8,8 +8,11 @@ import { handlers } from './handlers'
  *   ?mock_wake=1            every request answers 503 for the first 5 s (tests the waking banner)
  *   ?mock_role=reviewer     signs you in as a reviewer (or admin) without the login form
  *   ?mock_fail=/companies   forces a 500 on matching paths (tests error states)
+ * Automated browser tests set window.__MOCK_NO_DELAY__ before the page loads to skip the fake
+ * latency (see e2e/).
  */
 export async function startMocks() {
+  if ((window as { __MOCK_NO_DELAY__?: boolean }).__MOCK_NO_DELAY__) disableDelays()
   if (pageParam('mock_wake') === '1') mockState.wakeUntil = Date.now() + 5_000
   const worker = setupWorker(...handlers)
   await worker.start({

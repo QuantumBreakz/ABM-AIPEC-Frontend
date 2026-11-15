@@ -146,8 +146,10 @@ export function ContactsCard({ company }: { company: Company }) {
               {contacts.map((contact) => (
                 <tr key={contact.id} className="border-b border-border last:border-0">
                   <th scope="row" className="py-3 pr-4 text-left align-top font-normal">
-                    <p className="text-sm font-semibold text-foreground">{fullName(contact)}</p>
-                    <p className="text-muted-foreground">
+                    <p className="text-sm font-semibold text-foreground [overflow-wrap:anywhere]">
+                      {fullName(contact)}
+                    </p>
+                    <p className="text-muted-foreground [overflow-wrap:anywhere]">
                       {contact.title ?? <NotAvailable label="No title recorded" />}
                     </p>
                     {contact.seniority && (
