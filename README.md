@@ -39,9 +39,9 @@ Progress against the tickets in PLAN.md. Updated with each merged PR.
 | 2     | FE-2.2 Editing + History    | Done        |
 | 2     | FE-2.3 Review queue         | Done        |
 | 3     | FE-3.1 Contacts             | Done        |
-| 3     | FE-3.2 CSV paste import     | In review   |
-| 3     | FE-3.3 Sales Nav task       | Next        |
-| 3     | FE-3.4 Review: contacts, emails | Not started |
+| 3     | FE-3.2 CSV paste import     | Done        |
+| 3     | FE-3.3 Sales Nav task       | In review   |
+| 3     | FE-3.4 Review: contacts, emails | Next        |
 | 4     | AI review, first CSV        | Not started |
 | 5     | Email check, final CSV      | Not started |
 | 6     | Hardening and delivery      | Not started |
@@ -94,8 +94,10 @@ Progress against the tickets in PLAN.md. Updated with each merged PR.
   has waited; clicking it opens a drawer whose address can be shared. For websites you set the right
   address or mark "no website" with a reason. For duplicates you compare both records side by side,
   then merge (with a confirmation, choosing which to keep) or mark them as different. Resolved items
-  leave the list and the counts and sidebar badge go down. The other tabs link to the company page
-  until their guided drawers arrive.
+  leave the list and the counts and sidebar badge go down. Sales Navigator items open a guided
+  four-step drawer (open the search, note the account, add decision-makers, mark done); it only
+  links out to LinkedIn and never automates it. Contacts, Emails and AI items link to the company
+  page until their guided drawers arrive.
 - **Company list** (`/companies`): search, filters (edition dropdown, country, step status, email
   and AI status, duplicates…), sortable headings, 50 per page, show/hide columns, all kept in the
   URL. Missing data reads "Not available"; there are loading, empty and error states.
