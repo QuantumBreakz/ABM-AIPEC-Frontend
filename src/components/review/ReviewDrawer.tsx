@@ -6,6 +6,7 @@ import { ErrorState } from '@/components/ErrorState'
 import { Skeleton } from '@/components/Skeleton'
 import { DuplicateReview } from './DuplicateReview'
 import { GenericReview } from './GenericReview'
+import { SalesNavReview } from './SalesNavReview'
 import { WebsiteReview } from './WebsiteReview'
 
 /** The panel that opens when a queue row is clicked. What it shows depends on the kind of review. */
@@ -54,6 +55,8 @@ export function ReviewDrawer({
             <WebsiteReview company={company.data} onResolved={onClose} />
           ) : type === 'duplicate' ? (
             <DuplicateReview company={company.data} onResolved={onClose} />
+          ) : type === 'salesnav' ? (
+            <SalesNavReview company={company.data} onResolved={onClose} />
           ) : (
             <GenericReview type={type} item={item} company={company.data} />
           )}

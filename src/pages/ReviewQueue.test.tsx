@@ -134,9 +134,9 @@ describe('The item drawer', () => {
     expect(router.state.location.search).not.toContain('item=')
   })
 
-  it('points other kinds of review at the right company tab', async () => {
-    await open('/review/salesnav')
-    const first = items('salesnav')[0]
+  it('points contact reviews at the Contacts tab', async () => {
+    await open('/review/contacts')
+    const first = items('contacts')[0]
     const dialog = await openRow(first as Item)
     expect(within(dialog).getByRole('link', { name: 'Open the Contacts tab' })).toHaveAttribute(
       'href',
