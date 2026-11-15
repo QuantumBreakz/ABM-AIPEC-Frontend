@@ -1,6 +1,7 @@
-import { ArrowLeft, Sparkles } from 'lucide-react'
+import { ArrowLeft } from 'lucide-react'
 import { Link, useParams } from 'react-router'
 import { useCompany } from '@/api/queries/companies'
+import { AiTab } from '@/components/company/AiTab'
 import { AdipecTab } from '@/components/company/AdipecTab'
 import { CompanyHeader } from '@/components/company/CompanyHeader'
 import { CompanyTabs } from '@/components/company/CompanyTabs'
@@ -10,7 +11,6 @@ import { SocialsTab } from '@/components/company/SocialsTab'
 import { WebsiteTab } from '@/components/company/WebsiteTab'
 import { isCompanyTab } from '@/lib/companyTabs'
 import { StepsPanel } from '@/components/company/StepsPanel'
-import { EmptyState } from '@/components/EmptyState'
 import { ErrorState } from '@/components/ErrorState'
 import { Skeleton } from '@/components/Skeleton'
 import { Button } from '@/components/ui/button'
@@ -77,18 +77,7 @@ export default function CompanyDetailPage() {
       ) : current === 'history' ? (
         <HistoryTab companyId={data.id} />
       ) : (
-        <div className="card-elevated border-dashed">
-          <EmptyState
-            icon={Sparkles}
-            title="AI drafts coming soon"
-            hint="A summary of the drafts will appear here. You can already review and approve them."
-            action={
-              <Button asChild>
-                <Link to={`/ai/${data.id}`}>Open AI review</Link>
-              </Button>
-            }
-          />
-        </div>
+        <AiTab company={data} />
       )}
     </>
   )

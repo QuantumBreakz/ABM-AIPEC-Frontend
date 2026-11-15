@@ -214,7 +214,7 @@ describe('Tabs', () => {
 
   it('opens a tab from a deep link', async () => {
     await open('/companies/c_001/ai', company('c_001')?.name)
-    expect(await screen.findByText('AI drafts coming soon')).toBeInTheDocument()
+    expect(await screen.findByRole('region', { name: 'Company draft' })).toBeInTheDocument()
     expect(
       within(screen.getByRole('navigation', { name: 'Company sections' })).getByRole('link', {
         name: 'AI',
