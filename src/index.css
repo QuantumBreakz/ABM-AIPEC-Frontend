@@ -134,7 +134,16 @@
 }
 
 @layer base {
+  /* A visually hidden label (sr-only) inside a wide table would otherwise be placed against the
+     whole page and make it scroll sideways. */
+  th,
+  td {
+    position: relative;
+  }
+
   html {
+    /* The top bar is sticky: keep whatever scrolls (or is tabbed) into view clear of it. */
+    scroll-padding-top: 5.5rem;
     font-family: var(--font-sans);
     font-feature-settings: 'cv11', 'ss01';
     -webkit-font-smoothing: antialiased;
@@ -251,7 +260,7 @@
 }
 
 .dark .skeuo-thumb {
-  background: color-mix(in srgb, var(--muted) 75%, white);
+  background: var(--muted);
   box-shadow:
     inset 0 1px 0 rgb(255 255 255 / 0.14),
     0 1px 3px rgb(0 0 0 / 0.45);

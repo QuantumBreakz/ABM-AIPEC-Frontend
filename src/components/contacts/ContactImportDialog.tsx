@@ -6,6 +6,7 @@ import { type ImportResult, useImportContacts } from '@/api/queries/contacts'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/input'
 import { CONTACT_CSV_TEMPLATE, previewContactCsv } from '@/lib/csv'
+import { useFocusReturn } from '@/lib/useFocusReturn'
 
 function downloadTemplate() {
   const blob = new Blob([CONTACT_CSV_TEMPLATE], { type: 'text/csv;charset=utf-8' })
@@ -195,11 +196,16 @@ export function ContactImportDialog({
   onOpenChange: (open: boolean) => void
   companyId: string
 }) {
+  const focusReturn = useFocusReturn()
+
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 z-40 bg-foreground/45 backdrop-blur-[2px]" />
-        <Dialog.Content className="fixed left-1/2 top-1/2 z-50 max-h-[calc(100vh-2rem)] w-[calc(100%-2rem)] max-w-2xl -translate-x-1/2 -translate-y-1/2 overflow-y-auto overscroll-contain rounded-xl border border-border bg-surface p-6 shadow-2xl">
+        <Dialog.Content
+          {...focusReturn}
+          className="fixed left-1/2 top-1/2 z-50 max-h-[calc(100vh-2rem)] w-[calc(100%-2rem)] max-w-2xl -translate-x-1/2 -translate-y-1/2 overflow-y-auto overscroll-contain rounded-xl border border-border bg-surface p-6 shadow-2xl"
+        >
           <div className="mb-5 flex items-start justify-between gap-4 border-b border-border/70 pb-4">
             <div>
               <Dialog.Title className="text-base font-semibold tracking-tight text-foreground">

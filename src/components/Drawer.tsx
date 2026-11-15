@@ -3,6 +3,7 @@ import { X } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { cn } from '@/lib/utils'
 import { Button } from './ui/button'
+import { useFocusReturn } from '@/lib/useFocusReturn'
 
 /** Side panel that slides in from the right (used by the review queue). */
 export function Drawer({
@@ -23,11 +24,14 @@ export function Drawer({
   /** A wider panel, for content such as a side-by-side comparison. */
   wide?: boolean
 }) {
+  const focusReturn = useFocusReturn()
+
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 z-40 bg-foreground/45 backdrop-blur-[2px]" />
         <Dialog.Content
+          {...focusReturn}
           className={cn(
             'fixed inset-y-0 right-0 z-50 flex w-full flex-col border-l border-border bg-surface shadow-2xl',
             wide ? 'max-w-3xl' : 'max-w-xl',

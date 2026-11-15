@@ -12,6 +12,7 @@ import { STEP_STATUSES } from '@/api/types'
 import { Button } from '@/components/ui/button'
 import { Select, Textarea } from '@/components/ui/input'
 import { STEP_LABEL, STEP_STATUS_META } from '@/lib/status'
+import { useFocusReturn } from '@/lib/useFocusReturn'
 
 const schema = z.object({
   status: z.string().refine((v) => STEP_STATUSES.includes(v as StepStatus), 'Pick a status.'),
@@ -133,11 +134,16 @@ export function StepOverrideDialog({
   current: StepState
   onOpenChange: (open: boolean) => void
 }) {
+  const focusReturn = useFocusReturn()
+
   return (
     <Dialog.Root open={step !== null} onOpenChange={onOpenChange}>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 z-40 bg-foreground/40 backdrop-blur-[1px]" />
-        <Dialog.Content className="fixed left-1/2 top-1/2 z-50 max-h-[calc(100vh-2rem)] w-[calc(100%-2rem)] max-w-md -translate-x-1/2 -translate-y-1/2 overflow-y-auto rounded-lg border border-border bg-surface p-6 shadow-xl">
+        <Dialog.Content
+          {...focusReturn}
+          className="fixed left-1/2 top-1/2 z-50 max-h-[calc(100vh-2rem)] w-[calc(100%-2rem)] max-w-md -translate-x-1/2 -translate-y-1/2 overflow-y-auto rounded-lg border border-border bg-surface p-6 shadow-xl"
+        >
           <div className="mb-4 flex items-start justify-between gap-4">
             <div>
               <Dialog.Title className="text-base font-semibold">
