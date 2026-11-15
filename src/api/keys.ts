@@ -6,6 +6,7 @@ export const keys = {
   reviewAll: ['review'] as const,
   review: (type: string, page: number) => ['review', type, page] as const,
   events: ['events'] as const,
+  providers: ['providers'] as const,
   companies: (params?: object) => ['companies', params ?? {}] as const,
   company: (id: string | undefined) => ['company', id] as const,
   history: (id: string | undefined) => ['history', id] as const,

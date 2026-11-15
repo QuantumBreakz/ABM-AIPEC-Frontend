@@ -11,10 +11,12 @@ import {
   useExportLog,
 } from '@/api/queries/exports'
 import type { ExportKind, ExportLogEntry } from '@/api/types'
+import { useMe } from '@/auth/auth-context'
 import { ChartCard } from '@/components/charts/ChartCard'
 import { type Columns, DataTable } from '@/components/DataTable'
 import { DateTime } from '@/components/DateTime'
 import { EmptyState } from '@/components/EmptyState'
+import { VerifyEmailsCard } from '@/components/exports/VerifyEmailsCard'
 import { FilterBar } from '@/components/FilterBar'
 import { PageHeader } from '@/components/PageHeader'
 import { Button } from '@/components/ui/button'
@@ -107,6 +109,7 @@ const logColumns: Columns<ExportLogEntry> = [
 
 export default function ExportsPage() {
   const countId = useId()
+  const { isAdmin } = useMe()
   const [params, setParams] = useSearchParams()
   const kind: ExportKind = isKind(params.get('kind'))
     ? (params.get('kind') as ExportKind)
@@ -209,6 +212,12 @@ export default function ExportsPage() {
             </Button>
           </div>
         </ChartCard>
+
+        {isAdmin && (
+          <VerifyEmailsCard
+            defaultEdition={typeof filters.edition === 'number' ? filters.edition : undefined}
+          />
+        )}
 
         <ChartCard title="Export history" subtitle="Who downloaded what, newest first.">
           <DataTable

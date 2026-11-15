@@ -44,9 +44,9 @@ Progress against the tickets in PLAN.md. Updated with each merged PR.
 | 3     | FE-3.4 Review: contacts, emails | Done        |
 | 4     | FE-4.1 AI review            | Done        |
 | 4     | FE-4.2 AI tab               | Done        |
-| 4     | FE-4.3 Exports              | In review   |
-| 5     | FE-5.1 Email statuses and check | Next        |
-| 6     | FE-6.1 Admin and gap report | Not started |
+| 4     | FE-4.3 Exports              | Done        |
+| 5     | FE-5.1 Email statuses and check | In review   |
+| 6     | FE-6.1 Admin and gap report | Next        |
 | 6     | FE-6.2 Quality, e2e, guide  | Not started |
 
 ## What exists today
@@ -114,7 +114,11 @@ Progress against the tickets in PLAN.md. Updated with each merged PR.
   (initial, before the email check; final, after it), narrow the companies with the same filters as
   the company list, and see how many rows the file will have before downloading. The download is a
   UTF-8 CSV that opens in Excel with correct characters. Every download is listed in the export
-  history with its filters and who made it.
+  history with its filters and who made it. Admins also get a **Check emails** step: it is off until
+  an initial export exists, the confirmation says which checker will be used (without
+  MillionVerifier it is an MX-only check that cannot mark anything Verified), and progress shows
+  on the page and in the run details. Emails are never shown as Verified without a recorded check;
+  Not checked and Unknown look different from Verified and say why on hover.
 - **Company list** (`/companies`): search, filters (edition dropdown, country, step status, email
   and AI status, duplicates…), sortable headings, 50 per page, show/hide columns, all kept in the
   URL. Missing data reads "Not available"; there are loading, empty and error states.
