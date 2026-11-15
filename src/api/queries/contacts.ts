@@ -34,6 +34,22 @@ export function useUpdateContact(companyId: string) {
   })
 }
 
+export type ImportResult = {
+  created: number
+  updated: number
+  errors: { row: number; message: string }[]
+}
+
+/** Import pasted CSV text. Good rows are saved even when other rows fail; failures come back per row. */
+export function useImportContacts(companyId: string) {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (csv: string) =>
+      api.post<ImportResult>(`/companies/${companyId}/contacts/import`, { csv }),
+    onSuccess: () => refreshAfterContactChange(queryClient, companyId),
+  })
+}
+
 /** Admin only on the server. Deleting a contact also deletes their emails and drafts. */
 export function useDeleteContact(companyId: string) {
   const queryClient = useQueryClient()

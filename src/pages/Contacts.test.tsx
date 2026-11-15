@@ -394,3 +394,68 @@ describe('Deleting a contact', () => {
     expect(within(card()).getByRole('button', { name: `Edit ${name}` })).toBeInTheDocument()
   })
 })
+
+describe('CSV import', () => {
+  const GOOD = 'first_name,last_name,title,email'
+
+  async function openImport() {
+    const user = userEvent.setup()
+    await user.click(within(card()).getByRole('button', { name: /Import CSV/ }))
+    const dialog = await screen.findByRole('dialog', { name: 'Import contacts from CSV' })
+    return { user, dialog }
+  }
+
+  it('previews the first 10 rows before importing', async () => {
+    await open('c_004')
+    const { user, dialog } = await openImport()
+    const rows = Array.from({ length: 12 }, (_, i) => `Pat${i},Rowe${i},CFO,`).join('\n')
+    await user.click(within(dialog).getByLabelText('CSV text'))
+    await user.paste(`${GOOD}\n${rows}`)
+    const preview = within(dialog).getByRole('region', { name: 'Preview' })
+    expect(preview).toHaveTextContent('first 10 of 12 rows')
+    expect(within(preview).getAllByRole('row')).toHaveLength(11)
+    expect(within(dialog).getByRole('button', { name: 'Import 12 rows' })).toBeEnabled()
+  })
+
+  it('blocks the import and explains when the header is wrong', async () => {
+    await open('c_004')
+    const { user, dialog } = await openImport()
+    await user.click(within(dialog).getByLabelText('CSV text'))
+    await user.paste('name,mail\nA,b')
+    expect(await within(dialog).findByRole('alert')).toHaveTextContent(/first_name, last_name/)
+    expect(within(dialog).getByRole('button', { name: 'Import' })).toBeDisabled()
+  })
+
+  it('imports the good rows and lists the bad ones by row number', async () => {
+    const before = company('c_004')?.contacts.length as number
+    await open('c_004')
+    const { user, dialog } = await openImport()
+    await user.click(within(dialog).getByLabelText('CSV text'))
+    await user.paste(
+      `${GOOD}\nAnna,Keller,CFO,anna.keller@example.com\nBob,Stone,CEO,not-an-email\nCara,Lund,COO,`,
+    )
+    await user.click(within(dialog).getByRole('button', { name: 'Import 3 rows' }))
+    const status = await within(dialog).findByRole('status')
+    expect(status).toHaveTextContent('2 added')
+    expect(status).toHaveTextContent('1 not imported')
+    const errors = within(dialog).getByRole('table', { name: 'Rows that could not be imported' })
+    expect(within(errors).getByText('3')).toBeInTheDocument()
+    expect(errors).toHaveTextContent(/not-an-email/)
+    expect(company('c_004')?.contacts).toHaveLength(before + 2)
+
+    await user.click(within(dialog).getByRole('button', { name: 'Done' }))
+    expect(await screen.findByText('Anna Keller')).toBeInTheDocument()
+  })
+
+  it('updates a person who already exists instead of adding a second one', async () => {
+    const existing = company('c_001')?.contacts[0]
+    const before = company('c_001')?.contacts.length as number
+    await open('c_001')
+    const { user, dialog } = await openImport()
+    await user.click(within(dialog).getByLabelText('CSV text'))
+    await user.paste(`${GOOD}\n${existing?.firstName},${existing?.lastName},Chair,`)
+    await user.click(within(dialog).getByRole('button', { name: 'Import 1 rows' }))
+    expect(await within(dialog).findByRole('status')).toHaveTextContent('1 updated')
+    expect(company('c_001')?.contacts).toHaveLength(before)
+  })
+})

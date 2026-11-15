@@ -1,4 +1,4 @@
-import { Pencil, Plus, Trash2, UserPlus } from 'lucide-react'
+import { Pencil, Plus, Trash2, Upload, UserPlus } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { ApiError } from '@/api/client'
@@ -16,6 +16,7 @@ import { Button } from '@/components/ui/button'
 import { fullName, sourceLabel, verificationNote } from '@/lib/contacts'
 import { shortUrl } from '@/lib/format'
 import { ContactForm } from './ContactForm'
+import { ContactImportDialog } from './ContactImportDialog'
 
 function EmailLines({ contact }: { contact: Contact }) {
   if (contact.emails.length === 0) {
@@ -59,6 +60,7 @@ export function ContactsCard({ company }: { company: Company }) {
   const { isAdmin } = useMe()
   const remove = useDeleteContact(company.id)
   const [formOpen, setFormOpen] = useState(false)
+  const [importOpen, setImportOpen] = useState(false)
   const [editing, setEditing] = useState<Contact | undefined>()
   const [deleting, setDeleting] = useState<Contact | undefined>()
 
@@ -90,10 +92,16 @@ export function ContactsCard({ company }: { company: Company }) {
       title={`Decision-makers (${contacts.length})`}
       subtitle="The people you found for this company. Each email shows where it came from and whether it has been checked."
       action={
-        <Button size="sm" onClick={openAdd}>
-          <Plus className="size-4" aria-hidden />
-          Add contact
-        </Button>
+        <div className="flex gap-2">
+          <Button size="sm" variant="secondary" onClick={() => setImportOpen(true)}>
+            <Upload className="size-4" aria-hidden />
+            Import CSV
+          </Button>
+          <Button size="sm" onClick={openAdd}>
+            <Plus className="size-4" aria-hidden />
+            Add contact
+          </Button>
+        </div>
       }
     >
       {contacts.length === 0 ? (
@@ -207,6 +215,7 @@ export function ContactsCard({ company }: { company: Company }) {
         contacts={contacts}
         editing={editing}
       />
+      <ContactImportDialog open={importOpen} onOpenChange={setImportOpen} companyId={company.id} />
       <ConfirmDialog
         open={!!deleting}
         onOpenChange={(open) => !open && setDeleting(undefined)}
