@@ -40,9 +40,9 @@ Progress against the tickets in PLAN.md. Updated with each merged PR.
 | 2     | FE-2.3 Review queue         | Done        |
 | 3     | FE-3.1 Contacts             | Done        |
 | 3     | FE-3.2 CSV paste import     | Done        |
-| 3     | FE-3.3 Sales Nav task       | In review   |
-| 3     | FE-3.4 Review: contacts, emails | Next        |
-| 4     | AI review, first CSV        | Not started |
+| 3     | FE-3.3 Sales Nav task       | Done        |
+| 3     | FE-3.4 Review: contacts, emails | In review   |
+| 4     | AI review, first CSV        | Next        |
 | 5     | Email check, final CSV      | Not started |
 | 6     | Hardening and delivery      | Not started |
 
@@ -96,8 +96,10 @@ Progress against the tickets in PLAN.md. Updated with each merged PR.
   then merge (with a confirmation, choosing which to keep) or mark them as different. Resolved items
   leave the list and the counts and sidebar badge go down. Sales Navigator items open a guided
   four-step drawer (open the search, note the account, add decision-makers, mark done); it only
-  links out to LinkedIn and never automates it. Contacts, Emails and AI items link to the company
-  page until their guided drawers arrive.
+  links out to LinkedIn and never automates it. Contacts items let you add a person, look in Sales Navigator, or record "none found" with a
+  reason. Email items let you correct an address, remove it, or add another (a source is always
+  required); every change shows in the History tab. AI items link to the company page until their
+  guided drawer arrives.
 - **Company list** (`/companies`): search, filters (edition dropdown, country, step status, email
   and AI status, duplicates…), sortable headings, 50 per page, show/hide columns, all kept in the
   URL. Missing data reads "Not available"; there are loading, empty and error states.

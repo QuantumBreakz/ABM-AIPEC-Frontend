@@ -134,17 +134,6 @@ describe('The item drawer', () => {
     expect(router.state.location.search).not.toContain('item=')
   })
 
-  it('points contact reviews at the Contacts tab', async () => {
-    await open('/review/contacts')
-    const first = items('contacts')[0]
-    const dialog = await openRow(first as Item)
-    expect(within(dialog).getByRole('link', { name: 'Open the Contacts tab' })).toHaveAttribute(
-      'href',
-      `/companies/${first?.companyId}/contacts`,
-    )
-    expect(dialog).toHaveTextContent(first?.reason as string)
-  })
-
   it('points AI items at the AI tab', async () => {
     await open('/review/ai')
     const first = items('ai')[0]

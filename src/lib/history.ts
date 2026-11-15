@@ -34,6 +34,7 @@ export function historyFieldLabel(field: string): string {
     return `${STEP_LABEL[step] ?? step} status`
   }
   if (field.startsWith('ai.')) return AI_ACTIONS[field.slice(3)] ?? 'AI draft changed'
+  if (field.startsWith('email:')) return 'Email'
   if (field.startsWith('contact:'))
     return field.includes(':ai.') ? 'Contact draft changed' : 'Contact'
   return field
