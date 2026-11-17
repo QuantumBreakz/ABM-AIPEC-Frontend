@@ -12,7 +12,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { safeNext } from '@/lib/nav'
 
-const schema = z.object({
+const loginSchema = z.object({
   email: z
     .string()
     .trim()
@@ -20,7 +20,28 @@ const schema = z.object({
     .refine((v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v), 'Enter a valid email address.'),
   password: z.string().min(1, 'Enter your password.'),
 })
-type Values = z.infer<typeof schema>
+
+const signupSchema = z
+  .object({
+    email: z
+      .string()
+      .trim()
+      .min(1, 'Enter your email address.')
+      .refine((v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v), 'Enter a valid email address.'),
+    username: z
+      .string()
+      .trim()
+      .refine((v) => v === '' || v.length >= 2, 'Username must be at least 2 characters.'),
+    password: z.string().min(8, 'Use at least 8 characters.'),
+    confirmPassword: z.string().min(1, 'Confirm your password.'),
+  })
+  .refine((v) => v.password === v.confirmPassword, {
+    path: ['confirmPassword'],
+    message: 'The two passwords do not match.',
+  })
+
+type LoginValues = z.infer<typeof loginSchema>
+type SignupValues = z.infer<typeof signupSchema>
 
 function Field({
   id,
@@ -58,26 +79,43 @@ export default function LoginPage() {
   const { user, setUser } = useAuth()
   const navigate = useNavigate()
   const [params] = useSearchParams()
+  const [mode, setMode] = useState<'login' | 'signup'>('login')
   const [serverError, setServerError] = useState<string>()
   const [showPassword, setShowPassword] = useState(false)
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    formState: { errors, isSubmitting },
-  } = useForm<Values>({ resolver: zodResolver(schema) })
+
+  const loginForm = useForm<LoginValues>({ resolver: zodResolver(loginSchema) })
+  const signupForm = useForm<SignupValues>({
+    resolver: zodResolver(signupSchema),
+    defaultValues: { email: '', username: '', password: '', confirmPassword: '' },
+  })
 
   const next = safeNext(params.get('next'))
   if (user) return <Navigate to={next} replace />
 
-  const onSubmit = async (values: Values) => {
+  const onLogin = async (values: LoginValues) => {
     setServerError(undefined)
     try {
       const signedIn = await api.post<User>('/auth/login', values)
       setUser(signedIn)
       navigate(next, { replace: true })
     } catch (error) {
-      // 401 "wrong password" and 429 "too many attempts" carry a ready-made message.
+      setServerError(
+        error instanceof ApiError ? error.message : 'Something went wrong. Please try again.',
+      )
+    }
+  }
+
+  const onSignup = async (values: SignupValues) => {
+    setServerError(undefined)
+    try {
+      const created = await api.post<User>('/auth/signup', {
+        email: values.email,
+        username: values.username || undefined,
+        password: values.password,
+      })
+      setUser(created)
+      navigate(next, { replace: true })
+    } catch (error) {
       setServerError(
         error instanceof ApiError ? error.message : 'Something went wrong. Please try again.',
       )
@@ -85,8 +123,14 @@ export default function LoginPage() {
   }
 
   const fillDemo = (email: string) => {
-    setValue('email', email, { shouldValidate: true })
-    setValue('password', 'password', { shouldValidate: true })
+    setMode('login')
+    loginForm.setValue('email', email, { shouldValidate: true })
+    loginForm.setValue('password', 'password', { shouldValidate: true })
+  }
+
+  const switchMode = (nextMode: 'login' | 'signup') => {
+    setServerError(undefined)
+    setMode(nextMode)
   }
 
   return (
@@ -154,68 +198,199 @@ export default function LoginPage() {
               <h1 className="text-2xl font-semibold tracking-[-0.025em] text-foreground">
                 ADIPEC Lead Gen
               </h1>
-              <p className="mt-0.5 text-sm text-muted-foreground">Sign in</p>
+              <p className="mt-0.5 text-sm text-muted-foreground">
+                {mode === 'login' ? 'Sign in' : 'Create a user account'}
+              </p>
             </div>
           </div>
 
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            noValidate
-            className="card-elevated flex flex-col gap-4 p-6 sm:p-7"
+          <div
+            className="skeuo-track mb-4 grid grid-cols-2 p-1"
+            role="tablist"
+            aria-label="Account mode"
           >
-            {serverError && (
-              <div
-                role="alert"
-                className="flex items-start gap-2.5 rounded-lg border border-danger/25 bg-danger-soft px-3.5 py-2.5 text-sm text-danger-ink"
-              >
-                <TriangleAlert className="mt-0.5 size-4 shrink-0" aria-hidden />
-                <span>{serverError}</span>
-              </div>
-            )}
-
-            <Field id="email" label="Email" error={errors.email?.message}>
-              <Input
-                id="email"
-                type="email"
-                autoComplete="username"
-                autoFocus
-                placeholder="you@company.com"
-                aria-invalid={!!errors.email}
-                aria-describedby={errors.email ? 'email-error' : undefined}
-                {...register('email')}
-              />
-            </Field>
-
-            <Field id="password" label="Password" error={errors.password?.message}>
-              <div className="relative">
-                <Input
-                  id="password"
-                  type={showPassword ? 'text' : 'password'}
-                  autoComplete="current-password"
-                  className="pr-10"
-                  aria-invalid={!!errors.password}
-                  aria-describedby={errors.password ? 'password-error' : undefined}
-                  {...register('password')}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword((s) => !s)}
-                  aria-label={showPassword ? 'Hide password' : 'Show password'}
-                  className="absolute right-2 top-1/2 flex size-7 -translate-y-1/2 cursor-pointer items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-                >
-                  {showPassword ? (
-                    <EyeOff className="size-4" aria-hidden />
-                  ) : (
-                    <Eye className="size-4" aria-hidden />
-                  )}
-                </button>
-              </div>
-            </Field>
-
-            <Button type="submit" loading={isSubmitting} className="mt-1 w-full">
+            <button
+              type="button"
+              role="tab"
+              aria-selected={mode === 'login'}
+              onClick={() => switchMode('login')}
+              className={
+                mode === 'login'
+                  ? 'skeuo-thumb cursor-pointer rounded-md px-3 py-1.5 text-xs font-semibold text-foreground transition-all'
+                  : 'cursor-pointer rounded-md px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground'
+              }
+            >
               Sign in
-            </Button>
-          </form>
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={mode === 'signup'}
+              onClick={() => switchMode('signup')}
+              className={
+                mode === 'signup'
+                  ? 'skeuo-thumb cursor-pointer rounded-md px-3 py-1.5 text-xs font-semibold text-foreground transition-all'
+                  : 'cursor-pointer rounded-md px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground'
+              }
+            >
+              Create account
+            </button>
+          </div>
+
+          {mode === 'login' ? (
+            <form
+              onSubmit={loginForm.handleSubmit(onLogin)}
+              noValidate
+              className="card-elevated flex flex-col gap-4 p-6 sm:p-7"
+            >
+              {serverError && (
+                <div
+                  role="alert"
+                  className="flex items-start gap-2.5 rounded-lg border border-danger/25 bg-danger-soft px-3.5 py-2.5 text-sm text-danger-ink"
+                >
+                  <TriangleAlert className="mt-0.5 size-4 shrink-0" aria-hidden />
+                  <span>{serverError}</span>
+                </div>
+              )}
+
+              <Field id="email" label="Email" error={loginForm.formState.errors.email?.message}>
+                <Input
+                  id="email"
+                  type="email"
+                  autoComplete="username"
+                  autoFocus
+                  placeholder="you@company.com"
+                  aria-invalid={!!loginForm.formState.errors.email}
+                  aria-describedby={loginForm.formState.errors.email ? 'email-error' : undefined}
+                  {...loginForm.register('email')}
+                />
+              </Field>
+
+              <Field
+                id="password"
+                label="Password"
+                error={loginForm.formState.errors.password?.message}
+              >
+                <div className="relative">
+                  <Input
+                    id="password"
+                    type={showPassword ? 'text' : 'password'}
+                    autoComplete="current-password"
+                    className="pr-10"
+                    aria-invalid={!!loginForm.formState.errors.password}
+                    aria-describedby={
+                      loginForm.formState.errors.password ? 'password-error' : undefined
+                    }
+                    {...loginForm.register('password')}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((s) => !s)}
+                    aria-label={showPassword ? 'Hide password' : 'Show password'}
+                    className="absolute right-2 top-1/2 flex size-7 -translate-y-1/2 cursor-pointer items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                  >
+                    {showPassword ? (
+                      <EyeOff className="size-4" aria-hidden />
+                    ) : (
+                      <Eye className="size-4" aria-hidden />
+                    )}
+                  </button>
+                </div>
+              </Field>
+
+              <Button
+                type="submit"
+                loading={loginForm.formState.isSubmitting}
+                className="mt-1 w-full"
+              >
+                Sign in
+              </Button>
+            </form>
+          ) : (
+            <form
+              onSubmit={signupForm.handleSubmit(onSignup)}
+              noValidate
+              className="card-elevated flex flex-col gap-4 p-6 sm:p-7"
+            >
+              {serverError && (
+                <div
+                  role="alert"
+                  className="flex items-start gap-2.5 rounded-lg border border-danger/25 bg-danger-soft px-3.5 py-2.5 text-sm text-danger-ink"
+                >
+                  <TriangleAlert className="mt-0.5 size-4 shrink-0" aria-hidden />
+                  <span>{serverError}</span>
+                </div>
+              )}
+
+              <Field
+                id="signup-email"
+                label="Email"
+                error={signupForm.formState.errors.email?.message}
+              >
+                <Input
+                  id="signup-email"
+                  type="email"
+                  autoComplete="email"
+                  autoFocus
+                  placeholder="you@company.com"
+                  aria-invalid={!!signupForm.formState.errors.email}
+                  {...signupForm.register('email')}
+                />
+              </Field>
+
+              <Field
+                id="signup-username"
+                label="Username (optional)"
+                error={signupForm.formState.errors.username?.message}
+              >
+                <Input
+                  id="signup-username"
+                  type="text"
+                  autoComplete="username"
+                  placeholder="e.g. sarah.m"
+                  aria-invalid={!!signupForm.formState.errors.username}
+                  {...signupForm.register('username')}
+                />
+              </Field>
+
+              <Field
+                id="signup-password"
+                label="Password"
+                error={signupForm.formState.errors.password?.message}
+              >
+                <Input
+                  id="signup-password"
+                  type={showPassword ? 'text' : 'password'}
+                  autoComplete="new-password"
+                  placeholder="At least 8 characters"
+                  aria-invalid={!!signupForm.formState.errors.password}
+                  {...signupForm.register('password')}
+                />
+              </Field>
+
+              <Field
+                id="signup-confirm"
+                label="Confirm password"
+                error={signupForm.formState.errors.confirmPassword?.message}
+              >
+                <Input
+                  id="signup-confirm"
+                  type={showPassword ? 'text' : 'password'}
+                  autoComplete="new-password"
+                  aria-invalid={!!signupForm.formState.errors.confirmPassword}
+                  {...signupForm.register('confirmPassword')}
+                />
+              </Field>
+
+              <Button
+                type="submit"
+                loading={signupForm.formState.isSubmitting}
+                className="mt-1 w-full"
+              >
+                Create account
+              </Button>
+            </form>
+          )}
 
           {import.meta.env.VITE_API_MOCK === 'true' && (
             <div className="mt-4 flex flex-col items-center gap-2.5 rounded-xl border border-border bg-surface/70 px-4 py-3 text-xs text-muted-foreground">

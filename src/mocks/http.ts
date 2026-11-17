@@ -62,16 +62,25 @@ export function setSession(userId: string | null) {
 export function publicUser(user: {
   id: string
   email: string
+  username?: string
   role: Role
+  active?: boolean
   createdAt: string
 }): User {
-  return { id: user.id, email: user.email, role: user.role, createdAt: user.createdAt }
+  return {
+    id: user.id,
+    email: user.email,
+    username: user.username,
+    role: user.role,
+    active: user.active ?? true,
+    createdAt: user.createdAt,
+  }
 }
 
 /** ?mock_role=reviewer signs you in as that role without the login form. */
 export function currentUser(): User | null {
   const roleParam = pageParam('mock_role')
-  if (roleParam === 'admin' || roleParam === 'reviewer') {
+  if (roleParam === 'admin' || roleParam === 'reviewer' || roleParam === 'user') {
     const forced = db.users.find((u) => u.role === roleParam)
     if (forced) setSession(forced.id)
   }

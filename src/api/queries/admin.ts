@@ -20,13 +20,24 @@ function useUserMutation<T>(fn: (input: T) => Promise<unknown>) {
 }
 
 export const useCreateUser = () =>
-  useUserMutation((input: { email: string; password: string; role: Role }) =>
-    api.post<User>('/users', input),
+  useUserMutation(
+    (input: { email: string; username?: string; password: string; role: Role; active?: boolean }) =>
+      api.post<User>('/users', input),
   )
 
 export const useUpdateUser = () =>
-  useUserMutation((input: { id: string; role?: Role; password?: string }) =>
-    api.patch<User>(`/users/${input.id}`, { role: input.role, password: input.password }),
+  useUserMutation(
+    (input: {
+      id: string
+      email?: string
+      username?: string | null
+      role?: Role
+      password?: string
+      active?: boolean
+    }) => {
+      const { id, ...patch } = input
+      return api.patch<User>(`/users/${id}`, patch)
+    },
   )
 
 export const useDeleteUser = () => useUserMutation((id: string) => api.del(`/users/${id}`))

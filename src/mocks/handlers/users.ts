@@ -12,7 +12,7 @@ import {
   route,
 } from '../http'
 
-const ROLES: Role[] = ['admin', 'reviewer']
+const ROLES: Role[] = ['admin', 'user', 'reviewer']
 
 function validPassword(value: unknown) {
   if (typeof value !== 'string' || value.length < 8) {
@@ -21,7 +21,8 @@ function validPassword(value: unknown) {
   return value
 }
 function validRole(value: unknown): Role {
-  if (!ROLES.includes(value as Role)) throw badRequest('Role must be "admin" or "reviewer".')
+  if (!ROLES.includes(value as Role))
+    throw badRequest('Role must be "admin", "user", or "reviewer".')
   return value as Role
 }
 
@@ -29,16 +30,28 @@ export const userHandlers = [
   route.get('/users', 'admin', () => json<User[]>(db.users.map(publicUser))),
 
   route.post('/users', 'admin', async ({ body }) => {
-    const input = await body<{ email?: unknown; password?: unknown; role?: unknown }>()
+    const input = await body<{
+      email?: unknown
+      username?: unknown
+      password?: unknown
+      role?: unknown
+      active?: unknown
+    }>()
     const email = requireString(input.email, 'email').toLowerCase()
     if (!EMAIL_RE.test(email)) throw badRequest('Enter a valid email address.')
     if (db.users.some((u) => u.email.toLowerCase() === email)) {
       throw conflict('A user with this email already exists.')
     }
+    const username =
+      typeof input.username === 'string' && input.username.trim()
+        ? input.username.trim()
+        : undefined
     const user = {
       id: nextId('u'),
       email,
-      role: validRole(input.role),
+      username,
+      role: input.role === undefined ? ('user' as Role) : validRole(input.role),
+      active: typeof input.active === 'boolean' ? input.active : true,
       createdAt: new Date().toISOString(),
       password: validPassword(input.password),
     }
@@ -49,8 +62,27 @@ export const userHandlers = [
   route.patch('/users/:id', 'admin', async ({ params, body }) => {
     const user = db.users.find((u) => u.id === params.id)
     if (!user) throw notFound('User')
-    const input = await body<{ role?: unknown; password?: unknown }>()
+    const input = await body<{
+      email?: unknown
+      username?: unknown
+      role?: unknown
+      password?: unknown
+      active?: unknown
+    }>()
+    if (input.email !== undefined) {
+      const email = requireString(input.email, 'email').toLowerCase()
+      if (!EMAIL_RE.test(email)) throw badRequest('Enter a valid email address.')
+      if (db.users.some((u) => u.id !== user.id && u.email.toLowerCase() === email)) {
+        throw conflict('A user with this email already exists.')
+      }
+      user.email = email
+    }
+    if (input.username !== undefined) {
+      user.username =
+        input.username === null || input.username === '' ? undefined : String(input.username).trim()
+    }
     if (input.role !== undefined) user.role = validRole(input.role)
+    if (input.active !== undefined) user.active = Boolean(input.active)
     if (input.password !== undefined) user.password = validPassword(input.password)
     return json<User>(publicUser(user))
   }),
