@@ -17,7 +17,7 @@ export function PageHeader({
   usePageTitle(title)
 
   return (
-    <header className="mb-6 flex flex-wrap items-end justify-between gap-4 border-b border-border/80 pb-5">
+    <header className="mb-6 flex flex-col gap-3 border-b border-border/80 pb-5 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
       <div className="min-w-0">
         <h1 className="text-[1.625rem] font-semibold leading-tight tracking-[-0.025em] text-foreground">
           {title}
@@ -26,7 +26,11 @@ export function PageHeader({
           <p className="mt-1.5 max-w-2xl text-sm text-muted-foreground">{description}</p>
         )}
       </div>
-      {actions && <div className="flex flex-wrap items-center gap-2.5">{actions}</div>}
+      {actions && (
+        <div className="flex w-full flex-wrap items-center gap-2.5 sm:w-auto sm:justify-end">
+          {actions}
+        </div>
+      )}
     </header>
   )
 }

@@ -202,16 +202,16 @@ export default function OverviewPage() {
         actions={
           events.data &&
           events.data.length > 0 && (
-            <div className="flex items-center gap-2.5">
+            <div className="flex w-full items-center gap-2.5 sm:w-auto">
               <label
                 htmlFor="edition"
-                className="text-[0.8125rem] font-medium text-muted-foreground"
+                className="shrink-0 whitespace-nowrap text-[0.8125rem] font-medium text-muted-foreground"
               >
                 Edition
               </label>
               <Select
                 id="edition"
-                className="w-44"
+                className="w-full sm:w-44"
                 value={edition ?? ''}
                 onChange={(e) => setParam('edition', e.target.value)}
               >

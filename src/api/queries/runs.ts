@@ -32,7 +32,8 @@ export function useRun(id: string | undefined) {
 export function useStartRun() {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: (input: { edition: number; steps?: RunStep[] }) => api.post<Run>('/runs', input),
+    mutationFn: (input: { edition: number; steps?: RunStep[]; limit?: number }) =>
+      api.post<Run>('/runs', input),
     onSuccess: (run) => {
       queryClient.setQueryData(keys.run(run.id), run)
       void queryClient.invalidateQueries({ queryKey: keys.runsAll })

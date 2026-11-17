@@ -89,13 +89,16 @@ export function createRun(
   steps: RunStep[],
   startedBy: string,
   queued?: number,
+  limit?: number,
 ): Run {
-  const discovered = inEdition(edition).length
+  const totalInEdition = inEdition(edition).length
+  const discovered = limit ? Math.min(totalInEdition, limit) : totalInEdition
   const perStep: Run['perStep'] = {}
   for (const s of steps) perStep[s] = { queued: queued ?? discovered, done: 0, failed: 0 }
   const run: Run = {
     id: nextId('r'),
     edition,
+    ...(limit ? { limit } : {}),
     status: 'running',
     steps,
     startedBy,
@@ -137,10 +140,18 @@ export const runHandlers = [
   }),
 
   route.post('/runs', 'admin', async ({ body, user }) => {
-    const input = await body<{ edition?: unknown; steps?: unknown }>()
+    const input = await body<{ edition?: unknown; steps?: unknown; limit?: unknown }>()
     const edition = Number(input.edition)
     if (!db.events.some((e) => e.edition === edition))
       throw badRequest('Pick an edition that exists.')
+    let limit: number | undefined
+    if (input.limit !== undefined) {
+      const n = Number(input.limit)
+      if (!Number.isInteger(n) || n < 1 || n > 5000) {
+        throw badRequest('"limit" must be an integer between 1 and 5000.')
+      }
+      limit = n
+    }
     let steps = ALL_STEPS
     if (input.steps !== undefined) {
       if (
@@ -153,7 +164,7 @@ export const runHandlers = [
       steps = input.steps as RunStep[]
     }
     assertNoActiveRun()
-    return json<Run>(createRun(edition, steps, user.email), 202)
+    return json<Run>(createRun(edition, steps, user.email, undefined, limit), 202)
   }),
 
   route.get('/runs/:id', 'user', ({ params }) => {

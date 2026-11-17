@@ -1,3 +1,4 @@
+import { ChevronDown } from 'lucide-react'
 import {
   forwardRef,
   type InputHTMLAttributes,
@@ -26,9 +27,22 @@ Textarea.displayName = 'Textarea'
 
 export const Select = forwardRef<HTMLSelectElement, SelectHTMLAttributes<HTMLSelectElement>>(
   ({ className, children, ...props }, ref) => (
-    <select ref={ref} className={cn(fieldBase, 'min-h-9 py-1.5 pr-8', className)} {...props}>
-      {children}
-    </select>
+    <div className={cn('relative inline-flex w-full items-center', className)}>
+      <select
+        ref={ref}
+        className={cn(
+          fieldBase,
+          'h-9 w-full cursor-pointer appearance-none truncate py-1.5 pl-3.5 pr-9',
+        )}
+        {...props}
+      >
+        {children}
+      </select>
+      <ChevronDown
+        className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
+        aria-hidden
+      />
+    </div>
   ),
 )
 Select.displayName = 'Select'

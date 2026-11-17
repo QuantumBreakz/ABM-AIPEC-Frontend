@@ -12,15 +12,23 @@ import { useRuns, useStartRun } from '@/api/queries/runs'
 import type { Event, RunStep } from '@/api/types'
 import { Skeleton } from '@/components/Skeleton'
 import { Button } from '@/components/ui/button'
-import { Select } from '@/components/ui/input'
+import { Input, Select } from '@/components/ui/input'
 import { isRunning, RUN_STEP_LABEL, RUN_STEPS } from '@/lib/runs'
 import { useFocusReturn } from '@/lib/useFocusReturn'
 
 const schema = z.object({
   edition: z.number({ error: 'Pick an edition.' }),
+  limit: z
+    .string()
+    .trim()
+    .refine((v) => v === '' || (/^\d+$/.test(v) && Number(v) >= 1 && Number(v) <= 5000), {
+      message: 'Enter a whole number between 1 and 5000, or leave empty for all leads.',
+    }),
   steps: z.array(z.string()).min(1, 'Pick at least one step.'),
 })
 type Values = z.infer<typeof schema>
+
+const LIMIT_PRESETS = [25, 50, 100, 250] as const
 
 function StartRunFormInner({ events, onClose }: { events: Event[]; onClose: () => void }) {
   const navigate = useNavigate()
@@ -38,17 +46,20 @@ function StartRunFormInner({ events, onClose }: { events: Event[]; onClose: () =
   } = useForm<Values>({
     resolver: zodResolver(schema),
     // Everything is ticked by default: a normal run does every step.
-    defaultValues: { edition: newest, steps: [...RUN_STEPS] },
+    defaultValues: { edition: newest, limit: '', steps: [...RUN_STEPS] },
   })
   const chosen = useWatch({ control, name: 'steps' }) ?? []
+  const currentLimit = useWatch({ control, name: 'limit' }) ?? ''
   const activeRun = existing.data?.items.find(isRunning)
 
   const onSubmit = async (values: Values) => {
     setServerError(undefined)
     try {
       const selected = RUN_STEPS.filter((s) => values.steps.includes(s))
+      const parsedLimit = values.limit ? Number(values.limit) : undefined
       const run = await start.mutateAsync({
         edition: values.edition,
+        limit: parsedLimit,
         // No list means "everything", which is what the backend does by default.
         steps: selected.length === RUN_STEPS.length ? undefined : (selected as RunStep[]),
       })
@@ -100,6 +111,50 @@ function StartRunFormInner({ events, onClose }: { events: Event[]; onClose: () =
         {errors.edition && (
           <p className="text-[0.8125rem] text-danger-ink">{errors.edition.message}</p>
         )}
+      </div>
+
+      <div className="flex flex-col gap-1.5">
+        <div className="flex items-center justify-between gap-2">
+          <label htmlFor="run-limit" className="text-[0.8125rem] font-medium text-foreground">
+            Max leads (optional)
+          </label>
+          <div className="flex flex-wrap gap-1">
+            {LIMIT_PRESETS.map((n) => (
+              <button
+                key={n}
+                type="button"
+                onClick={() => setValue('limit', String(n), { shouldValidate: true })}
+                className={
+                  currentLimit === String(n)
+                    ? 'cursor-pointer rounded-md bg-primary px-2 py-0.5 text-[11px] font-semibold text-primary-foreground'
+                    : 'cursor-pointer rounded-md bg-muted px-2 py-0.5 text-[11px] font-medium text-muted-foreground hover:text-foreground'
+                }
+              >
+                {n}
+              </button>
+            ))}
+            <button
+              type="button"
+              onClick={() => setValue('limit', '', { shouldValidate: true })}
+              className={
+                currentLimit === ''
+                  ? 'cursor-pointer rounded-md bg-primary px-2 py-0.5 text-[11px] font-semibold text-primary-foreground'
+                  : 'cursor-pointer rounded-md bg-muted px-2 py-0.5 text-[11px] font-medium text-muted-foreground hover:text-foreground'
+              }
+            >
+              All
+            </button>
+          </div>
+        </div>
+        <Input
+          id="run-limit"
+          type="number"
+          min={1}
+          max={5000}
+          placeholder="All leads (leave blank for full directory)"
+          {...register('limit')}
+        />
+        {errors.limit && <p className="text-[0.8125rem] text-danger-ink">{errors.limit.message}</p>}
       </div>
 
       <fieldset className="flex flex-col gap-2.5">

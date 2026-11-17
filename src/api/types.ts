@@ -265,6 +265,7 @@ export type RunStep = StepKey | 'directory'
 export type Run = {
   id: string
   edition: number
+  limit?: number
   status: 'running' | 'paused' | 'completed' | 'failed'
   steps: RunStep[]
   startedBy: string
