@@ -200,7 +200,8 @@ export default function OverviewPage() {
         title="Overview"
         description={eventName ? `${eventName} pipeline` : 'Pipeline overview'}
         actions={
-          events.data && (
+          events.data &&
+          events.data.length > 0 && (
             <div className="flex items-center gap-2.5">
               <label
                 htmlFor="edition"
@@ -237,7 +238,25 @@ export default function OverviewPage() {
         </div>
       )}
 
-      {!events.error && !overview.error && (!data || events.isPending) && <LoadingTiles />}
+      {!events.error && !overview.error && events.data?.length === 0 && (
+        <div className="card-elevated">
+          <EmptyState
+            icon={Building2}
+            title="No editions configured yet"
+            hint="Create an edition or start a run to populate the pipeline."
+            action={
+              <Button asChild variant="secondary">
+                <Link to="/runs">Go to runs</Link>
+              </Button>
+            }
+          />
+        </div>
+      )}
+
+      {!events.error &&
+        !overview.error &&
+        events.data?.length !== 0 &&
+        (!data || events.isPending) && <LoadingTiles />}
 
       {data && !overview.error && data.discovered === 0 && (
         <div className="card-elevated">

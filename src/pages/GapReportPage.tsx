@@ -90,7 +90,7 @@ export default function GapReportPage() {
         description="What is finished, what is stuck, and why. Nothing is hidden or guessed."
         actions={
           <>
-            {events.data && (
+            {events.data && events.data.length > 0 && (
               <div className="flex items-center gap-2.5">
                 <label
                   htmlFor="gap-edition"
@@ -143,7 +143,22 @@ export default function GapReportPage() {
         </div>
       )}
 
-      {!events.error && !report.error && !data && (
+      {!events.error && !report.error && events.data?.length === 0 && (
+        <div className="card-elevated">
+          <EmptyState
+            icon={PartyPopper}
+            title="No editions configured yet"
+            hint="Start a run or create an edition to generate a gap report."
+            action={
+              <Button asChild variant="secondary">
+                <Link to="/runs">Go to runs</Link>
+              </Button>
+            }
+          />
+        </div>
+      )}
+
+      {!events.error && !report.error && events.data?.length !== 0 && !data && (
         <div role="status" aria-busy="true" className="grid gap-4 sm:grid-cols-3">
           <span className="sr-only">Loading…</span>
           <Skeleton className="h-28" />
