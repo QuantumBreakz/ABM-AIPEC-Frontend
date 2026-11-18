@@ -102,6 +102,14 @@ describe('Contacts list', () => {
     const coverage = screen.getByRole('region', { name: 'Sales Navigator account' })
     expect(coverage.compareDocumentPosition(card()) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
   })
+
+  it('scrapes contacts and emails on demand when Scrape contacts is clicked', async () => {
+    await open('c_004')
+    expect(card()).toHaveAccessibleName('Decision-makers (0)')
+    await userEvent.setup().click(within(card()).getByRole('button', { name: 'Scrape contacts' }))
+    expect(await within(card()).findByText('General Inquiries')).toBeInTheDocument()
+    expect(card()).toHaveAccessibleName('Decision-makers (1)')
+  })
 })
 
 describe('Adding a contact', () => {

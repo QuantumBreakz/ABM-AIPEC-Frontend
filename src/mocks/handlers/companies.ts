@@ -267,6 +267,57 @@ export const companyHandlers = [
     return json<Company>(company)
   }),
 
+  route.post('/companies/:id/enrich', 'user', ({ params }) => {
+    const company = getCompany(params.id)
+    const now = new Date().toISOString()
+    const domain = company.domain ?? 'company.example'
+    const address = `info@${domain}`
+    const alreadyHas = company.contacts.some((c) => c.emails.some((e) => e.address === address))
+    let contactsAdded = 0
+    let emailsAdded = 0
+    if (!alreadyHas) {
+      company.contacts.push({
+        id: `ct_enrich_${company.contacts.length + 1}`,
+        companyId: company.id,
+        firstName: 'General',
+        lastName: 'Inquiries',
+        title: 'Company Contact',
+        source: 'website',
+        matchConfidence: 'medium',
+        emails: [
+          {
+            address,
+            type: 'generic',
+            provider: 'website',
+            capturedAt: now,
+            verification: { status: 'not_checked' },
+          },
+        ],
+        ai: { status: 'pending', evidenceUrls: [], versions: [] },
+        createdAt: now,
+        updatedAt: now,
+      })
+      contactsAdded = 1
+      emailsAdded = 1
+      company.stages.emails = {
+        status: 'completed',
+        reason: 'Found 1 email across 1 contact (website)',
+        updatedAt: now,
+      }
+      refresh(company, true)
+    }
+    return json({
+      company,
+      summary: {
+        contactsAdded,
+        emailsAdded,
+        phonesAdded: 0,
+        pagesScraped: 3,
+        sourcesUsed: ['website'],
+      },
+    })
+  }),
+
   route.get('/companies/:id/history', 'user', ({ params }) => {
     getCompany(params.id)
     return json<HistoryEntry[]>(db.history[params.id as string] ?? [])

@@ -1,13 +1,14 @@
 import { type QueryClient, useMutation, useQueryClient } from '@tanstack/react-query'
 import { api } from '../client'
 import { keys } from '../keys'
-import type { Contact, ContactInput } from '../types'
+import type { Company, Contact, ContactInput } from '../types'
 
 /** A contact changed: the company page, its history, the lists and the review queues are out of date. */
 export function refreshAfterContactChange(queryClient: QueryClient, companyId: string) {
   void queryClient.invalidateQueries({ queryKey: keys.company(companyId) })
   void queryClient.invalidateQueries({ queryKey: keys.history(companyId) })
   void queryClient.invalidateQueries({ queryKey: ['companies'] })
+  void queryClient.invalidateQueries({ queryKey: ['run-companies'] })
   void queryClient.invalidateQueries({ queryKey: keys.reviewAll })
   void queryClient.invalidateQueries({ queryKey: keys.reviewCounts })
 }
@@ -56,5 +57,26 @@ export function useDeleteContact(companyId: string) {
   return useMutation({
     mutationFn: (id: string) => api.del(`/contacts/${id}`),
     onSuccess: () => refreshAfterContactChange(queryClient, companyId),
+  })
+}
+
+export type EnrichSummary = {
+  contactsAdded: number
+  emailsAdded: number
+  phonesAdded: number
+  pagesScraped: number
+  sourcesUsed: string[]
+}
+
+/** Run the NitLead scraper on-demand for one company to discover contacts, emails, and phones. */
+export function useEnrichCompany(companyId: string) {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: () =>
+      api.post<{ company: Company; summary: EnrichSummary }>(`/companies/${companyId}/enrich`),
+    onSuccess: (data) => {
+      queryClient.setQueryData(keys.company(companyId), data.company)
+      refreshAfterContactChange(queryClient, companyId)
+    },
   })
 }
