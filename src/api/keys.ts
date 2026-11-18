@@ -18,4 +18,6 @@ export const keys = {
   runsAll: ['runs'] as const,
   runs: (page: number) => ['runs', { page }] as const,
   run: (id: string | undefined) => ['run', id] as const,
+  runCompanies: (id: string | undefined, page: number, q?: string) =>
+    ['run-companies', id, { page, q: q || undefined }] as const,
 }

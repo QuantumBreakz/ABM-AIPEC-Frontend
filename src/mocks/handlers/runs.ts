@@ -1,8 +1,8 @@
-import type { EmailStatus, Paged, Run, RunStep } from '@/api/types'
+import type { CompanyListItem, EmailStatus, Paged, Run, RunStep } from '@/api/types'
 import { STEP_KEYS } from '@/api/types'
 import { mockConfig } from '../config'
 import { db, nextId } from '../db'
-import { refresh } from '../derive'
+import { refresh, toListItem } from '../derive'
 import { badRequest, conflict, json, notFound, paginate, route } from '../http'
 import { inEdition } from '../stats'
 
@@ -170,6 +170,22 @@ export const runHandlers = [
   route.get('/runs/:id', 'user', ({ params }) => {
     advanceRuns()
     return json<Run>(getRun(params.id))
+  }),
+
+  route.get('/runs/:id/companies', 'user', ({ params, url }) => {
+    const run = getRun(params.id)
+    const q = url.searchParams.get('q')?.trim().toLowerCase()
+    let companies = inEdition(run.edition)
+      .slice()
+      .sort((a, b) => a.name.localeCompare(b.name))
+    if (run.limit && run.limit > 0) companies = companies.slice(0, run.limit)
+    if (q) {
+      companies = companies.filter((c) =>
+        `${c.name} ${c.domain ?? ''} ${c.originalNames.join(' ')}`.toLowerCase().includes(q),
+      )
+    }
+    const items = companies.map((c) => toListItem(c))
+    return json<Paged<CompanyListItem>>(paginate(items, url))
   }),
 
   route.post('/runs/:id/pause', 'admin', ({ params }) => {

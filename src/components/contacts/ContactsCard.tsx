@@ -1,8 +1,8 @@
-import { Pencil, Plus, Trash2, Upload, UserPlus } from 'lucide-react'
+import { Pencil, Plus, SearchCheck, Trash2, Upload, UserPlus } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { ApiError } from '@/api/client'
-import { useDeleteContact } from '@/api/queries/contacts'
+import { useDeleteContact, useEnrichCompany } from '@/api/queries/contacts'
 import type { Company, Contact } from '@/api/types'
 import { useMe } from '@/auth/auth-context'
 import { ChartCard } from '@/components/charts/ChartCard'
@@ -59,10 +59,28 @@ function EmailLines({ contact }: { contact: Contact }) {
 export function ContactsCard({ company }: { company: Company }) {
   const { isAdmin } = useMe()
   const remove = useDeleteContact(company.id)
+  const enrich = useEnrichCompany(company.id)
   const [formOpen, setFormOpen] = useState(false)
   const [importOpen, setImportOpen] = useState(false)
   const [editing, setEditing] = useState<Contact | undefined>()
   const [deleting, setDeleting] = useState<Contact | undefined>()
+
+  const runEnrich = async () => {
+    try {
+      const { summary } = await enrich.mutateAsync()
+      if (summary.contactsAdded > 0 || summary.emailsAdded > 0 || summary.phonesAdded > 0) {
+        toast.success(
+          `Found ${summary.contactsAdded} new contact(s), ${summary.emailsAdded} email(s), and ${summary.phonesAdded} phone(s) across ${summary.pagesScraped} page(s).`,
+        )
+      } else {
+        toast.info(
+          `Scraped ${summary.pagesScraped} page(s) — no new public contacts or emails found.`,
+        )
+      }
+    } catch (error) {
+      toast.error(error instanceof ApiError ? error.message : 'Contact scraping failed.')
+    }
+  }
 
   const openAdd = () => {
     setEditing(undefined)
@@ -92,7 +110,16 @@ export function ContactsCard({ company }: { company: Company }) {
       title={`Decision-makers (${contacts.length})`}
       subtitle="The people you found for this company. Each email shows where it came from and whether it has been checked."
       action={
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
+          <Button
+            size="sm"
+            variant="secondary"
+            loading={enrich.isPending}
+            onClick={() => void runEnrich()}
+          >
+            <SearchCheck className="size-4" aria-hidden />
+            Scrape contacts
+          </Button>
           <Button size="sm" variant="secondary" onClick={() => setImportOpen(true)}>
             <Upload className="size-4" aria-hidden />
             Import CSV
@@ -110,13 +137,19 @@ export function ContactsCard({ company }: { company: Company }) {
           title="No decision-makers saved yet"
           hint={
             company.stages.people.reason ??
-            'A company is still valid without contacts. Add the people you find, or leave it empty if none could be found.'
+            'Scrape the company website and public web sources automatically, or add contacts by hand.'
           }
           action={
-            <Button variant="secondary" onClick={openAdd}>
-              <Plus className="size-4" aria-hidden />
-              Add contact
-            </Button>
+            <div className="flex flex-wrap justify-center gap-2">
+              <Button loading={enrich.isPending} onClick={() => void runEnrich()}>
+                <SearchCheck className="size-4" aria-hidden />
+                Scrape contacts &amp; emails
+              </Button>
+              <Button variant="secondary" onClick={openAdd}>
+                <Plus className="size-4" aria-hidden />
+                Add contact
+              </Button>
+            </div>
           }
         />
       ) : (

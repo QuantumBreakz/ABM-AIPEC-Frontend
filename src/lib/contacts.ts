@@ -13,6 +13,11 @@ export const PROVIDER_OPTIONS = [
 const SOURCE_LABELS: Record<string, string> = {
   ...Object.fromEntries(PROVIDER_OPTIONS.map((o) => [o.value, o.label])),
   csv_import: 'CSV import',
+  ddg_osint: 'Web OSINT search',
+  hunter: 'Hunter.io',
+  apollo: 'Apollo.io',
+  snov: 'Snov.io',
+  nitlead: 'Automated scraper',
 }
 
 /** A readable name for a source such as "contactout". Unknown values are shown as they are. */

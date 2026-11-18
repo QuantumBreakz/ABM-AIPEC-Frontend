@@ -239,6 +239,39 @@ describe('Run detail', () => {
     expect(screen.queryByRole('button', { name: /pause run|resume run/i })).not.toBeInTheDocument()
   })
 
+  it('expands to show all companies in the run and supports searching and collapsing', async () => {
+    await openDetail('r_2')
+    const user = userEvent.setup()
+    const toggle = screen.getByRole('button', { name: 'Show companies' })
+    expect(toggle).toHaveAttribute('aria-expanded', 'false')
+    expect(
+      screen.queryByRole('searchbox', { name: 'Search companies in this run' }),
+    ).not.toBeInTheDocument()
+
+    await user.click(toggle)
+    expect(screen.getByRole('button', { name: 'Hide companies' })).toHaveAttribute(
+      'aria-expanded',
+      'true',
+    )
+
+    const run = db.runs.find((r) => r.id === 'r_2')!
+    const firstCompany = db.companies
+      .filter((c) => c.editions.some((e) => e.edition === run.edition))
+      .sort((a, b) => a.name.localeCompare(b.name))[0]!
+    const link = await screen.findByRole('link', { name: firstCompany.name }, { timeout: 5000 })
+    expect(link).toHaveAttribute('href', `/companies/${firstCompany.id}`)
+
+    const search = screen.getByRole('searchbox', { name: 'Search companies in this run' })
+    await user.type(search, 'zzzz-no-such-company')
+    expect(await screen.findByText('No matching companies')).toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: 'Hide companies' }))
+    expect(screen.getByRole('button', { name: 'Show companies' })).toHaveAttribute(
+      'aria-expanded',
+      'false',
+    )
+  })
+
   it('shows a not-found state for an unknown run, with a way back', async () => {
     renderApp('/runs/nope')
     expect(await screen.findByRole('alert', {}, { timeout: 4000 })).toHaveTextContent(

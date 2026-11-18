@@ -11,6 +11,7 @@ import { DateTime } from '@/components/DateTime'
 import { ErrorState } from '@/components/ErrorState'
 import { PageHeader } from '@/components/PageHeader'
 import { ProgressBar } from '@/components/ProgressBar'
+import { RunCompanies } from '@/components/runs/RunCompanies'
 import { RunErrors } from '@/components/runs/RunErrors'
 import { RunStepBars } from '@/components/runs/RunStepBars'
 import { Skeleton } from '@/components/Skeleton'
@@ -161,6 +162,8 @@ export default function RunDetailPage() {
             <StatTile key={key} label={label} value={formatNumber(data.counts[key])} />
           ))}
         </div>
+
+        <RunCompanies run={data} />
 
         <ChartCard
           title="Progress by step"
