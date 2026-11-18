@@ -2,7 +2,7 @@ import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tansta
 import { isRunning } from '@/lib/runs'
 import { api } from '../client'
 import { keys } from '../keys'
-import type { Paged, Run, RunStep } from '../types'
+import type { CompanyListItem, Paged, Run, RunStep } from '../types'
 
 /** How often a screen re-reads a run that is still running. Tests make this tiny. */
 export const polling = { runsMs: 5_000 }
@@ -25,6 +25,29 @@ export function useRun(id: string | undefined) {
     enabled: !!id,
     refetchInterval: (query) =>
       query.state.data && isRunning(query.state.data) ? polling.runsMs : false,
+  })
+}
+
+export const RUN_COMPANIES_PAGE_SIZE = 50
+
+/** Paginated list of companies discovered or processed in a specific run. */
+export function useRunCompanies(
+  id: string | undefined,
+  page: number,
+  options?: { enabled?: boolean; q?: string; poll?: boolean },
+) {
+  const q = options?.q?.trim() || undefined
+  return useQuery({
+    queryKey: keys.runCompanies(id, page, q),
+    queryFn: ({ signal }) =>
+      api.get<Paged<CompanyListItem>>(
+        `/runs/${id}/companies`,
+        { page, pageSize: RUN_COMPANIES_PAGE_SIZE, ...(q ? { q } : {}) },
+        signal,
+      ),
+    placeholderData: keepPreviousData,
+    enabled: !!id && (options?.enabled ?? true),
+    refetchInterval: options?.poll ? polling.runsMs : false,
   })
 }
 
